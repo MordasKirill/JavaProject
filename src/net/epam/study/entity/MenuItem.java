@@ -11,6 +11,11 @@ public class MenuItem {
     public MenuItem(){
         super();
     }
+    public MenuItem(String name, String price, String filingTime){
+        this.name = name;
+        this.price = price;
+        this.filingTime = filingTime;
+    }
     public MenuItem(String name, String price, String filingTime, String category){
         this.name = name;
         this.price = price;
@@ -51,12 +56,9 @@ public class MenuItem {
 
     @Override
     public String toString() {
-        return "Dish details [" +
-                "category='" + category + '\'' +
-                ", name='" + name + '\'' +
-                ", price='" + price + '\'' +
-                ", filing time='" + filingTime + '\'' +
-                ']';
+        return "Name: " + name +
+                ", price: " + price +
+                ", filing time: " + filingTime +".";
     }
 
     @Override

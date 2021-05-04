@@ -15,6 +15,10 @@ public class CommandProvider {
 		commands.put(CommandName.GOTOMAINPAGE, new GoToMainPage());
 		commands.put(CommandName.CHECKLOGINANDPASSWORD, new CheckLoginAndPassword());
 		commands.put(CommandName.GOTOMENUPAGE, new GoToMenuPage());
+		commands.put(CommandName.ADDTOCART, new AddToCart());
+		commands.put(CommandName.GOTOBASKETPAGE, new GoToBasketPage());
+		commands.put(CommandName.SAVENEWORDER, new SaveNewOrder());
+		commands.put(CommandName.GOTOBILLPAGE, new GoToBillPage());
 
 //		commands.put(CommandName.LOGOUT, new Logout());
 	}

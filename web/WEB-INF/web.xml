@@ -15,9 +15,16 @@
         <servlet-name>Controller</servlet-name>
         <servlet-class>net.epam.study.controller.Controller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControllerForOrders</servlet-name>
+        <servlet-class>net.epam.study.controller.ControllerForOrders</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/Controller</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>ControllerForOrders</servlet-name>
+        <url-pattern>/ControllerForOrders</url-pattern>
+    </servlet-mapping>
 </web-app>

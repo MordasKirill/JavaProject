@@ -16,6 +16,7 @@ public class CheckLoginAndPassword implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
+        String test = request.getParameter("test");
         if(LoginAndPasswordValidate.validate(login, password)) {
             request.setAttribute("errMsg", "");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
