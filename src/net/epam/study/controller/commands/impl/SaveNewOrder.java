@@ -19,39 +19,36 @@ public class SaveNewOrder implements Command {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String city = request.getParameter("city");
-        String sql = "INSERT INTO orders (fullName,address,email,phone)" +
-                "VALUES ('" + fullName + "','" + address + "','" + email + "','" + phone + "')";
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i =0; i<AddToCart.order.size(); i++){
+            stringBuilder.append(AddToCart.order.get(i).toString()).append(" ");
+        }
+        String sql = "INSERT INTO orders (fullName,address,email,phone,details)" +
+                "VALUES ('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')";
         if(!OrderValidate.isValidEmailAddress(email)) {
             request.setAttribute("errMsgEmail", "Email is incorrect");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
-            requestDispatcher.forward(request, response);
         }
         if(!OrderValidate.isValidFullName(fullName)) {
             request.setAttribute("errMsgFullName", "Full name is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
-            requestDispatcher.forward(request, response);
         }
         if(!OrderValidate.isValidPhoneNumber(phone)) {
             request.setAttribute("errMsgPhone", "Phone is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
-            requestDispatcher.forward(request, response);
         }
         if(!OrderValidate.isValidCity(city)) {
             request.setAttribute("errMsgCity", "Only Minsk required!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
-            requestDispatcher.forward(request, response);
         }
         if (OrderValidate.isValidEmailAddress(email)
                 &&OrderValidate.isValidFullName(fullName)
@@ -59,6 +56,9 @@ public class SaveNewOrder implements Command {
                 &&OrderValidate.isValidCity(city)){
             OrderValidate.validate(sql);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
+            requestDispatcher.forward(request, response);
+        } else{
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
             requestDispatcher.forward(request, response);
         }
     }

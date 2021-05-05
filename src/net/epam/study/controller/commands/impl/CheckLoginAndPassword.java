@@ -16,11 +16,17 @@ public class CheckLoginAndPassword implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String test = request.getParameter("test");
-        if(LoginAndPasswordValidate.validate(login, password)) {
-            request.setAttribute("errMsg", "");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
-            requestDispatcher.forward(request, response);
+        if(LoginAndPasswordValidate.validate(login, password)
+                &&LoginAndPasswordValidate.isAdmin(login)) {
+            if (LoginAndPasswordValidate.role.equals("ADMIN")) {
+                request.setAttribute("errMsg", "");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+                requestDispatcher.forward(request, response);
+            } else {
+                request.setAttribute("errMsg", "");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
+                requestDispatcher.forward(request, response);
+            }
         }else{
             request.setAttribute("errMsg", "Username or password are incorrect !!!");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");

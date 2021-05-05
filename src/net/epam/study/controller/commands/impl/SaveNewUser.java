@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.controller.commands.Role;
 import net.epam.study.dao.NewUserValidate;
 
 import javax.servlet.RequestDispatcher;
@@ -15,8 +16,9 @@ public class SaveNewUser implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String sql = "INSERT INTO users (login,password)" +
-                "VALUES ('" + login + "','" + password + "')";
+        String role = String.valueOf(Role.USER);
+        String sql = "INSERT INTO users (login,password,role)" +
+                "VALUES ('" + login + "','" + password + "','" + role + "')";
         if(NewUserValidate.validate(sql, login)) {
             request.setAttribute("errMsg", "");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");

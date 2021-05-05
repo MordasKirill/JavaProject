@@ -32,7 +32,6 @@
         <div class="field">
             <label>Password:</label>
             <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="Enter password" name="password" required/>
-            <input type="hidden" name="test" value="test"/>
         </div>
         <buttons >
             <div class="form-buttons">

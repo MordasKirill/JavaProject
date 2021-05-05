@@ -21,11 +21,11 @@
         </form>
     </div>
 </header>
+</body>
 <footer class="site-footer">
     <div class="container">
         <p>© KirMoSoft, 2021</p>
         <p>Your online restaurant...</p>
     </div>
 </footer>
-</body>
 </html>

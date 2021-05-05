@@ -1,5 +1,7 @@
 package net.epam.study.dao;
 
+import net.epam.study.connection.ConnectionToDB;
+
 import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +27,11 @@ public class OrderValidate {
     }
     public static boolean isValidCity(String city){
         boolean result = false;
-        if (city.equals("Minsk")||city.equals("minsk")){
+        if (city.equals("Minsk")
+                ||city.equals("minsk")
+                ||city.equals("минск")
+                ||city.equals("Минск")){
+
             result = true;
         }
         return result;
@@ -34,11 +40,8 @@ public class OrderValidate {
         Connection connection = null;
         Statement statement = null;
         try {
-            String userNameDB = "root";
-            String passwordDB = "3158095KIRILLMordas";
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String connectionUrl = "jdbc:mysql://localhost:3306/test";
-            connection = DriverManager.getConnection(connectionUrl, userNameDB, passwordDB);
+            connection = DriverManager.getConnection(ConnectionToDB.connectionUrl, ConnectionToDB.userNameDB, ConnectionToDB.passwordDB);
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.createStatement();
             statement.executeUpdate(sqlCommand);

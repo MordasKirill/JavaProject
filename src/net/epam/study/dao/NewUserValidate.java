@@ -1,5 +1,6 @@
 package net.epam.study.dao;
 
+import net.epam.study.connection.ConnectionToDB;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
 import java.sql.*;
@@ -10,11 +11,8 @@ public class NewUserValidate {
         Connection connection = null;
         Statement statement = null;
         try {
-            String userNameDB = "root";
-            String passwordDB = "3158095KIRILLMordas";
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String connectionUrl = "jdbc:mysql://localhost:3306/test";
-            connection = DriverManager.getConnection(connectionUrl, userNameDB, passwordDB);
+            connection = DriverManager.getConnection(ConnectionToDB.connectionUrl, ConnectionToDB.userNameDB, ConnectionToDB.passwordDB);
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select login from users where login ='" + login + "'");

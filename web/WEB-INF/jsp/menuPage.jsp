@@ -12,7 +12,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Menu</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="styleMenuPage.css">
 </head>
 <body>
 <header>
