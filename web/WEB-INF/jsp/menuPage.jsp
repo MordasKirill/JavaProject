@@ -12,13 +12,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Menu</title>
-    <link rel="stylesheet" href="styleMenuPage.css">
+    <link rel="stylesheet" href="styleMenu.css">
 </head>
 <body>
 <header>
     <img src="resources/menu.png" style="text-align: center" alt="Snow">
     <div class="menu">
-        <a href="Controller?command=gotobasketpage" class="green">Basket</a>
+        <a href="Controller?command=gotobasketpage" class="green">Cart <c:out value="${size}"/> item(s)</a>
     </div>
 </header>
 <sql:query dataSource = "${snapshot}" var = "result">
@@ -32,7 +32,7 @@
 <section>
     <c:forEach var = "row" items = "${result.rows}">
         <div class="product-item">
-            <div class="product-list">
+            <div class="product-list" >
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
                 <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
@@ -207,6 +207,12 @@
     </c:forEach>
     </form>
 </section>
+<script>
+    let cords = ['scrollX', 'scrollY'];
+    window.addEventListener('unload', e =>
+    cords.forEach(cord => localStorage[cord] = window[cord]));
+    window.scroll(...cords.map(cord => localStorage[cord]));
+</script>
 <%--<script>--%>
 <%--    $(document).on('click', 'a[class^="button"]', function(e) {--%>
 <%--    e.preventDefault();--%>

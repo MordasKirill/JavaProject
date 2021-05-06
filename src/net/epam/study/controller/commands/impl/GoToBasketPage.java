@@ -23,7 +23,6 @@ public class GoToBasketPage implements Command {
         request.setAttribute("order", AddToCart.order);
         request.setAttribute("total", getTotal());
         request.setAttribute("size", AddToCart.order.size());
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
         requestDispatcher.forward(request, response);
     }

@@ -10,7 +10,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Admin</title>
-    <link rel="stylesheet" href="adminPage.css">
+    <link rel="stylesheet" href="styleAdminPage.css">
 </head>
 <body>
 <header>
@@ -25,14 +25,20 @@ SELECT * from orders;
     </div>
 </div>
 <section>
+    <a href="Controller?command=gotologinpage" class="green" style="width: 200px; position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%);">Logout</a>
+
     <c:forEach var = "row" items = "${result.rows}">
         <div class="product-item">
-            <div class="product-list">
+            <div class="product-list" data-id="${row.id}">
                 <h3><c:out value = "${row.fullName}"/></h3>
                 <span class="price">Address: <c:out value = "${row.address}"/></span>
                 <span class="time">Email: <c:out value = "${row.email}"/></span>
                 <span class="time">Phone: <c:out value = "${row.phone}"/></span>
                 <span class="time">Details: <c:out value = "${row.details}"/></span>
+                <div class="form-buttons">
+                    <a href="" class="green">Accept</a>
+                    <a href="Controller?command=orderdelete&id=${row.id}" class="green" style="color: darkred">Delete</a>
+                </div>
             </div>
         </div>
     </c:forEach>

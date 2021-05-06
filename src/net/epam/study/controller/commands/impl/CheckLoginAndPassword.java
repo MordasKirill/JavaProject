@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.controller.commands.Role;
 import net.epam.study.dao.LoginAndPasswordValidate;
 
 import javax.servlet.RequestDispatcher;
@@ -18,7 +19,7 @@ public class CheckLoginAndPassword implements Command {
         String password = request.getParameter("password");
         if(LoginAndPasswordValidate.validate(login, password)
                 &&LoginAndPasswordValidate.isAdmin(login)) {
-            if (LoginAndPasswordValidate.role.equals("ADMIN")) {
+            if (LoginAndPasswordValidate.role.equals(String.valueOf(Role.ADMIN))) {
                 request.setAttribute("errMsg", "");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
                 requestDispatcher.forward(request, response);

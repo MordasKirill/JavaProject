@@ -11,6 +11,7 @@ import java.io.IOException;
 public class GoToMenuPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("size", AddToCart.order.size());
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
         requestDispatcher.forward(request, response);
 

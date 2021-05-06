@@ -35,8 +35,8 @@
         </div>
         <buttons >
             <div class="form-buttons">
-            <input type="hidden" name="command" value="checkloginandpassword" />
-            <input type="submit" class="green" value="Sign in"><!--
+                <input type="hidden" name="command" value="checkloginandpassword" />
+                <input type="submit" class="green" value="Sign in"><!--
             --><a href="Controller?command=registration" class="green">Sign up</a>
             </div>
         </buttons>

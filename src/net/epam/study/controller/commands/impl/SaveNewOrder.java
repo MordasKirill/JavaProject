@@ -54,9 +54,18 @@ public class SaveNewOrder implements Command {
                 &&OrderValidate.isValidFullName(fullName)
                 &&OrderValidate.isValidPhoneNumber(phone)
                 &&OrderValidate.isValidCity(city)){
-            OrderValidate.validate(sql);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
-            requestDispatcher.forward(request, response);
+            if (AddToCart.order.size() == 0) {
+                request.setAttribute("error", "You cant checkout with empty cart!");
+                request.setAttribute("order", AddToCart.order);
+                request.setAttribute("total", GoToBasketPage.getTotal());
+                request.setAttribute("size", AddToCart.order.size());
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
+                requestDispatcher.forward(request, response);
+            } else {
+                OrderValidate.validate(sql);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
+                requestDispatcher.forward(request, response);
+            }
         } else{
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
             requestDispatcher.forward(request, response);
