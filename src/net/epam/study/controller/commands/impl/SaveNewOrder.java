@@ -2,6 +2,7 @@ package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
 import net.epam.study.dao.OrderValidate;
+import net.epam.study.service.FieldsValidation;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,34 +27,34 @@ public class SaveNewOrder implements Command {
         }
         String sql = "INSERT INTO orders (fullName,address,email,phone,details)" +
                 "VALUES ('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')";
-        if(!OrderValidate.isValidEmailAddress(email)) {
+        if(!FieldsValidation.isValidEmailAddress(email)) {
             request.setAttribute("errMsgEmail", "Email is incorrect");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!OrderValidate.isValidFullName(fullName)) {
+        if(!FieldsValidation.isValidFullName(fullName)) {
             request.setAttribute("errMsgFullName", "Full name is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!OrderValidate.isValidPhoneNumber(phone)) {
+        if(!FieldsValidation.isValidPhoneNumber(phone)) {
             request.setAttribute("errMsgPhone", "Phone is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!OrderValidate.isValidCity(city)) {
+        if(!FieldsValidation.isValidCity(city)) {
             request.setAttribute("errMsgCity", "Only Minsk required!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if (OrderValidate.isValidEmailAddress(email)
-                &&OrderValidate.isValidFullName(fullName)
-                &&OrderValidate.isValidPhoneNumber(phone)
-                &&OrderValidate.isValidCity(city)){
+        if (FieldsValidation.isValidEmailAddress(email)
+                &&FieldsValidation.isValidFullName(fullName)
+                &&FieldsValidation.isValidPhoneNumber(phone)
+                &&FieldsValidation.isValidCity(city)){
             if (AddToCart.order.size() == 0) {
                 request.setAttribute("error", "You cant checkout with empty cart!");
                 request.setAttribute("order", AddToCart.order);

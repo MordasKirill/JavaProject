@@ -1,22 +1,24 @@
 package net.epam.study.dao;
 
-import net.epam.study.connection.ConnectionToDB;
+import net.epam.study.controller.Listener;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class NewUserValidate {
     public static boolean validate (String sqlCommand, String login)  {
         boolean result = true;
-        Connection connection = null;
-        Statement statement = null;
+        Connection connection = Listener.connection;
+        Statement statement;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            connection = DriverManager.getConnection(ConnectionToDB.connectionUrl, ConnectionToDB.userNameDB, ConnectionToDB.passwordDB);
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select login from users where login ='" + login + "'");
-            if (resultSet.next()) {
+            if (resultSet.next()){
+                    //&&resultSet.getString("login").equals(login)) {
                 System.out.println("FAIL DB: User already exist.");
                 result = false;
             } else{
@@ -25,17 +27,9 @@ public class NewUserValidate {
                 statement.executeUpdate(sqlCommand);
                 result = true;
             }
-        } catch (ClassNotFoundException | SQLException exc) {
+        } catch (SQLException exc) {
             exc.printStackTrace();
             System.out.println("FAIL DB: Fail to write DB.");
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) connection.close();
-                if (statement != null) statement.close();
-            } catch (SQLException exc) {
-            }
         }
         return result;
     }
