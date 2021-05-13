@@ -23,10 +23,9 @@ SELECT * from orders;
     <div class="header-admin">
         <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Hello, admin!</h2>
     </div>
+    <a href="Controller?command=logout" class="green" style="width: 200px; ">Logout</a>
 </div>
 <section>
-    <a href="Controller?command=gotologinpage" class="green" style="width: 200px; position: absolute; top: 25%; left: 75%; transform: translate(-50%, -50%);">Logout</a>
-
     <c:forEach var = "row" items = "${result.rows}">
         <div class="product-item">
             <div class="product-list" data-id="${row.id}">

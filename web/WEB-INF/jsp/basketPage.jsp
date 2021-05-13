@@ -20,13 +20,14 @@
                             </span>
                     </h4>
                     <c:choose>
-                    <c:when test="${not empty order}">
-                    <c:forEach items="${order}" var="item">
-                    <p><span><c:out value="${item}" /></span></p>
-                    </c:forEach>
-                    </c:when>
+                        <c:when test="${not empty order}">
+                            <c:forEach items="${order}" var="item">
+                                <p><span><c:out value="${item}" /></span></p>
+                                <a href="Controller?command=itemdelete&item=${item}" class="green">Delete</a>
+                            </c:forEach>
+                        </c:when>
                     <c:otherwise>
-                    <h2>Your cart is empty!</h2>
+                        <h2>Your cart is empty!</h2>
                         <p style="color: red; font-size: 10px"><c:out value="${error}" /></p>
                     </c:otherwise>
                     </c:choose>

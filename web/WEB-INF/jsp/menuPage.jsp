@@ -17,6 +17,8 @@
 <body>
 <header>
     <img src="resources/menu.png" style="text-align: center" alt="Snow">
+    <a href="Controller?command=gotomainpage" class="green" style="margin-top: -100px; margin-left: 400px">Main page</a>
+    <a href="Controller?command=logout" class="green" style="margin-left: 400px">Logout</a>
     <div class="menu">
         <a href="Controller?command=gotobasketpage" class="green">Cart <c:out value="${size}"/> item(s)</a>
     </div>

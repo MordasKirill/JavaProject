@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +18,11 @@ public class GoToMainPage implements Command {
         } else {
             request.setAttribute("login", "stranger");
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp");
-        requestDispatcher.forward(request, response);
+        if (!CheckSession.checkSession(request, response)) {
+            response.sendRedirect("Controller?command=gotologinpage");
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp");
+            requestDispatcher.forward(request, response);
+        }
     }
 }

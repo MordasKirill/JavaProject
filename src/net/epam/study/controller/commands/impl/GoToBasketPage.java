@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,11 +20,14 @@ public class GoToBasketPage implements Command {
     }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        request.setAttribute("order", AddToCart.order);
-        request.setAttribute("total", getTotal());
-        request.setAttribute("size", AddToCart.order.size());
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
-        requestDispatcher.forward(request, response);
+        if (!CheckSession.checkSession(request, response)) {
+            response.sendRedirect("Controller?command=gotologinpage");
+        } else {
+            request.setAttribute("order", AddToCart.order);
+            request.setAttribute("total", getTotal());
+            request.setAttribute("size", AddToCart.order.size());
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
+            requestDispatcher.forward(request, response);
+        }
     }
 }

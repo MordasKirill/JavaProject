@@ -2,6 +2,7 @@ package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
 import net.epam.study.entity.MenuItem;
+import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,15 +23,19 @@ public class AddToCart implements Command {
     }
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String price = request.getParameter("price");
-        String time = request.getParameter("time");
-        if (name!=null&&price!=null&&time!=null) {
-            order.add(new MenuItem(name, price, time));
-            total.add(price);
-            addToList();
+        if (!CheckSession.checkSession(request, response)) {
+            response.sendRedirect("Controller?command=gotologinpage");
+        } else {
+            String name = request.getParameter("name");
+            String price = request.getParameter("price");
+            String time = request.getParameter("time");
+            if (name != null && price != null && time != null) {
+                order.add(new MenuItem(name, price, time));
+                total.add(price);
+                addToList();
+            }
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menu-indexPage.jsp");
+            requestDispatcher.forward(request, response);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menu-indexPage.jsp");
-        requestDispatcher.forward(request, response);
     }
 }

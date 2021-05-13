@@ -17,7 +17,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="styleLoginPage.css">
+    <link rel="stylesheet" href="styleLoginRegistr.css">
 </head>
 <body>
 <header class="site-header">
@@ -36,6 +36,7 @@
                 <div class="form-buttons">
                     <input type="hidden" name="command" value="savenewuser" />
                     <input type="submit" class="green" value="Register!">
+                    <a href="Controller?command=gotologinpage" class="green">Back to login</a>
                 </div>
             </buttons>
         </form>

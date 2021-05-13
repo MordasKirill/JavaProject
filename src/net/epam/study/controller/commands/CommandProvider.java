@@ -21,7 +21,8 @@ public class CommandProvider {
 		commands.put(CommandName.SAVENEWORDER, new SaveNewOrder());
 		commands.put(CommandName.GOTOBILLPAGE, new GoToBillPage());
 		commands.put(CommandName.ORDERDELETE, new AdminOrderDelete());
-//		commands.put(CommandName.LOGOUT, new Logout());
+		commands.put(CommandName.LOGOUT, new Logout());
+		commands.put(CommandName.ITEMDELETE, new CartItemDelete());
 	}
 	
 	
