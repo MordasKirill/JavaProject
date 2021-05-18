@@ -11,14 +11,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Restaurant Online</title>
-    <link rel="stylesheet" href="styleMainPage.css">
+    <link rel="stylesheet" href="test.css">
 </head>
 <body>
 <header class="site-header">
     <div class="container">
         <h1>Food Bar Online</h1>
         <p>Delicious food!</p>
-        <p1>Hello, <%= request.getAttribute("login")%> !</p1>
+        <p1>Hello, <%= request.getAttribute("login")%> !
+            <a href="Controller?command=logout" class="green" style="margin-left: -440px">Logout</a>
+        </p1>
     </div>
 </header>
 <section class="features">

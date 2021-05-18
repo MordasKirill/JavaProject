@@ -20,14 +20,17 @@ public class CheckLoginAndPassword implements Command {
         String password = request.getParameter("password");
         HttpSession session = request.getSession(true);
         session.setAttribute("auth", true);
+
         if(LoginAndPasswordValidate.validate(login, password)
                 &&LoginAndPasswordValidate.isAdmin(login)) {
             if (LoginAndPasswordValidate.role.equals(String.valueOf(Role.ADMIN))) {
                 request.setAttribute("errMsg", "");
+                session.setAttribute("role", LoginAndPasswordValidate.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             } else {
                 request.setAttribute("errMsg", "");
+                session.setAttribute("role", LoginAndPasswordValidate.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }

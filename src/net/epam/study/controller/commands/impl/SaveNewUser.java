@@ -8,6 +8,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class SaveNewUser implements Command {
@@ -17,6 +18,9 @@ public class SaveNewUser implements Command {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String role = String.valueOf(Role.USER);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("auth", true);
+        session.setAttribute("role", role);
         String sql = "INSERT INTO users (login,password,role)" +
                 "VALUES ('" + login + "','" + password + "','" + role + "')";
         if(NewUserValidate.validate(sql, login)) {

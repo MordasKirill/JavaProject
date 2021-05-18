@@ -3,21 +3,18 @@ package net.epam.study.dao;
 import net.epam.study.controller.Listener;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class LoginAndPasswordValidate {
     public static String role;
     public static boolean validate (String login, String password) {
         boolean result = false;
         Connection connection = Listener.connection;
-        Statement statement;
+        PreparedStatement statement;
         try {
-            statement = connection.createStatement();
+            statement = connection.prepareStatement("select login, password from users where login ='" + login + "' and password ='" + password + "'");
             System.out.println("SUCCESS DB: Connected.");
-            ResultSet resultSet = statement.executeQuery("select login, password from users where login ='" + login + "' and password ='" + password + "'");
+            ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()) {
                 if (resultSet.getString("login").equals(login)
                     &&resultSet.getString("password").equals(password)) {
@@ -38,11 +35,11 @@ public class LoginAndPasswordValidate {
     public static boolean isAdmin(String login){
         boolean result = false;
         Connection connection = Listener.connection;
-        Statement statement;
+        PreparedStatement statement;
         try {
-            statement = connection.createStatement();
+            statement = connection.prepareStatement("select role from users where login ='" + login + "'");
             System.out.println("SUCCESS DB: Connected.");
-            ResultSet resultSet = statement.executeQuery("select role from users where login ='" + login + "'");
+            ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()) {
                 System.out.println("SUCCESS: Role checked.");
                 role = resultSet.getString("role");

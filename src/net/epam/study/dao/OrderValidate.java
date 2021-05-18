@@ -3,17 +3,17 @@ package net.epam.study.dao;
 import net.epam.study.controller.Listener;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class OrderValidate {
     public static void validate (String sqlCommand)  {
         Connection connection = Listener.connection;
-        Statement statement;
+        PreparedStatement statement;
         try {
-            statement = connection.createStatement();
+            statement = connection.prepareStatement(sqlCommand);
             System.out.println("SUCCESS DB: Connected.");
-            statement.executeUpdate(sqlCommand);
+            statement.executeUpdate();
             System.out.println("SUCCESS DB: Order created.");
         } catch (SQLException exc) {
             exc.printStackTrace();

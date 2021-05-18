@@ -3,20 +3,17 @@ package net.epam.study.dao;
 import net.epam.study.controller.Listener;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class NewUserValidate {
     public static boolean validate (String sqlCommand, String login)  {
         boolean result = true;
         Connection connection = Listener.connection;
-        Statement statement;
+        PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select login from users where login ='" + login + "'");
+            statement = connection.prepareStatement("select login from users where login ='" + login + "'");
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()){
                     //&&resultSet.getString("login").equals(login)) {
                 System.out.println("FAIL DB: User already exist.");
