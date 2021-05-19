@@ -11,7 +11,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Restaurant Online</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="styleMainPage.css">
 </head>
 <body>
 <header class="site-header">

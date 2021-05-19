@@ -1,7 +1,5 @@
 package net.epam.study.service;
 
-import net.epam.study.controller.commands.Role;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,13 +12,9 @@ public class CheckSession {
         if(session == null) {
             return false;
         }
-
         Boolean isAuth = (Boolean) session.getAttribute("auth");
         String role = (String) session.getAttribute("role");
         if (isAuth == null || !isAuth || role == null) {
-            return false;
-        }
-        if (role.equals(Role.ADMIN.toString())){
             return false;
         }
         return true;

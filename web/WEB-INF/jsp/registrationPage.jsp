@@ -37,7 +37,7 @@
                 <div class="form-buttons">
                     <input type="hidden" name="command" value="savenewuser" />
                     <input type="submit" class="green" value="Register!">
-                    <a href="" class="green">Back to login</a>
+                    <a href="Controller?command=gotologinpage" class="green">Back to login</a>
                 </div>
             </buttons>
         </form>

@@ -15,16 +15,17 @@ public class LoginAndPasswordValidate {
             statement = connection.prepareStatement("select login, password from users where login ='" + login + "' and password ='" + password + "'");
             System.out.println("SUCCESS DB: Connected.");
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
+            while (resultSet.next()) {
                 if (resultSet.getString("login").equals(login)
                     &&resultSet.getString("password").equals(password)) {
                     System.out.println("SUCCESS: Login success.");
                     GoToMainPage.userLogin = login;
                     result = true;
+                    break;
+                } else {
+                    System.out.println("FAIL: Incorrect pass or login.");
+                    result = false;
                 }
-            } else {
-                System.out.println("FAIL: Incorrect pass or login.");
-                result = false;
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
@@ -37,16 +38,19 @@ public class LoginAndPasswordValidate {
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("select role from users where login ='" + login + "'");
+            statement = connection.prepareStatement("select login, role from users where login ='" + login + "'");
             System.out.println("SUCCESS DB: Connected.");
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()) {
-                System.out.println("SUCCESS: Role checked.");
-                role = resultSet.getString("role");
-                result = true;
-            } else {
-                System.out.println("FAIL: Fail to check role.");
-                result = false;
+            while (resultSet.next()) {
+                if (resultSet.getString("login").equals(login)){
+                    System.out.println("SUCCESS: Role checked.");
+                    role = resultSet.getString("role");
+                    result = true;
+                    break;
+                }else {
+                    System.out.println("FAIL: Fail to check role.");
+                    result = false;
+                }
             }
         } catch (SQLException exc) {
             exc.printStackTrace();

@@ -14,8 +14,8 @@ public class NewUserValidate {
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.prepareStatement("select login from users where login ='" + login + "'");
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()){
-                    //&&resultSet.getString("login").equals(login)) {
+            if (resultSet.next()
+                    &&resultSet.getString("login").equals(login)) {
                 System.out.println("FAIL DB: User already exist.");
                 result = false;
             } else{

@@ -23,7 +23,8 @@ public class CheckLoginAndPassword implements Command {
 
         if(LoginAndPasswordValidate.validate(login, password)
                 &&LoginAndPasswordValidate.isAdmin(login)) {
-            if (LoginAndPasswordValidate.role.equals(String.valueOf(Role.ADMIN))) {
+            if (LoginAndPasswordValidate.role.equals(String.valueOf(Role.ADMIN))
+                    ||LoginAndPasswordValidate.role.equals(String.valueOf(Role.OWNER))) {
                 request.setAttribute("errMsg", "");
                 session.setAttribute("role", LoginAndPasswordValidate.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
