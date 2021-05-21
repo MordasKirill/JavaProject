@@ -21,6 +21,8 @@ public class GoToMainPage implements Command {
         if (!CheckSession.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
+            String local = request.getParameter("local");
+            System.out.println(local);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp");
             requestDispatcher.forward(request, response);
         }

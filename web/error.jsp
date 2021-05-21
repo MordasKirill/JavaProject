@@ -7,6 +7,6 @@
     <title>Error</title>
 </head>
 <body>
-Error !!!
+    <span style="color:red; font-size: 20px" ><%= session.getAttribute("error")%></span>
 </body>
 </html>

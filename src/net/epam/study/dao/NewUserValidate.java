@@ -3,9 +3,13 @@ package net.epam.study.dao;
 import net.epam.study.controller.Listener;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class NewUserValidate {
+    public static String error;
     public static boolean validate (String sqlCommand, String login)  {
         boolean result = true;
         Connection connection = Listener.connection;
@@ -24,8 +28,10 @@ public class NewUserValidate {
                 statement.executeUpdate(sqlCommand);
                 result = true;
             }
+            error = "Failed to check if user exists!";
         } catch (SQLException exc) {
             exc.printStackTrace();
+            error = "Failed to check if user exists!";
             System.out.println("FAIL DB: Fail to write DB.");
         }
         return result;

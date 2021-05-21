@@ -36,7 +36,15 @@ public class CheckLoginAndPassword implements Command {
                 requestDispatcher.forward(request, response);
             }
         }else{
+            if (LoginAndPasswordValidate.error != null) {
+                session.setAttribute("error", LoginAndPasswordValidate.error);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                requestDispatcher.forward(request, response);
+                return;
+            }
             request.setAttribute("errMsg", "Username or password are incorrect !!!");
+            String local = request.getParameter("local");
+            request.getSession(true).setAttribute("local", local);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
             requestDispatcher.forward(request, response);
         }

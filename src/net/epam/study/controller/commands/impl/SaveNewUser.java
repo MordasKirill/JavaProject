@@ -28,6 +28,12 @@ public class SaveNewUser implements Command {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
             requestDispatcher.forward(request, response);
         }else{
+            if (NewUserValidate.error != null) {
+                session.setAttribute("error", NewUserValidate.error);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                requestDispatcher.forward(request, response);
+                return;
+            }
             request.setAttribute("errMsg", "User with such login already exist !");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
             requestDispatcher.forward(request, response);

@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Bill</title>
-    <link rel="stylesheet" href="styleBillPage.css">
+    <link rel="stylesheet" href="css/styleBillPage.css">
 </head>
 <body>
 <header class="site-header">

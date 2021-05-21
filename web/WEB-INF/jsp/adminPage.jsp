@@ -10,7 +10,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Admin</title>
-    <link rel="stylesheet" href="styleAdminPage.css">
+    <link rel="stylesheet" href="css/styleAdminPage.css">
 </head>
 <body>
 <header>

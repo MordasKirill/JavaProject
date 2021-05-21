@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.dao.LoginAndPasswordValidate;
 import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
@@ -15,6 +16,7 @@ public class GoToAdminPage implements Command {
         if (!CheckSession.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
+            System.out.println(LoginAndPasswordValidate.role);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
             requestDispatcher.forward(request, response);
         }

@@ -1,43 +1,61 @@
-<%@ page import="java.util.Date" %>
-<%@ page import="java.util.Calendar" %>
-<%@ page import="java.util.GregorianCalendar" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.time.DayOfWeek" %>
-<%@ page import="java.time.LocalDateTime" %>
-<%@ page import="java.text.SimpleDateFormat" %><%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%--
   Created by IntelliJ IDEA.
   User: Kirill
   Date: 24.04.2021
   Time: 21:16
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
+<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
+<fmt:message bundle="${loc}" key="local.login" var="login"/>
+<fmt:message bundle="${loc}" key="local.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.placeholder.login" var="placeholder_login"/>
+<fmt:message bundle="${loc}" key="local.placeholder.password" var="placeholder_password"/>
+<fmt:message bundle="${loc}" key="local.signin" var="signin"/>
+<fmt:message bundle="${loc}" key="local.signup" var="signup"/>
+<fmt:message bundle="${loc}" key="local.footer" var="footer"/>
 <!DOCTYPE html PUBLIC>
-<html lang="ru">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Login</title>
-    <link rel="stylesheet" href="styleLoginRegistr.css">
+    <link rel="stylesheet" href="css/styleLoginRegistr.css" />
 </head>
 <body>
 <header class="site-header">
+    <form action="Controller" method="post" style="margin-top: -20px">
+        <input type="hidden" name="command" value="gotologinpage"/>
+        <input type="hidden" name="local" value="en"/>
+        <input type="submit" name="local" style="width: 55px; height: 30px" class="green" value="${en_button}"> <br />
+    </form>
+    <form action="Controller" method="post" style="margin-top: -50px">
+        <input type="hidden" name="command" value="gotologinpage"/>
+        <input type="hidden" name="local" value="ru"/>
+        <input type="submit" name="local" style="width: 55px; height: 30px" class="green" value="${ru_button} "/> <br />
+    </form>
     <div class="container">
         <div class="time" id="current_date_time_block2" ></div>
         <form action="Controller" method="post">
         <span style="color:red; font-size: 13px" >${errMsg}</span>
         <div class="field">
-            <label>Login:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="Enter login" name="login" required/>
+            <label>${login}:</label>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" required/>
         </div>
         <div class="field">
-            <label>Password:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="Enter password" name="password" required/>
+            <label>${password}:</label>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="${placeholder_password}" name="password" required/>
         </div>
         <buttons >
             <div class="form-buttons">
                 <input type="hidden" name="command" value="checkloginandpassword" />
-                <input type="submit" class="green" value="Sign in"><!--
-            --><a href="Controller?command=registration" class="green">Sign up</a>
+                <input type="submit" class="green" value="${signin}">
+            <a href="Controller?command=registration&locale=${sessionScope.local}" class="green">${signup}</a>
             </div>
         </buttons>
     </form>
@@ -46,7 +64,7 @@
 <footer class="site-footer">
     <div class="container">
         <p>© KirMoSoft, 2021</p>
-        <p>Your online restaurant...</p>
+        <p>${footer}</p>
     </div>
 </footer>
 </body>

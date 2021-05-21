@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <title>Basket</title>
-    <link rel="stylesheet" href="styleBasketPage.css">
+    <link rel="stylesheet" href="css/styleBasketPage.css">
 </head>
 <body>
 <div class="row">

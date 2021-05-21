@@ -15,9 +15,9 @@ public class Logout implements Command {
         HttpSession session = request.getSession();
         if (session != null){
             session.removeAttribute("auth");
-            System.out.println(session.getAttribute("role"));
+            //System.out.println(session.getAttribute("role"));
             session.removeAttribute("role");
-            System.out.println(session.getAttribute("role"));
+            //System.out.println(session.getAttribute("role"));
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
         requestDispatcher.forward(request, response);
