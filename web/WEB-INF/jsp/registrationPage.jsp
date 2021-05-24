@@ -10,18 +10,18 @@
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
-<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
-<fmt:message bundle="${loc}" key="local.login" var="login"/>
-<fmt:message bundle="${loc}" key="local.password" var="password"/>
-<fmt:message bundle="${loc}" key="local.placeholder.login" var="placeholder_login"/>
-<fmt:message bundle="${loc}" key="local.placeholder.password" var="placeholder_password"/>
-<fmt:message bundle="${loc}" key="local.register" var="reg"/>
-<fmt:message bundle="${loc}" key="local.backtologin" var="back"/>
-<fmt:message bundle="${loc}" key="local.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
+<fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
+<fmt:message bundle="${loc}" key="local.login.login" var="login"/>
+<fmt:message bundle="${loc}" key="local.login.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.login.placeholder.login" var="placeholder_login"/>
+<fmt:message bundle="${loc}" key="local.login.placeholder.password" var="placeholder_password"/>
+<fmt:message bundle="${loc}" key="local.login.register" var="reg"/>
+<fmt:message bundle="${loc}" key="local.login.backtologin" var="back"/>
+<fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
 
 <!DOCTYPE html PUBLIC>
-<html lang="ru">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Registration</title>
@@ -54,6 +54,7 @@
             <buttons >
                 <div class="form-buttons">
                     <input type="hidden" name="command" value="savenewuser" />
+                    <input type="hidden" name="locale" value="${sessionScope.local}">
                     <input type="submit" class="green" value="${reg}">
                     <a href="Controller?command=gotologinpage" class="green">${back}</a>
                 </div>

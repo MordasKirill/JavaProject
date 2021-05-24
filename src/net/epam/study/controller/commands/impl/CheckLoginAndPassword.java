@@ -12,8 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class CheckLoginAndPassword implements Command {
-
-
+    public static String userLocale;
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
@@ -28,10 +27,12 @@ public class CheckLoginAndPassword implements Command {
                 request.setAttribute("errMsg", "");
                 session.setAttribute("role", LoginAndPasswordValidate.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+                userLocale = request.getParameter("locale");
                 requestDispatcher.forward(request, response);
             } else {
                 request.setAttribute("errMsg", "");
                 session.setAttribute("role", LoginAndPasswordValidate.role);
+                userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }
@@ -43,8 +44,7 @@ public class CheckLoginAndPassword implements Command {
                 return;
             }
             request.setAttribute("errMsg", "Username or password are incorrect !!!");
-            String local = request.getParameter("local");
-            request.getSession(true).setAttribute("local", local);
+            userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
             requestDispatcher.forward(request, response);
         }

@@ -25,6 +25,7 @@ public class SaveNewUser implements Command {
                 "VALUES ('" + login + "','" + password + "','" + role + "')";
         if(NewUserValidate.validate(sql, login)) {
             request.setAttribute("errMsg", "");
+            CheckLoginAndPassword.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
             requestDispatcher.forward(request, response);
         }else{
@@ -35,6 +36,7 @@ public class SaveNewUser implements Command {
                 return;
             }
             request.setAttribute("errMsg", "User with such login already exist !");
+            CheckLoginAndPassword.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
             requestDispatcher.forward(request, response);
         }

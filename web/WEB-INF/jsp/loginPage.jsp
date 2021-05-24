@@ -11,17 +11,27 @@
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
-<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
-<fmt:message bundle="${loc}" key="local.login" var="login"/>
-<fmt:message bundle="${loc}" key="local.password" var="password"/>
-<fmt:message bundle="${loc}" key="local.placeholder.login" var="placeholder_login"/>
-<fmt:message bundle="${loc}" key="local.placeholder.password" var="placeholder_password"/>
-<fmt:message bundle="${loc}" key="local.signin" var="signin"/>
-<fmt:message bundle="${loc}" key="local.signup" var="signup"/>
-<fmt:message bundle="${loc}" key="local.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
+<fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
+<fmt:message bundle="${loc}" key="local.login.login" var="login"/>
+<fmt:message bundle="${loc}" key="local.login.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.login.placeholder.login" var="placeholder_login"/>
+<fmt:message bundle="${loc}" key="local.login.placeholder.password" var="placeholder_password"/>
+<fmt:message bundle="${loc}" key="local.login.signin" var="signin"/>
+<fmt:message bundle="${loc}" key="local.login.signup" var="signup"/>
+<fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.main.logo" var="logo"/>
+<fmt:message bundle="${loc}" key="local.main.regards" var="regards"/>
+<fmt:message bundle="${loc}" key="local.main.logout" var="logout"/>
+<fmt:message bundle="${loc}" key="local.main.uniq" var="uniq"/>
+<fmt:message bundle="${loc}" key="local.main.offer" var="offer"/>
+<fmt:message bundle="${loc}" key="local.main.uniq.list.1" var="first"/>
+<fmt:message bundle="${loc}" key="local.main.uniq.list.2" var="second"/>
+<fmt:message bundle="${loc}" key="local.main.uniq.list.3" var="third"/>
+<fmt:message bundle="${loc}" key="local.main.uniq.list.4" var="fourth"/>
+<fmt:message bundle="${loc}" key="local.main.menu" var="button"/>
 <!DOCTYPE html PUBLIC>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Login</title>
@@ -54,6 +64,7 @@
         <buttons >
             <div class="form-buttons">
                 <input type="hidden" name="command" value="checkloginandpassword" />
+                <input type="hidden" name="locale" value="${sessionScope.local}">
                 <input type="submit" class="green" value="${signin}">
             <a href="Controller?command=registration&locale=${sessionScope.local}" class="green">${signup}</a>
             </div>
