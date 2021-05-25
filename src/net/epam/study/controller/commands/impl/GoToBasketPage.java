@@ -26,6 +26,7 @@ public class GoToBasketPage implements Command {
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
+            request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
             requestDispatcher.forward(request, response);
         }

@@ -17,6 +17,7 @@ public class GoToBillPage implements Command {
         if (!CheckSession.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
+            request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/billPage.jsp");
             requestDispatcher.forward(request, response);
         }

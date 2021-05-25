@@ -1,11 +1,27 @@
-<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
-<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
+
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:message bundle="${loc}" key="local.main.logout" var="logout"/>
+<fmt:message bundle="${loc}" key="local.menu.back" var="back"/>
+<fmt:message bundle="${loc}" key="local.menu.cart" var="cart"/>
+<fmt:message bundle="${loc}" key="local.menu.cart.item" var="item"/>
+<fmt:message bundle="${loc}" key="local.menu.appetizer" var="appetizer"/>
+<fmt:message bundle="${loc}" key="local.menu.soups" var="soups"/>
+<fmt:message bundle="${loc}" key="local.menu.meat_dishes" var="meat_dishes"/>
+<fmt:message bundle="${loc}" key="local.menu.poultry" var="poultry"/>
+<fmt:message bundle="${loc}" key="local.menu.sea_food" var="sea_food"/>
+<fmt:message bundle="${loc}" key="local.menu.soft_drinks" var="soft_drinks"/>
+<fmt:message bundle="${loc}" key="local.menu.hot_drinks" var="hot_drinks"/>
+<fmt:message bundle="${loc}" key="local.menu.alcohol" var="alcohol"/>
+<fmt:message bundle="${loc}" key="local.menu.deserts" var="deserts"/>
+<fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html PUBLIC>
-<html lang="ru">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Menu</title>
@@ -14,15 +30,15 @@
 <body>
 <header>
     <img src="resources/menu.png" style="text-align: center" alt="Snow">
-    <a href="Controller?command=gotomainpage" class="green" style="margin-top: -100px; margin-left: 400px">Main page</a>
-    <a href="Controller?command=logout" class="green" style="margin-left: 400px">Logout</a>
+    <a href="Controller?command=gotomainpage" class="green" style="margin-top: -100px; margin-left: 400px">${back}</a>
+    <a href="Controller?command=logout" class="green" style="margin-left: 400px">${logout}</a>
     <div class="menu">
-        <a href="Controller?command=gotobasketpage" class="green">Cart <c:out value="${size}"/> item(s)</a>
+        <a href="Controller?command=gotobasketpage" class="green">${cart} <c:out value="${size}"/> ${item}</a>
     </div>
 </header>
 <div class="container">
     <div class="header-appetizers">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Appetizers!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${appetizer}!</h2>
     </div>
 </div>
 <section>
@@ -43,7 +59,7 @@
 </section>
 <div class="container">
     <div class="header-soups">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Soups!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soups}!</h2>
     </div>
 </div>
 <section>
@@ -64,7 +80,7 @@
 </section>
 <div class="container">
     <div class="header-main-dishes">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Meat dishes!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${meat_dishes}!</h2>
     </div>
 </div>
 <section>
@@ -85,7 +101,7 @@
 </section>
 <div class="container">
     <div class="header-poultry">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Poultry!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${poultry}!</h2>
     </div>
 </div>
 <section>
@@ -106,7 +122,7 @@
 </section>
 <div class="container">
     <div class="header-fish-and-sea-food">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Sea food!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${sea_food}!</h2>
     </div>
 </div>
 <section>
@@ -127,7 +143,7 @@
 </section>
 <div class="container">
     <div class="header-deserts">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Deserts!</h2>
+        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${deserts}!</h2>
     </div>
 </div>
 <section>
@@ -148,7 +164,7 @@
 </section>
 <div class="container">
 <div class="header-soft-drinks">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Soft drinks!</h2>
+    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soft_drinks}!</h2>
 </div>
 </div>
 <section>
@@ -169,7 +185,7 @@
 </section>
 <div class="container">
 <div class="header-hot-drinks">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Hot drinks!</h2>
+    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${hot_drinks}!</h2>
 </div>
 </div>
 <section>
@@ -190,7 +206,7 @@
 </section>
 <div class="container">
 <div class="header-alcohol">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Alcohol!</h2>
+    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${alcohol}!</h2>
 </div>
 </div>
 <section>
@@ -235,7 +251,7 @@
 <footer class="site-footer">
     <div class="container">
         <p>© KirMoSoft, 2021</p>
-        <p>Your online restaurant...</p>
+        <p>${footer}</p>
     </div>
 </footer>
 </body>

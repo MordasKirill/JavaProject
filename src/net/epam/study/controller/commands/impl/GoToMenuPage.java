@@ -18,6 +18,7 @@ public class GoToMenuPage implements Command {
         } else {
             request.setAttribute("size", AddToCart.order.size());
             request.setAttribute("menuItems", ShowMenu.showMenu());
+            request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
             requestDispatcher.forward(request, response);
         }
