@@ -20,17 +20,6 @@
 <fmt:message bundle="${loc}" key="local.login.signin" var="signin"/>
 <fmt:message bundle="${loc}" key="local.login.signup" var="signup"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
-<fmt:message bundle="${loc}" key="local.main.logo" var="logo"/>
-<fmt:message bundle="${loc}" key="local.main.regards" var="regards"/>
-<fmt:message bundle="${loc}" key="local.main.logout" var="logout"/>
-<fmt:message bundle="${loc}" key="local.main.uniq" var="uniq"/>
-<fmt:message bundle="${loc}" key="local.main.offer" var="offer"/>
-<fmt:message bundle="${loc}" key="local.main.uniq.list.1" var="first"/>
-<fmt:message bundle="${loc}" key="local.main.uniq.list.2" var="second"/>
-<fmt:message bundle="${loc}" key="local.main.uniq.list.3" var="third"/>
-<fmt:message bundle="${loc}" key="local.main.uniq.list.4" var="fourth"/>
-<fmt:message bundle="${loc}" key="local.main.menu" var="button"/>
-<!DOCTYPE html PUBLIC>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">

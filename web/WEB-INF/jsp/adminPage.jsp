@@ -2,9 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
-                   url = "jdbc:mysql://localhost:3306/test"
-                   user = "root"  password = "3158095KIRILLMordas"/>
 <!DOCTYPE html PUBLIC>
 <html lang="ru">
 <head>
@@ -16,9 +13,7 @@
 <header>
 
 </header>
-<sql:query dataSource = "${snapshot}" var = "result">
-SELECT * from orders;
-</sql:query>
+
 <div class="container">
     <div class="header-admin">
         <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Hello, admin!</h2>
@@ -26,7 +21,7 @@ SELECT * from orders;
     <a href="Controller?command=logout" class="green" style="width: 200px; ">Logout</a>
 </div>
 <section>
-    <c:forEach var = "row" items = "${result.rows}">
+    <c:forEach var = "row" items = "${orders}">
         <div class="product-item">
             <div class="product-list" data-id="${row.id}">
                 <h3><c:out value = "${row.fullName}"/></h3>
@@ -42,3 +37,5 @@ SELECT * from orders;
         </div>
     </c:forEach>
 </section>
+</body>
+</html>

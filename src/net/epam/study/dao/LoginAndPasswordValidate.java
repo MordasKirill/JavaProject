@@ -1,5 +1,6 @@
 package net.epam.study.dao;
 
+import net.epam.study.BCrypt.BCrypt;
 import net.epam.study.controller.Listener;
 import net.epam.study.controller.commands.impl.GoToMainPage;
 
@@ -13,15 +14,18 @@ public class LoginAndPasswordValidate {
     public static String error;
     public static boolean validate (String login, String password) {
         boolean result = false;
+
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("select login, password from users where login ='" + login + "' and password ='" + password + "'");
+            statement = connection.prepareStatement("select login, password from users where login ='" + login + "'");
             System.out.println("SUCCESS DB: Connected.");
+
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
+                boolean passwordMatch = BCrypt.checkpw(password, resultSet.getString("password"));
                 if (resultSet.getString("login").equals(login)
-                    &&resultSet.getString("password").equals(password)) {
+                    &&passwordMatch) {
                     System.out.println("SUCCESS: Login success.");
                     GoToMainPage.userLogin = login;
                     result = true;

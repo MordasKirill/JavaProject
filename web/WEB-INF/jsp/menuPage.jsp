@@ -4,9 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
-                   url = "jdbc:mysql://localhost:3306/test"
-                   user = "root"  password = "3158095KIRILLMordas"/>
 <!DOCTYPE html PUBLIC>
 <html lang="ru">
 <head>
@@ -23,24 +20,25 @@
         <a href="Controller?command=gotobasketpage" class="green">Cart <c:out value="${size}"/> item(s)</a>
     </div>
 </header>
-<sql:query dataSource = "${snapshot}" var = "result">
-    SELECT * from menu where category='appetizer';
-</sql:query>
 <div class="container">
     <div class="header-appetizers">
         <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">Appetizers!</h2>
     </div>
 </div>
 <section>
-    <c:forEach var = "row" items = "${result.rows}">
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='appetizer'}">
         <div class="product-item">
             <div class="product-list" >
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
+                <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
             </div>
         </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -49,18 +47,19 @@
     </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='soups';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='soups'}">
         <div class="product-item">
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
+                <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
             </div>
         </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -69,18 +68,19 @@
     </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='meat-dishes';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
+        <c:forEach var = "row" items = "${menuItems}">
+            <c:choose>
+                <c:when test="${row.category=='meat'}">
         <div class="product-item">
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
+                <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
             </div>
         </div>
+                </c:when>
+            </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -89,18 +89,19 @@
     </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='poultry';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
-        <div class="product-item">
-            <div class="product-list">
-                <h3><c:out value = "${row.name}"/></h3>
-                <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='poultry'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -109,18 +110,19 @@
     </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='fish-and-sea-food';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
-        <div class="product-item">
-            <div class="product-list">
-                <h3><c:out value = "${row.name}"/></h3>
-                <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='fish-and-sea-food'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -129,18 +131,19 @@
     </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='deserts';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
-        <div class="product-item">
-            <div class="product-list">
-                <h3><c:out value = "${row.name}"/></h3>
-                <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='deserts'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -149,18 +152,19 @@
 </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='soft-drinks';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
-        <div class="product-item">
-            <div class="product-list">
-                <h3><c:out value = "${row.name}"/></h3>
-                <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='soft-drinks'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -169,18 +173,19 @@
 </div>
 </div>
 <section>
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='hot-drinks';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}">
-        <div class="product-item">
-            <div class="product-list" >
-                <h3><c:out value = "${row.name}"/></h3>
-                <span class="price">Price: $<c:out value = "${row.price}"/></span>
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}" class="button">Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='hot-drinks'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <div class="container">
@@ -189,25 +194,20 @@
 </div>
 </div>
 <section>
-    <form action="Controller" method="post">
-    <sql:query dataSource = "${snapshot}" var = "result">
-        SELECT * from menu where category='alcohol';
-    </sql:query>
-    <c:forEach var = "row" items = "${result.rows}" varStatus="Counter">
-        <div class="product-item">
-            <div class="product-list" data-id="${row.id}">
-                <h3 class="test"><c:out value = "${row.name}"/> per bottle</h3>
-                <input type="hidden" name="test" value="${row.name}"/>
-                <span class="price" >Price: $<c:out value = "${row.price}"/> </span>
-                <input type="hidden" name="price" value="price">
-                <span class="time">Filing time: <c:out value = "${row.time}"/>min</span>
-                <input type="hidden" name="command" value="addtocart" />
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.time}"
-                   class="button" >Add to cart</a>
-            </div>
-        </div>
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:choose>
+            <c:when test="${row.category=='alcohol'}">
+                <div class="product-item">
+                    <div class="product-list">
+                        <h3><c:out value = "${row.name}"/></h3>
+                        <span class="price">Price: $<c:out value = "${row.price}"/></span>
+                        <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                    </div>
+                </div>
+            </c:when>
+        </c:choose>
     </c:forEach>
-    </form>
 </section>
 <script>
     let cords = ['scrollX', 'scrollY'];

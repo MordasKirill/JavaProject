@@ -28,7 +28,6 @@ public class NewUserValidate {
                 statement.executeUpdate(sqlCommand);
                 result = true;
             }
-            error = "Failed to check if user exists!";
         } catch (SQLException exc) {
             exc.printStackTrace();
             error = "Failed to check if user exists!";

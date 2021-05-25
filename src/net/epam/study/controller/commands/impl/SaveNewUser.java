@@ -1,5 +1,6 @@
 package net.epam.study.controller.commands.impl;
 
+import net.epam.study.BCrypt.BCrypt;
 import net.epam.study.controller.commands.Command;
 import net.epam.study.controller.commands.Role;
 import net.epam.study.dao.NewUserValidate;
@@ -17,12 +18,13 @@ public class SaveNewUser implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
+        String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(15));
         String role = String.valueOf(Role.USER);
         HttpSession session = request.getSession(true);
         session.setAttribute("auth", true);
         session.setAttribute("role", role);
         String sql = "INSERT INTO users (login,password,role)" +
-                "VALUES ('" + login + "','" + password + "','" + role + "')";
+                "VALUES ('" + login + "','" + hashPassword + "','" + role + "')";
         if(NewUserValidate.validate(sql, login)) {
             request.setAttribute("errMsg", "");
             CheckLoginAndPassword.userLocale = request.getParameter("locale");

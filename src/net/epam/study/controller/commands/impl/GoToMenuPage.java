@@ -1,6 +1,7 @@
 package net.epam.study.controller.commands.impl;
 
 import net.epam.study.controller.commands.Command;
+import net.epam.study.dao.ShowMenu;
 import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +17,7 @@ public class GoToMenuPage implements Command {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             request.setAttribute("size", AddToCart.order.size());
+            request.setAttribute("menuItems", ShowMenu.showMenu());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
             requestDispatcher.forward(request, response);
         }
