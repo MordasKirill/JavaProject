@@ -1,10 +1,10 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.ShowTablesDAO;
-import net.epam.study.dao.impl.ShowTablesImpl;
-import net.epam.study.service.CheckSession;
+import net.epam.study.dao.impl.CheckSessionImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +17,8 @@ public class GoToAdminPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAOProvider provider = DAOProvider.getInstance();
         ShowTablesDAO showTablesDAO = provider.getShowTablesDAO();
-        if (!CheckSession.checkSession(request, response)) {
+        CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
+        if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             request.setAttribute("orders", showTablesDAO.getOrders());

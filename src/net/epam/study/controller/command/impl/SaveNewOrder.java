@@ -3,7 +3,8 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.OrderValidateDAO;
-import net.epam.study.service.FieldsValidation;
+import net.epam.study.service.FieldsValidationService;
+import net.epam.study.service.ServiceProvider;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,40 +24,42 @@ public class SaveNewOrder implements Command {
         String city = request.getParameter("city");
         DAOProvider provider = DAOProvider.getInstance();
         OrderValidateDAO orderValidateDAO = provider.getOrderValidateDAO();
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        FieldsValidationService fieldsValidationService = serviceProvider.getFieldsValidationService();
         StringBuilder stringBuilder = new StringBuilder();
         for (int i =0; i<AddToCart.order.size(); i++){
             stringBuilder.append(AddToCart.order.get(i).toString()).append(" ");
         }
         String sql = "INSERT INTO orders (fullName,address,email,phone,details)" +
                 "VALUES ('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')";
-        if(!FieldsValidation.isValidEmailAddress(email)) {
+        if(!fieldsValidationService.isValidEmailAddress(email)) {
             request.setAttribute("errMsgEmail", "Email is incorrect");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!FieldsValidation.isValidFullName(fullName)) {
+        if(!fieldsValidationService.isValidFullName(fullName)) {
             request.setAttribute("errMsgFullName", "Full name is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!FieldsValidation.isValidPhoneNumber(phone)) {
+        if(!fieldsValidationService.isValidPhoneNumber(phone)) {
             request.setAttribute("errMsgPhone", "Phone is incorrect!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if(!FieldsValidation.isValidCity(city)) {
+        if(!fieldsValidationService.isValidCity(city)) {
             request.setAttribute("errMsgCity", "Only Minsk required!");
             request.setAttribute("order", AddToCart.order);
             request.setAttribute("total", getTotal());
             request.setAttribute("size", AddToCart.order.size());
         }
-        if (FieldsValidation.isValidEmailAddress(email)
-                &&FieldsValidation.isValidFullName(fullName)
-                &&FieldsValidation.isValidPhoneNumber(phone)
-                &&FieldsValidation.isValidCity(city)){
+        if (fieldsValidationService.isValidEmailAddress(email)
+                &&fieldsValidationService.isValidFullName(fullName)
+                &&fieldsValidationService.isValidPhoneNumber(phone)
+                &&fieldsValidationService.isValidCity(city)){
             if (AddToCart.order.size() == 0) {
                 request.setAttribute("error", "You cant checkout with empty cart!");
                 request.setAttribute("order", AddToCart.order);

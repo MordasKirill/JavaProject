@@ -11,7 +11,7 @@ public final class DAOProvider {
     private final DeleteOrderDAO deleteOrderDAO = new DeleteOrderImpl();
     private final OrderValidateDAO orderValidateDAO = new OrderValidateImpl();
     private final ShowTablesDAO showTablesDAO = new ShowTablesImpl();
-    private final RemoveOrderElementDAO removeOrderElementDAO = new RemoveOrderElementImpl();
+    private final CheckSessionDAO checkSessionDAO = new CheckSessionImpl();
 
     private DAOProvider(){}
 
@@ -33,7 +33,7 @@ public final class DAOProvider {
     public ShowTablesDAO getShowTablesDAO(){
         return showTablesDAO;
     }
-    public RemoveOrderElementDAO getRemoveOrderElementDAO(){
-        return removeOrderElementDAO;
+    public CheckSessionDAO  getCheckSessionDAO(){
+        return checkSessionDAO;
     }
 }

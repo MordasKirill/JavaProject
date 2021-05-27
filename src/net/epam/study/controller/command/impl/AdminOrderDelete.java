@@ -1,9 +1,9 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.DeleteOrderDAO;
-import net.epam.study.service.CheckSession;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,11 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminOrderDelete implements Command {
+    DAOProvider provider = DAOProvider.getInstance();
+    DeleteOrderDAO deleteOrderDAO = provider.getDeleteOrderDAO();
+    CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAOProvider provider = DAOProvider.getInstance();
-        DeleteOrderDAO deleteOrderDAO = provider.getDeleteOrderDAO();
-        if (!CheckSession.checkSession(request, response)) {
+        if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             String id = request.getParameter("id");

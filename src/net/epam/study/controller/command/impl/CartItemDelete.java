@@ -1,9 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.RemoveOrderElementDAO;
-import net.epam.study.dao.impl.RemoveOrderElementImpl;
+import net.epam.study.service.RemoveOrderElementService;
+import net.epam.study.service.ServiceProvider;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,10 +13,10 @@ import java.io.IOException;
 public class CartItemDelete implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAOProvider provider = DAOProvider.getInstance();
-        RemoveOrderElementDAO removeOrderElementDAO = provider.getRemoveOrderElementDAO();
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        RemoveOrderElementService removeOrderElementService = serviceProvider.getRemoveOrderElementService();
         String deleteValue = request.getParameter("item");
-        removeOrderElementDAO.delete(deleteValue);
+        removeOrderElementService.delete(deleteValue);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basket-indexPage.jsp");
         requestDispatcher.forward(request, response);
     }

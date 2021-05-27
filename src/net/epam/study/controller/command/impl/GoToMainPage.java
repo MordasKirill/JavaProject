@@ -1,7 +1,9 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.service.CheckSession;
+import net.epam.study.dao.CheckSessionDAO;
+import net.epam.study.dao.DAOProvider;
+import net.epam.study.dao.impl.CheckSessionImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,8 @@ import java.io.IOException;
 
 public class GoToMainPage implements Command {
     public static String userLogin;
+    DAOProvider provider = DAOProvider.getInstance();
+    CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (userLogin != null) {
@@ -18,7 +22,7 @@ public class GoToMainPage implements Command {
         } else {
             request.setAttribute("login", "stranger");
         }
-        if (!CheckSession.checkSession(request, response)) {
+        if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
