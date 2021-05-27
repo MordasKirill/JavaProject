@@ -1,7 +1,7 @@
-package net.epam.study.controller.commands.impl;
+package net.epam.study.controller.command.impl;
 
-import net.epam.study.controller.commands.Command;
-import net.epam.study.controller.commands.Role;
+import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.Role;
 import net.epam.study.dao.LoginAndPasswordValidate;
 
 import javax.servlet.RequestDispatcher;

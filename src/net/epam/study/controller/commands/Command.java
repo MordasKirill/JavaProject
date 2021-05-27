@@ -1,4 +1,4 @@
-package net.epam.study.controller.commands;
+package net.epam.study.controller.command;
 
 import java.io.IOException;
 

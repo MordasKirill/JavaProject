@@ -1,7 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.dao.OrderValidate;
+import net.epam.study.dao.DAOProvider;
+import net.epam.study.dao.OrderValidateDAO;
 import net.epam.study.service.FieldsValidation;
 
 import javax.servlet.RequestDispatcher;
@@ -20,7 +21,8 @@ public class SaveNewOrder implements Command {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String city = request.getParameter("city");
-
+        DAOProvider provider = DAOProvider.getInstance();
+        OrderValidateDAO orderValidateDAO = provider.getOrderValidateDAO();
         StringBuilder stringBuilder = new StringBuilder();
         for (int i =0; i<AddToCart.order.size(); i++){
             stringBuilder.append(AddToCart.order.get(i).toString()).append(" ");
@@ -63,7 +65,7 @@ public class SaveNewOrder implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                 requestDispatcher.forward(request, response);
             } else {
-                OrderValidate.validate(sql);
+                orderValidateDAO.validate(sql);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }

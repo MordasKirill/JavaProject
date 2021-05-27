@@ -2,7 +2,7 @@ package net.epam.study.dao;
 
 import net.epam.study.BCrypt.BCrypt;
 import net.epam.study.controller.Listener;
-import net.epam.study.controller.commands.impl.GoToMainPage;
+import net.epam.study.controller.command.impl.GoToMainPage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

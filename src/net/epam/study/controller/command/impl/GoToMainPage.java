@@ -9,16 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToBillPage implements Command {
+public class GoToMainPage implements Command {
+    public static String userLogin;
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        AddToCart.order.clear();
-        AddToCart.total.clear();
+        if (userLogin != null) {
+            request.setAttribute("login", userLogin);
+        } else {
+            request.setAttribute("login", "stranger");
+        }
         if (!CheckSession.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/billPage.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp");
             requestDispatcher.forward(request, response);
         }
     }

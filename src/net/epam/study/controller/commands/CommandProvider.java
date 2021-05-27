@@ -1,6 +1,6 @@
-package net.epam.study.controller.commands;
+package net.epam.study.controller.command;
 
-import net.epam.study.controller.commands.impl.*;
+import net.epam.study.controller.command.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;

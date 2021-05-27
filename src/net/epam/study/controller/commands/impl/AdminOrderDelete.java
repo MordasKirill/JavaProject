@@ -1,6 +1,6 @@
-package net.epam.study.controller.commands.impl;
+package net.epam.study.controller.command.impl;
 
-import net.epam.study.controller.commands.Command;
+import net.epam.study.controller.command.Command;
 import net.epam.study.dao.OrderDelete;
 import net.epam.study.service.CheckSession;
 

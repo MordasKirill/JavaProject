@@ -1,6 +1,6 @@
-package net.epam.study.controller.commands.impl;
+package net.epam.study.controller.command.impl;
 
-import net.epam.study.controller.commands.Command;
+import net.epam.study.controller.command.Command;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

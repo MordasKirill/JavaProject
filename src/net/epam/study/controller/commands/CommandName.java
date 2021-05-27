@@ -1,4 +1,4 @@
-package net.epam.study.controller.commands;
+package net.epam.study.controller.command;
 
 public enum CommandName {
 	REGISTRATION, SAVENEWUSER, GOTOLOGINPAGE, GOTOMAINPAGE,

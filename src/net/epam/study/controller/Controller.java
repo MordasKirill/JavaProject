@@ -1,7 +1,7 @@
 package net.epam.study.controller;
 
-import net.epam.study.controller.commands.Command;
-import net.epam.study.controller.commands.CommandProvider;
+import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.CommandProvider;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
