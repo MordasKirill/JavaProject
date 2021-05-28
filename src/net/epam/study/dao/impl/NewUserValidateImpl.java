@@ -1,6 +1,6 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.controller.Listener;
+import net.epam.study.listener.Listener;
 import net.epam.study.controller.command.impl.GoToMainPage;
 import net.epam.study.dao.NewUserValidateDAO;
 
@@ -11,16 +11,18 @@ import java.sql.SQLException;
 
 public class NewUserValidateImpl implements NewUserValidateDAO {
     public static String error;
+    public static final String columnLogin = "login";
+    public static final String selectFrom = "select login from users where login =";
     public boolean validate (String sqlCommand, String login)  {
         boolean result = true;
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement("select login from users where login ='" + login + "'");
+            statement = connection.prepareStatement(selectFrom + "'" + login + "'");
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()
-                    &&resultSet.getString("login").equals(login)) {
+                    &&resultSet.getString(columnLogin).equals(login)) {
                 System.out.println("FAIL DB: User already exist.");
                 result = false;
             } else{

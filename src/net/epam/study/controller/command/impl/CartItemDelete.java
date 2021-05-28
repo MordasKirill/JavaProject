@@ -1,7 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.service.RemoveOrderElementService;
+import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceProvider;
 
 import javax.servlet.RequestDispatcher;
@@ -14,9 +14,9 @@ public class CartItemDelete implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        RemoveOrderElementService removeOrderElementService = serviceProvider.getRemoveOrderElementService();
+        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
         String deleteValue = request.getParameter("item");
-        removeOrderElementService.delete(deleteValue);
+        changeOrderService.delete(deleteValue);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basket-indexPage.jsp");
         requestDispatcher.forward(request, response);
     }

@@ -1,6 +1,6 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.controller.Listener;
+import net.epam.study.listener.Listener;
 import net.epam.study.dao.ShowTablesDAO;
 import net.epam.study.entity.MenuItem;
 import net.epam.study.entity.Order;
@@ -13,22 +13,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShowTablesImpl implements ShowTablesDAO {
+    public static final String columnId = "id";
+    public static final String columnFullName = "fullName";
+    public static final String columnAddress = "address";
+    public static final String columnEmail = "email";
+    public static final String columnPhone = "phone";
+    public static final String columnDetails = "details";
+    public static final String selectFromOrders = "select id, fullName, address, email, phone, details from orders";
+    public static final String columnItemName = "itemName";
+    public static final String columnPrice = "price";
+    public static final String columnWaitTime = "waitTime";
+    public static final String columnCategory = "category";
+    public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
     public List<Order> getOrders(){
         List<Order> orders = new ArrayList<>();
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement("select id, fullName, address, email, phone, details from orders ");
+            statement = connection.prepareStatement(selectFromOrders);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Order order = new Order();
-                order.setId(resultSet.getString("id"));
-                order.setFullName(resultSet.getString("fullName"));
-                order.setAddress(resultSet.getString("address"));
-                order.setEmail(resultSet.getString("email"));
-                order.setPhone(resultSet.getString("phone"));
-                order.setDetails(resultSet.getString("details"));
+                order.setId(resultSet.getString(columnId));
+                order.setFullName(resultSet.getString(columnFullName));
+                order.setAddress(resultSet.getString(columnAddress));
+                order.setEmail(resultSet.getString(columnEmail));
+                order.setPhone(resultSet.getString(columnPhone));
+                order.setDetails(resultSet.getString(columnDetails));
                 orders.add(order);
             }
         } catch (SQLException exc) {
@@ -44,14 +56,14 @@ public class ShowTablesImpl implements ShowTablesDAO {
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement("select itemName, price, waitTime, category from menu ");
+            statement = connection.prepareStatement(selectFromMenu);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 MenuItem menuItem = new MenuItem();
-                menuItem.setName(resultSet.getString("itemName"));
-                menuItem.setPrice(resultSet.getString("price"));
-                menuItem.setFilingTime(resultSet.getString("waitTime"));
-                menuItem.setCategory(resultSet.getString("category"));
+                menuItem.setName(resultSet.getString(columnItemName));
+                menuItem.setPrice(resultSet.getString(columnPrice));
+                menuItem.setFilingTime(resultSet.getString(columnWaitTime));
+                menuItem.setCategory(resultSet.getString(columnCategory));
                 menuItems.add(menuItem);
             }
         } catch (SQLException exc) {

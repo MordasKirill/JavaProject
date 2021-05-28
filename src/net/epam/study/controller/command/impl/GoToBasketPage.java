@@ -3,6 +3,10 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
+import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.FieldsValidation;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,23 +17,17 @@ import java.io.IOException;
 public class GoToBasketPage implements Command {
     DAOProvider provider = DAOProvider.getInstance();
     CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
-    public static double getTotal(){
-        double sum =0;
-        for (int i=0; i<AddToCart.total.size(); i++){
-            sum = sum + Double.parseDouble(AddToCart.total.get(i));
-            sum = (double) Math.round(sum * 100) / 100;
-        }
-        return sum;
-    }
+    ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            request.setAttribute("order", AddToCart.order);
-            request.setAttribute("total", getTotal());
-            request.setAttribute("size", AddToCart.order.size());
-            request.getSession(true).setAttribute("local", CheckLoginAndPassword.userLocale);
+            request.setAttribute("order", ChangeOrderImpl.order);
+            request.setAttribute("total", changeOrderService.getTotal());
+            request.setAttribute("size", ChangeOrderImpl.order.size());
+            request.getSession(true).setAttribute("local", FieldsValidation.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
             requestDispatcher.forward(request, response);
         }

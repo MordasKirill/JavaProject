@@ -1,6 +1,6 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.controller.Listener;
+import net.epam.study.listener.Listener;
 import net.epam.study.dao.DeleteOrderDAO;
 
 import java.sql.Connection;

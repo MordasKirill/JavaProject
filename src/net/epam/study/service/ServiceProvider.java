@@ -1,14 +1,14 @@
 package net.epam.study.service;
 
+import net.epam.study.service.impl.ChangeOrderImpl;
 import net.epam.study.service.impl.FieldsValidation;
-import net.epam.study.service.impl.RemoveOrderElementImpl;
 
 public final class ServiceProvider {
 
     private static final ServiceProvider instance = new ServiceProvider();
 
     private final FieldsValidationService fieldsValidationService = new FieldsValidation();
-    private final RemoveOrderElementService removeOrderElementService = new RemoveOrderElementImpl();
+    private final ChangeOrderService changeOrderService = new ChangeOrderImpl();
 
     private ServiceProvider(){}
 
@@ -18,7 +18,7 @@ public final class ServiceProvider {
     public FieldsValidationService getFieldsValidationService(){
         return fieldsValidationService;
     }
-    public RemoveOrderElementService getRemoveOrderElementService(){
-        return removeOrderElementService;
+    public ChangeOrderService getChangeOrderService(){
+        return changeOrderService;
     }
 }

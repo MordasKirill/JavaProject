@@ -1,11 +1,12 @@
 package net.epam.study.controller.command.impl;
 
-import net.epam.study.BCrypt.BCrypt;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.Role;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.NewUserValidateDAO;
 import net.epam.study.dao.impl.NewUserValidateImpl;
+import net.epam.study.service.impl.FieldsValidation;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,7 +32,7 @@ public class SaveNewUser implements Command {
                 "VALUES ('" + login + "','" + hashPassword + "','" + role + "')";
         if(newUserValidateDAO.validate(sql, login)) {
             request.setAttribute("errMsg", "");
-            CheckLoginAndPassword.userLocale = request.getParameter("locale");
+            FieldsValidation.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
             requestDispatcher.forward(request, response);
         }else{
@@ -42,7 +43,7 @@ public class SaveNewUser implements Command {
                 return;
             }
             request.setAttribute("errMsg", "User with such login already exist !");
-            CheckLoginAndPassword.userLocale = request.getParameter("locale");
+            FieldsValidation.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
             requestDispatcher.forward(request, response);
         }
