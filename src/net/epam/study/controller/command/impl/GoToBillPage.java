@@ -4,7 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
-import net.epam.study.service.impl.FieldsValidation;
+import net.epam.study.service.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class GoToBillPage implements Command {
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            request.getSession(true).setAttribute("local", FieldsValidation.userLocale);
+            request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/billPage.jsp");
             requestDispatcher.forward(request, response);
         }

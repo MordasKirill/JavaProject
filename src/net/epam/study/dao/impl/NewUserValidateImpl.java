@@ -13,7 +13,8 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
     public static String error;
     public static final String columnLogin = "login";
     public static final String selectFrom = "select login from users where login =";
-    public boolean validate (String sqlCommand, String login)  {
+    public static final String insertInto = "INSERT INTO users (login,password,role) VALUES";
+    public boolean validate (String login, String hashPassword, String role)  {
         boolean result = true;
         Connection connection = Listener.connection;
         PreparedStatement statement;
@@ -28,7 +29,7 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
             } else{
                 System.out.println("SUCCESS DB: User created.");
                 GoToMainPage.userLogin = login;
-                statement.executeUpdate(sqlCommand);
+                statement.executeUpdate(insertInto + "('" + login + "','" + hashPassword + "','" + role + "')");
                 result = true;
             }
         } catch (SQLException exc) {

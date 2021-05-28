@@ -5,8 +5,9 @@ import net.epam.study.controller.command.Role;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.NewUserValidateDAO;
 import net.epam.study.dao.impl.NewUserValidateImpl;
-import net.epam.study.service.impl.FieldsValidation;
-import org.mindrot.jbcrypt.BCrypt;
+import net.epam.study.service.HashPasswordService;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,18 +22,17 @@ public class SaveNewUser implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(15));
         String role = String.valueOf(Role.USER);
         HttpSession session = request.getSession(true);
         DAOProvider provider = DAOProvider.getInstance();
         NewUserValidateDAO newUserValidateDAO = provider.getNewUserValidateDAO();
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
         session.setAttribute("auth", true);
         session.setAttribute("role", role);
-        String sql = "INSERT INTO users (login,password,role)" +
-                "VALUES ('" + login + "','" + hashPassword + "','" + role + "')";
-        if(newUserValidateDAO.validate(sql, login)) {
+        if(newUserValidateDAO.validate(login, hashPasswordService.hashPassword(password), role)) {
             request.setAttribute("errMsg", "");
-            FieldsValidation.userLocale = request.getParameter("locale");
+            FieldsValidationImpl.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
             requestDispatcher.forward(request, response);
         }else{
@@ -43,7 +43,7 @@ public class SaveNewUser implements Command {
                 return;
             }
             request.setAttribute("errMsg", "User with such login already exist !");
-            FieldsValidation.userLocale = request.getParameter("locale");
+            FieldsValidationImpl.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
             requestDispatcher.forward(request, response);
         }

@@ -1,5 +1,5 @@
 package net.epam.study.dao;
 
 public interface NewUserValidateDAO {
-    boolean validate(String sqlCommand, String login);
+    boolean validate(String login, String hashPassword, String role);
 }

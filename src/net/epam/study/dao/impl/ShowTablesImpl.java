@@ -25,6 +25,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
     public static final String columnWaitTime = "waitTime";
     public static final String columnCategory = "category";
     public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
+    public static String error;
     public List<Order> getOrders(){
         List<Order> orders = new ArrayList<>();
         Connection connection = Listener.connection;
@@ -45,6 +46,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
+            error = "Failed to show orders !";
             System.out.println("FAIL DB: Fail to show orders.");
         }
         return orders;
@@ -68,6 +70,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
+            error = "Failed to show menu !";
             System.out.println("FAIL DB: Fail to show menu.");
         }
         return menuItems;

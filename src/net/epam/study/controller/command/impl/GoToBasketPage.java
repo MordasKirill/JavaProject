@@ -6,7 +6,7 @@ import net.epam.study.dao.DAOProvider;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
-import net.epam.study.service.impl.FieldsValidation;
+import net.epam.study.service.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +27,7 @@ public class GoToBasketPage implements Command {
             request.setAttribute("order", ChangeOrderImpl.order);
             request.setAttribute("total", changeOrderService.getTotal());
             request.setAttribute("size", ChangeOrderImpl.order.size());
-            request.getSession(true).setAttribute("local", FieldsValidation.userLocale);
+            request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
             requestDispatcher.forward(request, response);
         }

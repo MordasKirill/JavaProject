@@ -1,7 +1,8 @@
 package net.epam.study.service;
 
 public interface ChangeOrderService {
-    void delete(String item);
-    void addToList(String name, String price, String time);
+    void deleteOrderItem(String item);
+    void addToOrder(String name, String price, String time);
     double getTotal();
+    StringBuilder getOrder();
 }

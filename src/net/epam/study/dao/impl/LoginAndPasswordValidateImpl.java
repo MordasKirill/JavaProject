@@ -1,9 +1,10 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.listener.Listener;
 import net.epam.study.controller.command.impl.GoToMainPage;
 import net.epam.study.dao.UserLoginValidateDAO;
-import org.mindrot.jbcrypt.BCrypt;
+import net.epam.study.listener.Listener;
+import net.epam.study.service.HashPasswordService;
+import net.epam.study.service.ServiceProvider;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
+    ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
     public static String role;
     public static String error;
     public static final String selectFrom = "select login, password, role from users where login =";
@@ -19,18 +22,15 @@ public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
     public static final String columnRole = "role";
     public boolean validate (String login, String password) {
         boolean result = false;
-
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
             System.out.println("SUCCESS DB: Connected.");
-
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                boolean passwordMatch = BCrypt.checkpw(password, resultSet.getString(columnPassword));
                 if (resultSet.getString(columnLogin).equals(login)
-                    &&passwordMatch) {
+                    &&hashPasswordService.checkHashPassword(password, resultSet.getString(columnPassword))) {
                     System.out.println("SUCCESS: Login success.");
                     GoToMainPage.userLogin = login;
                     result = true;

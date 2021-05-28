@@ -8,16 +8,19 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DeleteOrderImpl implements DeleteOrderDAO {
-    public void delete(String sqlCommand){
+    public static final String deleteFrom = "delete from orders where id =";
+    public static String error;
+    public void delete(String id){
         Connection connection = Listener.connection;
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement(sqlCommand);
+            statement = connection.prepareStatement(deleteFrom + "'" + id + "'");
             System.out.println("SUCCESS DB: Connected.");
             statement.executeUpdate();
             System.out.println("SUCCESS DB: Order deleted.");
         } catch (SQLException exc) {
             exc.printStackTrace();
+            error = "Failed to delete order !";
             System.out.println("FAIL DB: Fail to write DB.");
         }
     }

@@ -16,7 +16,7 @@ public class CartItemDelete implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
         String deleteValue = request.getParameter("item");
-        changeOrderService.delete(deleteValue);
+        changeOrderService.deleteOrderItem(deleteValue);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basket-indexPage.jsp");
         requestDispatcher.forward(request, response);
     }

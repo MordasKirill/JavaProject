@@ -33,7 +33,7 @@
     <div class="container">
         <h1>Food Bar Online</h1>
         <p>${logo}!</p>
-        <p1>${regards}, <%= request.getAttribute("login")%> !
+        <p1>${regards}, <%= session.getAttribute("login")%> !
             <a href="Controller?command=logout" class="green" style="margin-left: -440px">${logout}</a>
         </p1>
     </div>

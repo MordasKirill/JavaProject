@@ -3,8 +3,9 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.OrderValidateDAO;
-import net.epam.study.service.FieldsValidationService;
+import net.epam.study.dao.impl.OrderValidateImpl;
 import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.FieldsValidationService;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
 
@@ -12,9 +13,15 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class SaveNewOrder implements Command {
+    DAOProvider provider = DAOProvider.getInstance();
+    OrderValidateDAO orderValidateDAO = provider.getOrderValidateDAO();
+    ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    FieldsValidationService fieldsValidationService = serviceProvider.getFieldsValidationService();
+    ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
@@ -22,17 +29,7 @@ public class SaveNewOrder implements Command {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String city = request.getParameter("city");
-        DAOProvider provider = DAOProvider.getInstance();
-        OrderValidateDAO orderValidateDAO = provider.getOrderValidateDAO();
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        FieldsValidationService fieldsValidationService = serviceProvider.getFieldsValidationService();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i< ChangeOrderImpl.order.size(); i++){
-            stringBuilder.append(ChangeOrderImpl.order.get(i).toString()).append(" ");
-        }
-        String sql = "INSERT INTO orders (fullName,address,email,phone,details)" +
-                "VALUES ('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')";
+        HttpSession session = request.getSession(true);
         if(!fieldsValidationService.isValidEmailAddress(email)) {
             request.setAttribute("errMsgEmail", "Email is incorrect");
             request.setAttribute("order", ChangeOrderImpl.order);
@@ -69,7 +66,13 @@ public class SaveNewOrder implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                 requestDispatcher.forward(request, response);
             } else {
-                orderValidateDAO.validate(sql);
+                if (OrderValidateImpl.error != null) {
+                    session.setAttribute("error", OrderValidateImpl.error);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    requestDispatcher.forward(request, response);
+                    return;
+                }
+                orderValidateDAO.validate(fullName, address, email, phone, changeOrderService.getOrder());
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }

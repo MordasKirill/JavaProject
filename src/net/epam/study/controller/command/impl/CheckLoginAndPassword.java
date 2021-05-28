@@ -5,7 +5,7 @@ import net.epam.study.controller.command.Role;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.UserLoginValidateDAO;
 import net.epam.study.dao.impl.LoginAndPasswordValidateImpl;
-import net.epam.study.service.impl.FieldsValidation;
+import net.epam.study.service.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,14 +15,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class CheckLoginAndPassword implements Command {
+    DAOProvider provider = DAOProvider.getInstance();
+    UserLoginValidateDAO validateDAO = provider.getLoginAndPasswordValidate();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         HttpSession session = request.getSession(true);
         session.setAttribute("auth", true);
-        DAOProvider provider = DAOProvider.getInstance();
-        UserLoginValidateDAO validateDAO = provider.getLoginAndPasswordValidate();
         if(validateDAO.validate(login, password)
                 &&validateDAO.isAdmin(login)) {
             if (LoginAndPasswordValidateImpl.role.equals(String.valueOf(Role.ADMIN))
@@ -30,12 +30,12 @@ public class CheckLoginAndPassword implements Command {
                 request.setAttribute("errMsg", "");
                 session.setAttribute("role", LoginAndPasswordValidateImpl.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
-                FieldsValidation.userLocale = request.getParameter("locale");
+                FieldsValidationImpl.userLocale = request.getParameter("locale");
                 requestDispatcher.forward(request, response);
             } else {
                 request.setAttribute("errMsg", "");
                 session.setAttribute("role", LoginAndPasswordValidateImpl.role);
-                FieldsValidation.userLocale = request.getParameter("locale");
+                FieldsValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }
@@ -47,7 +47,7 @@ public class CheckLoginAndPassword implements Command {
                 return;
             }
             request.setAttribute("errMsg", "Username or password are incorrect !!!");
-            FieldsValidation.userLocale = request.getParameter("locale");
+            FieldsValidationImpl.userLocale = request.getParameter("locale");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
             requestDispatcher.forward(request, response);
         }
