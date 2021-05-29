@@ -39,6 +39,9 @@ public class GoToMenuPage implements Command {
             request.setAttribute("menuItems", showTablesDAO.getMenu());
             request.setAttribute("category", category);
             category = null;
+            if (request.getParameter("locale")!= null) {
+                FieldsValidationImpl.userLocale = request.getParameter("locale");
+            }
             request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
             requestDispatcher.forward(request, response);

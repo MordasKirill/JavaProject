@@ -1,6 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.dao.impl.ShowTablesImpl;
+import net.epam.study.service.impl.ChangeOrderImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,9 +17,10 @@ public class Logout implements Command {
         HttpSession session = request.getSession();
         if (session != null){
             session.removeAttribute("auth");
-            //System.out.println(session.getAttribute("role"));
             session.removeAttribute("role");
-            //System.out.println(session.getAttribute("role"));
+            ChangeOrderImpl.order.clear();
+            ChangeOrderImpl.total.clear();
+            ShowTablesImpl.limit = ShowTablesImpl.defaultLimit;
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
         requestDispatcher.forward(request, response);

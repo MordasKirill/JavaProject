@@ -13,13 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShowTablesImpl implements ShowTablesDAO {
+    public static final int defaultLimit = 8;
+    public static int limit = 8;
     public static final String columnId = "id";
     public static final String columnFullName = "fullName";
     public static final String columnAddress = "address";
     public static final String columnEmail = "email";
     public static final String columnPhone = "phone";
     public static final String columnDetails = "details";
-    public static final String selectFromOrders = "select id, fullName, address, email, phone, details from orders";
+    public static final String selectFromOrders = "select id, fullName, address, email, phone, details from orders where id>0 LIMIT ";
     public static final String columnItemName = "itemName";
     public static final String columnPrice = "price";
     public static final String columnWaitTime = "waitTime";
@@ -32,7 +34,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(selectFromOrders);
+            statement = connection.prepareStatement(selectFromOrders + limit);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Order order = new Order();

@@ -17,6 +17,7 @@
 <fmt:message bundle="${loc}" key="local.basket.placeholder.fullname" var="placeholder_fullname"/>
 <fmt:message bundle="${loc}" key="local.basket.placeholder.address" var="placeholder_address"/>
 <fmt:message bundle="${loc}" key="local.basket.placeholder.city" var="placeholder_city"/>
+<fmt:message bundle="${loc}" key="local.basket.empty" var="emptyCart"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
 <!DOCTYPE html>
 <html>
@@ -44,7 +45,7 @@
                             </c:forEach>
                         </c:when>
                     <c:otherwise>
-                        <h2>Your cart is empty!</h2>
+                        <h2>${emptyCart}!</h2>
                         <p style="color: red; font-size: 10px"><c:out value="${error}" /></p>
                     </c:otherwise>
                     </c:choose>

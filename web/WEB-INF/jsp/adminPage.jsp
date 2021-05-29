@@ -37,5 +37,14 @@
         </div>
     </c:forEach>
 </section>
+    <div class="container">
+        <a href="Controller?command=gotoadminpage&load=1" class="green" style="width: 200px;">Load more</a>
+    </div>
 </body>
+<script>
+    let cords = ['scrollX', 'scrollY'];
+    window.addEventListener('unload', e =>
+        cords.forEach(cord => localStorage[cord] = window[cord]));
+    window.scroll(...cords.map(cord => localStorage[cord]));
+</script>
 </html>

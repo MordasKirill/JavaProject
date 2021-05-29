@@ -29,6 +29,11 @@ public class GoToAdminPage implements Command {
                 requestDispatcher.forward(request, response);
                 return;
             }
+            if (request.getParameter("load")!=null){
+                ShowTablesImpl.limit = ShowTablesImpl.limit + 8;
+                response.sendRedirect("Controller?command=gotoadminpage");
+                return;
+            }
             request.setAttribute("orders", showTablesDAO.getOrders());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
             requestDispatcher.forward(request, response);
