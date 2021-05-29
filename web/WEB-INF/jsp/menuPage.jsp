@@ -38,191 +38,191 @@
 </header>
 <div class="container">
     <div class="header-appetizers">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${appetizer}!</h2>
+        <a href="Controller?command=gotomenupage&category=appetizer" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${appetizer}!</a>
     </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='appetizer'}">
+            <c:if test="${category=='appetizer'}">
+                <c:if test="${row.category=='appetizer'}">
         <div class="product-item">
             <div class="product-list" >
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
                 <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=appetizer" class="button">Add to cart</a>
             </div>
         </div>
-            </c:when>
-        </c:choose>
+                </c:if>
+            </c:if>
     </c:forEach>
 </section>
 <div class="container">
     <div class="header-soups">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soups}!</h2>
+        <a href="Controller?command=gotomenupage&category=soups" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soups}!</a>
     </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='soups'}">
+        <c:if test="${category=='soups'}">
+            <c:if test="${row.category=='soups'}">
         <div class="product-item">
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
                 <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=soups" class="button">Add to cart</a>
             </div>
         </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
     <div class="header-main-dishes">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${meat_dishes}!</h2>
+        <a href="Controller?command=gotomenupage&category=meat" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${meat_dishes}!</a>
     </div>
 </div>
 <section>
-        <c:forEach var = "row" items = "${menuItems}">
-            <c:choose>
-                <c:when test="${row.category=='meat'}">
+    <c:forEach var = "row" items = "${menuItems}">
+        <c:if test="${category=='meat'}">
+            <c:if test="${row.category=='meat'}">
         <div class="product-item">
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">Price: $<c:out value = "${row.price}"/></span>
                 <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=meat" class="button">Add to cart</a>
             </div>
         </div>
-                </c:when>
-            </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
     <div class="header-poultry">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${poultry}!</h2>
+        <a href="Controller?command=gotomenupage&category=poultry" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${poultry}!</a>
     </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='poultry'}">
+        <c:if test="${category=='poultry'}">
+            <c:if test="${row.category=='poultry'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=poultry" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
     <div class="header-fish-and-sea-food">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${sea_food}!</h2>
+        <a href="Controller?command=gotomenupage&category=fish-and-sea-food" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${sea_food}!</a>
     </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='fish-and-sea-food'}">
+        <c:if test="${category=='fish-and-sea-food'}">
+            <c:if test="${row.category=='fish-and-sea-food'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=fish-and-sea-food" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
     <div class="header-deserts">
-        <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${deserts}!</h2>
+        <a href="Controller?command=gotomenupage&category=deserts" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${deserts}!</a>
     </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='deserts'}">
+        <c:if test="${category=='deserts'}">
+            <c:if test="${row.category=='deserts'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=deserts" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
 <div class="header-soft-drinks">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soft_drinks}!</h2>
+    <a href="Controller?command=gotomenupage&category=soft-drinks" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${soft_drinks}!</a>
 </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='soft-drinks'}">
+        <c:if test="${category=='soft-drinks'}">
+            <c:if test="${row.category=='soft-drinks'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=soft-drinks" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
 <div class="header-hot-drinks">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${hot_drinks}!</h2>
+    <a href="Controller?command=gotomenupage&category=hot-drinks" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${hot_drinks}!</a>
 </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='hot-drinks'}">
+        <c:if test="${category=='hot-drinks'}">
+            <c:if test="${row.category=='hot-drinks'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=hot-drinks" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <div class="container">
 <div class="header-alcohol">
-    <h2 class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${alcohol}!</h2>
+    <a href="Controller?command=gotomenupage&category=alcohol" class="centered" style="-webkit-text-stroke: 1px #b1b3a0;">${alcohol}!</a>
 </div>
 </div>
 <section>
     <c:forEach var = "row" items = "${menuItems}">
-        <c:choose>
-            <c:when test="${row.category=='alcohol'}">
+        <c:if test="${category=='alcohol'}">
+            <c:if test="${row.category=='alcohol'}">
                 <div class="product-item">
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">Price: $<c:out value = "${row.price}"/></span>
                         <span class="time">Filing time: <c:out value = "${row.filingTime}"/>min</span>
-                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}" class="button">Add to cart</a>
+                        <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time=${row.filingTime}&category=alcohol" class="button">Add to cart</a>
                     </div>
                 </div>
-            </c:when>
-        </c:choose>
+            </c:if>
+        </c:if>
     </c:forEach>
 </section>
 <script>
@@ -231,23 +231,6 @@
     cords.forEach(cord => localStorage[cord] = window[cord]));
     window.scroll(...cords.map(cord => localStorage[cord]));
 </script>
-<%--<script>--%>
-<%--    $(document).on('click', 'a[class^="button"]', function(e) {--%>
-<%--    e.preventDefault();--%>
-<%--    var productName =--%>
-<%--        $(this)--%>
-<%--        .parent()--%>
-<%--        .data('id')--%>
-<%--        let itemsArray = [];--%>
-<%--        localStorage.setItem('id', JSON.stringify(itemsArray))--%>
-<%--        const data = JSON.parse(localStorage.getItem('id'))--%>
-
-<%--        itemsArray.push(productName);--%>
-<%--        localStorage.setItem('id', JSON.stringify(itemsArray));--%>
-
-<%--        alert('You added item to cart ' + productName);--%>
-<%--    });--%>
-<%--</script>--%>
 <footer class="site-footer">
     <div class="container">
         <p>© KirMoSoft, 2021</p>

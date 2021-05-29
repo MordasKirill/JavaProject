@@ -19,6 +19,7 @@ public class GoToMenuPage implements Command {
     DAOProvider provider = DAOProvider.getInstance();
     CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
     ShowTablesDAO showTablesDAO = provider.getShowTablesDAO();
+    public static String category;
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
@@ -31,8 +32,13 @@ public class GoToMenuPage implements Command {
                 requestDispatcher.forward(request, response);
                 return;
             }
+            if (category == null) {
+                category = request.getParameter("category");
+            }
             request.setAttribute("size", ChangeOrderImpl.order.size());
             request.setAttribute("menuItems", showTablesDAO.getMenu());
+            request.setAttribute("category", category);
+            category = null;
             request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
             requestDispatcher.forward(request, response);

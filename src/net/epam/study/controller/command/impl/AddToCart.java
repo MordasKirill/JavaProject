@@ -25,6 +25,8 @@ public class AddToCart implements Command {
             String name = request.getParameter("name");
             String price = request.getParameter("price");
             String time = request.getParameter("time");
+            GoToMenuPage.category = request.getParameter("category");
+            request.setAttribute("category", GoToMenuPage.category);
             changeOrderService.addToOrder(name, price, time);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menu-indexPage.jsp");
             requestDispatcher.forward(request, response);
