@@ -38,7 +38,9 @@
     </c:forEach>
 </section>
     <div class="container">
-        <a href="Controller?command=gotoadminpage&load=1" class="green" style="width: 200px;">Load more</a>
+        <c:if test="${result}">
+            <a href="Controller?command=gotoadminpage&load=1" class="green" style="width: 200px;">Load more</a>
+        </c:if>
     </div>
 </body>
 <script>

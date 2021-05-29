@@ -14,11 +14,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class GoToAdminPage implements Command {
+    DAOProvider provider = DAOProvider.getInstance();
+    ShowTablesDAO showTablesDAO = provider.getShowTablesDAO();
+    CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAOProvider provider = DAOProvider.getInstance();
-        ShowTablesDAO showTablesDAO = provider.getShowTablesDAO();
-        CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
         HttpSession session = request.getSession(true);
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
@@ -30,10 +30,13 @@ public class GoToAdminPage implements Command {
                 return;
             }
             if (request.getParameter("load")!=null){
-                ShowTablesImpl.limit = ShowTablesImpl.limit + 8;
+                ShowTablesImpl.limit = ShowTablesImpl.limit + ShowTablesImpl.defaultLimit;
                 response.sendRedirect("Controller?command=gotoadminpage");
                 return;
             }
+            int size = showTablesDAO.getOrders().size();
+            boolean result = size>=ShowTablesImpl.limit;
+            request.setAttribute("result", result);
             request.setAttribute("orders", showTablesDAO.getOrders());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
             requestDispatcher.forward(request, response);
