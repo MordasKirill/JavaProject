@@ -35,7 +35,7 @@ public class GoToAdminPage implements Command {
                 return;
             }
             int size = showTablesDAO.getOrders().size();
-            boolean result = size>=ShowTablesImpl.limit;
+            boolean result = size>ShowTablesImpl.limit;
             request.setAttribute("result", result);
             request.setAttribute("orders", showTablesDAO.getOrders());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");

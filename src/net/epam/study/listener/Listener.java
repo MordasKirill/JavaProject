@@ -1,27 +1,20 @@
 package net.epam.study.listener;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import net.epam.study.connection.ConnectionPool;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Listener implements ServletContextListener {
-    public static Connection connection = null;
+    public static final String userNameDB = "root";
+    public static final String passwordDB = "3158095KIRILLMordas";
+    public static final String urlDB = "jdbc:mysql://localhost:3306/test";
+    public static final String driver = "com.mysql.jdbc.Driver";
+    public static ConnectionPool connectionPool;
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("ServletContextListener was created!");
-        Context context;
-        try {
-            context = new InitialContext();
-            DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/test");
-            connection = ds.getConnection();
-        } catch (NamingException | SQLException e) {
-            e.printStackTrace();
-        }
+        connectionPool = new ConnectionPool(urlDB, passwordDB, userNameDB, driver, 5);
     }
 
     @Override

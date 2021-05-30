@@ -14,15 +14,20 @@ import java.sql.SQLException;
 public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
     ServiceProvider serviceProvider = ServiceProvider.getInstance();
     HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
+    //ConnectionPool connectionPool = new ConnectionPool(urlDB, passwordDB, userNameDB, driver, 5);
     public static String role;
     public static String error;
     public static final String selectFrom = "select login, password, role from users where login =";
     public static final String columnLogin = "login";
     public static final String columnPassword = "password";
     public static final String columnRole = "role";
+    public static final String userNameDB = "root";
+    public static final String passwordDB = "3158095KIRILLMordas";
+    public static final String urlDB = "jdbc:mysql://localhost:3306/test";
+    public static final String driver = "com.mysql.jdbc.Driver";
     public boolean validate (String login, String password) {
         boolean result = false;
-        Connection connection = Listener.connection;
+        Connection connection = Listener.connectionPool.retrieve();
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
@@ -37,21 +42,17 @@ public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
                     break;
                 }
             }
-            //todo incorrect data action needed
-//            if (!resultSet.next()){
-//                System.out.println("FAIL: Incorrect pass or login.");
-//                result = false;
-//            }
         } catch (SQLException exc) {
             exc.printStackTrace();
             error = "Failed to check user !";
             System.out.println("FAIL DB: Fail to write DB.");
         }
+        Listener.connectionPool.putBack(connection);
         return result;
     }
     public boolean isAdmin(String login){
         boolean result = false;
-        Connection connection = Listener.connection;
+        Connection connection = Listener.connectionPool.retrieve();
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
@@ -64,16 +65,13 @@ public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
                     result = true;
                     break;
                 }
-//                else {
-//                    System.out.println("FAIL: Fail to check role.");
-//                    result = false;
-//                }
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
             error = "Failed to check user role !";
             System.out.println("FAIL DB: Fail to write DB.");
         }
+        Listener.connectionPool.putBack(connection);
         return result;
     }
 }

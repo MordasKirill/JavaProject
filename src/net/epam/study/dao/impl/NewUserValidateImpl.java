@@ -16,7 +16,7 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
     public static final String insertInto = "INSERT INTO users (login,password,role) VALUES";
     public boolean validate (String login, String hashPassword, String role)  {
         boolean result = true;
-        Connection connection = Listener.connection;
+        Connection connection = Listener.connectionPool.retrieve();
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
@@ -37,6 +37,7 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
             error = "Failed to check if user exists!";
             System.out.println("FAIL DB: Fail to write DB.");
         }
+        Listener.connectionPool.putBack(connection);
         return result;
     }
 }

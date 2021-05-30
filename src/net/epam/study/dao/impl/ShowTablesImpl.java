@@ -30,7 +30,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
     public static String error;
     public List<Order> getOrders(){
         List<Order> orders = new ArrayList<>();
-        Connection connection = Listener.connection;
+        Connection connection = Listener.connectionPool.retrieve();
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
@@ -51,12 +51,13 @@ public class ShowTablesImpl implements ShowTablesDAO {
             error = "Failed to show orders !";
             System.out.println("FAIL DB: Fail to show orders.");
         }
+        Listener.connectionPool.putBack(connection);
         return orders;
     }
 
     public List<MenuItem> getMenu()  {
         List<MenuItem> menuItems = new ArrayList<>();
-        Connection connection = Listener.connection;
+        Connection connection = Listener.connectionPool.retrieve();
         PreparedStatement statement;
         try {
             System.out.println("SUCCESS DB: Connected.");
@@ -75,6 +76,7 @@ public class ShowTablesImpl implements ShowTablesDAO {
             error = "Failed to show menu !";
             System.out.println("FAIL DB: Fail to show menu.");
         }
+        Listener.connectionPool.putBack(connection);
         return menuItems;
     }
 }
