@@ -2,11 +2,11 @@ package net.epam.study.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ConnectionPool {
-    private final Vector<Connection> availableConnections = new Vector<Connection>();
-    private final Vector<Connection> usedConnections = new Vector<Connection>();
+    private final ArrayList<Connection> availableConnections = new ArrayList<Connection>();
+    private final ArrayList<Connection> usedConnections = new ArrayList<Connection>();
     private String url;
     private String password;
     private String userName;
@@ -21,7 +21,7 @@ public class ConnectionPool {
         this.password = password;
         this.userName = userName;
         for (int i = 0; i < initConnCnt; i++) {
-            availableConnections.addElement(getConnection());
+            availableConnections.add(getConnection());
         }
     }
 
@@ -40,17 +40,17 @@ public class ConnectionPool {
         if (availableConnections.size() == 0) {
             newConn = getConnection();
         } else {
-            newConn = availableConnections.lastElement();
-            availableConnections.removeElement(newConn);
+            newConn = availableConnections.get(availableConnections.size() - 1);
+            availableConnections.remove(newConn);
         }
-        usedConnections.addElement(newConn);
+        usedConnections.add(newConn);
         return newConn;
     }
 
     public synchronized void putBack(Connection connection) throws NullPointerException {
         if (connection != null) {
-            if (usedConnections.removeElement(connection)) {
-                availableConnections.addElement(connection);
+            if (usedConnections.remove(connection)) {
+                availableConnections.add(connection);
             } else {
                 throw new NullPointerException("Connection not in the usedConnections array");
             }

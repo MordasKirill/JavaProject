@@ -21,10 +21,6 @@ public class LoginAndPasswordValidateImpl implements UserLoginValidateDAO {
     public static final String columnLogin = "login";
     public static final String columnPassword = "password";
     public static final String columnRole = "role";
-    public static final String userNameDB = "root";
-    public static final String passwordDB = "3158095KIRILLMordas";
-    public static final String urlDB = "jdbc:mysql://localhost:3306/test";
-    public static final String driver = "com.mysql.jdbc.Driver";
     public boolean validate (String login, String password) {
         boolean result = false;
         Connection connection = Listener.connectionPool.retrieve();
