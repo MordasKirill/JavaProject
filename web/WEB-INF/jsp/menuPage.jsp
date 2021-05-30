@@ -25,13 +25,13 @@
 <fmt:message bundle="${loc}" key="local.menu.time" var="localTime"/>
 <fmt:message bundle="${loc}" key="local.menu.time.min" var="localTimeMin"/>
 <fmt:message bundle="${loc}" key="local.menu.addtocart" var="localAddToCart"/>
-
+<fmt:message bundle="${loc}" key="local.title.menuPage" var="menuPage"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <title>Menu</title>
+    <title>${menuPage}</title>
     <link rel="stylesheet" href="css/styleMenu.css">
 </head>
 <body>

@@ -7,11 +7,12 @@
 <fmt:message bundle="${loc}" key="local.bill.thankyou2" var="thankyou2"/>
 <fmt:message bundle="${loc}" key="local.menu.back" var="main"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.title.bill" var="bill"/>
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <title>Bill</title>
+    <title>${bill}</title>
     <link rel="stylesheet" href="css/styleBillPage.css">
 </head>
 <body>

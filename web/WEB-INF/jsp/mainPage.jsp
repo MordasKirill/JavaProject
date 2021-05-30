@@ -21,11 +21,12 @@
 <fmt:message bundle="${loc}" key="local.main.uniq.list.4" var="fourth"/>
 <fmt:message bundle="${loc}" key="local.main.menu" var="button"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.title.mainPage" var="mainPage"/>
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <title>Restaurant Online</title>
+    <title>${mainPage}</title>
     <link rel="stylesheet" href="css/styleMainPage.css">
 </head>
 <body>

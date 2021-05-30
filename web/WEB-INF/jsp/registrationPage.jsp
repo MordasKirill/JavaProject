@@ -1,4 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Kirill
@@ -19,12 +20,12 @@
 <fmt:message bundle="${loc}" key="local.login.register" var="reg"/>
 <fmt:message bundle="${loc}" key="local.login.backtologin" var="back"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
-
+<fmt:message bundle="${loc}" key="local.title.registration" var="registration"/>
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <title>Registration</title>
+    <title>${registration}</title>
     <link rel="stylesheet" href="css/styleLoginRegistr.css">
 </head>
 <body>
@@ -70,35 +71,68 @@
 </footer>
 
 </body>
-<script type="text/javascript">
-    /* функция добавления ведущих нулей */
-    /* (если число меньше десяти, перед числом добавляем ноль) */
-    function zero_first_format(value)
-    {
-        if (value < 10)
+<c:if test="${sessionScope.local == 'ru' || sessionScope.local == null}">
+    <script type="text/javascript">
+        /* функция добавления ведущих нулей */
+        /* (если число меньше десяти, перед числом добавляем ноль) */
+        function zero_first_format(value)
         {
-            value='0'+value;
+            if (value < 10)
+            {
+                value='0'+value;
+            }
+            return value;
         }
-        return value;
-    }
 
-    /* функция получения текущей даты и времени */
-    function date_time()
-    {
-        var current_datetime = new Date();
-        var day = zero_first_format(current_datetime.getDate());
-        var month = zero_first_format(current_datetime.getMonth()+1);
-        var year = current_datetime.getFullYear();
-        var hours = zero_first_format(current_datetime.getHours());
-        var minutes = zero_first_format(current_datetime.getMinutes());
-        var seconds = zero_first_format(current_datetime.getSeconds());
+        /* функция получения текущей даты и времени */
+        function date_time()
+        {
+            var current_datetime = new Date();
+            var day = zero_first_format(current_datetime.getDate());
+            var month = zero_first_format(current_datetime.getMonth()+1);
+            var year = current_datetime.getFullYear();
+            var hours = zero_first_format(current_datetime.getHours());
+            var minutes = zero_first_format(current_datetime.getMinutes());
+            var seconds = zero_first_format(current_datetime.getSeconds());
 
-        return day+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
-    }
-    /* каждую секунду получаем текущую дату и время */
-    /* и вставляем значение в блок с id "current_date_time_block2" */
-    setInterval(function () {
-        document.getElementById('current_date_time_block2').innerHTML = date_time();
-    }, 1000);
-</script>
+            return day+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
+        }
+
+        /* каждую секунду получаем текущую дату и время */
+        /* и вставляем значение в блок с id "current_date_time_block2" */
+        setInterval(function () {
+            document.getElementById('current_date_time_block2').innerHTML = date_time();
+        }, 1000);
+    </script>
+</c:if>
+<c:if test="${sessionScope.local == 'en'}">
+    <script type="text/javascript">
+        function zero_first_format(value)
+        {
+            if (value < 10)
+            {
+                value='0'+value;
+            }
+            return value;
+        }
+
+        function date_time_en()
+        {
+            var current_datetime = new Date();
+            var day = zero_first_format(current_datetime.getDate());
+            var month = zero_first_format(current_datetime.getMonth()+1);
+            var year = current_datetime.getFullYear();
+            var hours = current_datetime.getHours();
+            var minutes = zero_first_format(current_datetime.getMinutes());
+            var seconds = current_datetime.getSeconds();
+            var ampm = (hours >= 12) ? "PM" : "AM";
+            var hoursAmPm = (hours>12) ? (hours-12) : hours;
+            return  month+"-"+day+"-"+year+" "+hoursAmPm+":"+minutes+":"+seconds+" "+ampm;
+        }
+
+        setInterval(function () {
+            document.getElementById('current_date_time_block2').innerHTML = date_time_en();
+        }, 1000);
+    </script>
+</c:if>
 </html>

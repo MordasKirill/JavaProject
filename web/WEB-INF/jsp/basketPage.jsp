@@ -19,11 +19,12 @@
 <fmt:message bundle="${loc}" key="local.basket.placeholder.city" var="placeholder_city"/>
 <fmt:message bundle="${loc}" key="local.basket.empty" var="emptyCart"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
+<fmt:message bundle="${loc}" key="local.title.basket" var="basket"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Basket</title>
+    <title>${basket}</title>
     <link rel="stylesheet" href="css/styleBasketPage.css">
 </head>
 <body>
