@@ -123,9 +123,12 @@
         var year = current_datetime.getFullYear();
         var hours = current_datetime.getHours();
         var minutes = zero_first_format(current_datetime.getMinutes());
-        var seconds = current_datetime.getSeconds();
+        var seconds = zero_first_format(current_datetime.getSeconds());
         var ampm = (hours >= 12) ? "PM" : "AM";
         var hoursAmPm = (hours>12) ? (hours-12) : hours;
+        if (hours===0){
+            hoursAmPm = 12;
+        }
         return month+"-"+day+"-"+year+" "+hoursAmPm+":"+minutes+":"+seconds+" "+ampm;
     }
 

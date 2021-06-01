@@ -2,10 +2,10 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.Role;
-import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.UserLoginValidateDAO;
-import net.epam.study.dao.impl.LoginAndPasswordValidateImpl;
-import net.epam.study.service.impl.FieldsValidationImpl;
+import net.epam.study.dao.impl.CheckUserImpl;
+import net.epam.study.service.CheckUserService;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.validation.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,33 +15,33 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class CheckLoginAndPassword implements Command {
-    DAOProvider provider = DAOProvider.getInstance();
-    UserLoginValidateDAO validateDAO = provider.getLoginAndPasswordValidate();
+    ServiceProvider provider = ServiceProvider.getInstance();
+    CheckUserService checkUserService = provider.getCheckUserService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         HttpSession session = request.getSession(true);
         session.setAttribute("auth", true);
-        if(validateDAO.validate(login, password)
-                &&validateDAO.isAdmin(login)) {
-            if (LoginAndPasswordValidateImpl.role.equals(String.valueOf(Role.ADMIN))
-                    || LoginAndPasswordValidateImpl.role.equals(String.valueOf(Role.OWNER))) {
+        if(checkUserService.validateUser(login, password)
+                &&checkUserService.isAdmin(login)) {
+            if (CheckUserImpl.role.equals(String.valueOf(Role.ADMIN))
+                    || CheckUserImpl.role.equals(String.valueOf(Role.OWNER))) {
                 request.setAttribute("errMsg", "");
-                session.setAttribute("role", LoginAndPasswordValidateImpl.role);
+                session.setAttribute("role", CheckUserImpl.role);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
                 FieldsValidationImpl.userLocale = request.getParameter("locale");
                 requestDispatcher.forward(request, response);
             } else {
                 request.setAttribute("errMsg", "");
-                session.setAttribute("role", LoginAndPasswordValidateImpl.role);
+                session.setAttribute("role", CheckUserImpl.role);
                 FieldsValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
             }
         }else{
-            if (LoginAndPasswordValidateImpl.error != null) {
-                session.setAttribute("error", LoginAndPasswordValidateImpl.error);
+            if (CheckUserImpl.error != null) {
+                session.setAttribute("error", CheckUserImpl.error);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
                 requestDispatcher.forward(request, response);
                 return;

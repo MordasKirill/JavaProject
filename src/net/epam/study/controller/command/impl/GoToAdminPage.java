@@ -3,8 +3,9 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.ShowTablesDAO;
-import net.epam.study.dao.impl.ShowTablesImpl;
+import net.epam.study.dao.impl.TablesListImpl;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.TablesListService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,8 +15,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class GoToAdminPage implements Command {
+
     DAOProvider provider = DAOProvider.getInstance();
-    ShowTablesDAO showTablesDAO = provider.getShowTablesDAO();
+    ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    TablesListService tablesListService = serviceProvider.getTablesListService();
     CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,21 +26,21 @@ public class GoToAdminPage implements Command {
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            if (ShowTablesImpl.error != null) {
-                session.setAttribute("error", ShowTablesImpl.error);
+            if (TablesListImpl.error != null) {
+                session.setAttribute("error", TablesListImpl.error);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
                 requestDispatcher.forward(request, response);
                 return;
             }
             if (request.getParameter("load")!=null){
-                ShowTablesImpl.limit = ShowTablesImpl.limit + ShowTablesImpl.defaultLimit;
+                TablesListImpl.limit = TablesListImpl.limit + TablesListImpl.defaultLimit;
                 response.sendRedirect("Controller?command=gotoadminpage");
                 return;
             }
-            int size = showTablesDAO.getOrders().size();
-            boolean result = size>ShowTablesImpl.limit;
+            int size = tablesListService.getOrders().size();
+            boolean result = size>= TablesListImpl.limit;
             request.setAttribute("result", result);
-            request.setAttribute("orders", showTablesDAO.getOrders());
+            request.setAttribute("orders", tablesListService.getOrders());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
             requestDispatcher.forward(request, response);
         }

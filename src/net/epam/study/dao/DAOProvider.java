@@ -6,11 +6,11 @@ public final class DAOProvider {
 
     private static final DAOProvider instance = new DAOProvider();
 
-    private final UserLoginValidateDAO loginAndPasswordValidate = new LoginAndPasswordValidateImpl();
+    private final CheckUserDAO checkUserDAO = new CheckUserImpl();
     private final NewUserValidateDAO newUserValidateDAO = new NewUserValidateImpl();
     private final DeleteOrderDAO deleteOrderDAO = new DeleteOrderImpl();
-    private final OrderValidateDAO orderValidateDAO = new OrderValidateImpl();
-    private final ShowTablesDAO showTablesDAO = new ShowTablesImpl();
+    private final OrderCreateDAO orderCreateDAO = new OrderCreateImpl();
+    private final TablesListDAO tablesListDAO = new TablesListImpl();
     private final CheckSessionDAO checkSessionDAO = new CheckSessionImpl();
 
     private DAOProvider(){}
@@ -18,8 +18,8 @@ public final class DAOProvider {
     public static DAOProvider getInstance(){
         return instance;
     }
-    public UserLoginValidateDAO getLoginAndPasswordValidate(){
-        return loginAndPasswordValidate;
+    public CheckUserDAO getCheckUserDAO(){
+        return checkUserDAO;
     }
     public NewUserValidateDAO getNewUserValidateDAO(){
         return newUserValidateDAO;
@@ -27,11 +27,11 @@ public final class DAOProvider {
     public DeleteOrderDAO getDeleteOrderDAO(){
         return deleteOrderDAO;
     }
-    public OrderValidateDAO getOrderValidateDAO(){
-        return orderValidateDAO;
+    public OrderCreateDAO getOrderCreateDAO(){
+        return orderCreateDAO;
     }
-    public ShowTablesDAO getShowTablesDAO(){
-        return showTablesDAO;
+    public TablesListDAO getTablesListDAO(){
+        return tablesListDAO;
     }
     public CheckSessionDAO  getCheckSessionDAO(){
         return checkSessionDAO;

@@ -6,7 +6,7 @@ import net.epam.study.dao.DAOProvider;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
-import net.epam.study.service.impl.FieldsValidationImpl;
+import net.epam.study.service.validation.impl.FieldsValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

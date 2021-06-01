@@ -3,8 +3,9 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.DeleteOrderDAO;
 import net.epam.study.dao.impl.DeleteOrderImpl;
+import net.epam.study.service.RemoveOrderService;
+import net.epam.study.service.ServiceProvider;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,9 @@ import java.io.IOException;
 
 public class AdminOrderDelete implements Command {
     DAOProvider provider = DAOProvider.getInstance();
-    DeleteOrderDAO deleteOrderDAO = provider.getDeleteOrderDAO();
     CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
+    ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    RemoveOrderService removeOrderService = serviceProvider.getRemoveOrderService();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
@@ -31,7 +33,7 @@ public class AdminOrderDelete implements Command {
             }
             String id = request.getParameter("id");
             if (id != null) {
-                deleteOrderDAO.delete(id);
+                removeOrderService.delete(id);
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
             requestDispatcher.forward(request, response);
