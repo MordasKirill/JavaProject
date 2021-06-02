@@ -17,16 +17,16 @@ public class Controller extends HttpServlet {
         super();
     }
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        requestDispatcher(response, request);
+        process(response, request);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         request.getSession(true).setAttribute("local", request.getParameter("local"));
-        requestDispatcher(response, request);
+        process(response, request);
     }
-    private void requestDispatcher(HttpServletResponse response, HttpServletRequest request) throws  IOException, ServletException{
+    private void process(HttpServletResponse response, HttpServletRequest request) throws  IOException, ServletException{
         String name;
         Command command;
         name = request.getParameter("command");

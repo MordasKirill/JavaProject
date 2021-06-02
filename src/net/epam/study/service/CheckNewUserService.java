@@ -1,5 +1,5 @@
 package net.epam.study.service;
 
 public interface CheckNewUserService {
-    boolean check(String login, String hashPassword, String role);
+    boolean check(String login, String hashPassword, String role) throws ServiceException;
 }

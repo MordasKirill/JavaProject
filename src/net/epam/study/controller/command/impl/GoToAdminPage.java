@@ -4,6 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.impl.TablesListImpl;
+import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 
@@ -26,23 +27,22 @@ public class GoToAdminPage implements Command {
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            if (TablesListImpl.error != null) {
-                session.setAttribute("error", TablesListImpl.error);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            try {
+                if (request.getParameter("load") != null) {
+                    TablesListImpl.limit = TablesListImpl.limit + TablesListImpl.defaultLimit;
+                    response.sendRedirect("Controller?command=gotoadminpage");
+                    return;
+                }
+                int size = tablesListService.getOrders().size();
+                boolean result = size >= TablesListImpl.limit;
+                request.setAttribute("result", result);
+                request.setAttribute("orders", tablesListService.getOrders());
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
                 requestDispatcher.forward(request, response);
-                return;
+            } catch (ServiceException e){
+                session.setAttribute("error", "Show orders fail!");
+                response.sendRedirect("/error.jsp");
             }
-            if (request.getParameter("load")!=null){
-                TablesListImpl.limit = TablesListImpl.limit + TablesListImpl.defaultLimit;
-                response.sendRedirect("Controller?command=gotoadminpage");
-                return;
-            }
-            int size = tablesListService.getOrders().size();
-            boolean result = size>= TablesListImpl.limit;
-            request.setAttribute("result", result);
-            request.setAttribute("orders", tablesListService.getOrders());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
-            requestDispatcher.forward(request, response);
         }
     }
 }

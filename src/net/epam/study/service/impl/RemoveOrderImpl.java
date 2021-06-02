@@ -1,14 +1,20 @@
 package net.epam.study.service.impl;
 
+import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.DeleteOrderDAO;
 import net.epam.study.service.RemoveOrderService;
+import net.epam.study.service.ServiceException;
 
 public class RemoveOrderImpl implements RemoveOrderService {
     @Override
-    public void delete(String id) {
+    public void delete(String id) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         DeleteOrderDAO deleteOrderDAO = daoProvider.getDeleteOrderDAO();
-        deleteOrderDAO.delete(id);
+        try {
+            deleteOrderDAO.delete(id);
+        } catch (DAOException e){
+            throw new ServiceException("Fail to delete order", e);
+        }
     }
 }

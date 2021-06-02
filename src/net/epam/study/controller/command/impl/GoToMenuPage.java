@@ -3,7 +3,7 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.dao.CheckSessionDAO;
 import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.impl.TablesListImpl;
+import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 import net.epam.study.service.impl.ChangeOrderImpl;
@@ -28,25 +28,24 @@ public class GoToMenuPage implements Command {
         if (!checkSessionDAO.checkSession(request, response)) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            if (TablesListImpl.error != null) {
-                session.setAttribute("error", TablesListImpl.error);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            try {
+                if (category == null) {
+                    category = request.getParameter("category");
+                }
+                request.setAttribute("size", ChangeOrderImpl.order.size());
+                request.setAttribute("menuItems", tablesListService.getMenu());
+                request.setAttribute("category", category);
+                category = null;
+                if (request.getParameter("locale") != null) {
+                    FieldsValidationImpl.userLocale = request.getParameter("locale");
+                }
+                request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
                 requestDispatcher.forward(request, response);
-                return;
+            } catch (ServiceException e){
+                session.setAttribute("error", "Show menu fail!");
+                response.sendRedirect("/error.jsp");
             }
-            if (category == null) {
-                category = request.getParameter("category");
-            }
-            request.setAttribute("size", ChangeOrderImpl.order.size());
-            request.setAttribute("menuItems", tablesListService.getMenu());
-            request.setAttribute("category", category);
-            category = null;
-            if (request.getParameter("locale")!= null) {
-                FieldsValidationImpl.userLocale = request.getParameter("locale");
-            }
-            request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
-            requestDispatcher.forward(request, response);
         }
     }
 }

@@ -2,9 +2,9 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.Role;
-import net.epam.study.dao.impl.NewUserValidateImpl;
-import net.epam.study.service.HashPasswordService;
 import net.epam.study.service.CheckNewUserService;
+import net.epam.study.service.HashPasswordService;
+import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.impl.FieldsValidationImpl;
 
@@ -28,22 +28,21 @@ public class SaveNewUser implements Command {
         CheckNewUserService checkNewUserService = serviceProvider.getCheckNewUserService();
         session.setAttribute("auth", true);
         session.setAttribute("role", role);
-        if(checkNewUserService.check(login, hashPasswordService.hashPassword(password), role)) {
-            if (NewUserValidateImpl.error != null) {
-                session.setAttribute("error", NewUserValidateImpl.error);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+        try {
+            if(checkNewUserService.check(login, hashPasswordService.hashPassword(password), role)) {
+                request.setAttribute("errMsg", "");
+                FieldsValidationImpl.userLocale = request.getParameter("locale");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
-                return;
+            }else{
+                request.setAttribute("errMsg", "User with such login already exist !");
+                FieldsValidationImpl.userLocale = request.getParameter("locale");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
+                requestDispatcher.forward(request, response);
             }
-            request.setAttribute("errMsg", "");
-            FieldsValidationImpl.userLocale = request.getParameter("locale");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
-            requestDispatcher.forward(request, response);
-        }else{
-            request.setAttribute("errMsg", "User with such login already exist !");
-            FieldsValidationImpl.userLocale = request.getParameter("locale");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
-            requestDispatcher.forward(request, response);
+        } catch (ServiceException e){
+            session.setAttribute("error", "Save user fail!");
+            response.sendRedirect("/error.jsp");
         }
     }
 }

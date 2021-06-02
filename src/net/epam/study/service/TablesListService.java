@@ -6,6 +6,6 @@ import net.epam.study.entity.Order;
 import java.util.List;
 
 public interface TablesListService {
-    List<Order> getOrders();
-    List<MenuItem> getMenu();
+    List<Order> getOrders() throws ServiceException;
+    List<MenuItem> getMenu() throws ServiceException;
 }

@@ -1,7 +1,8 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.listener.Listener;
+import net.epam.study.dao.DAOException;
 import net.epam.study.dao.TablesListDAO;
+import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.entity.MenuItem;
 import net.epam.study.entity.Order;
 
@@ -14,7 +15,8 @@ import java.util.List;
 
 public class TablesListImpl implements TablesListDAO {
     public static final int defaultLimit = 8;
-    public static int limit = 8;
+    //todo remove static
+    public static  int limit = 8;
     public static final String columnId = "order_id";
     public static final String columnFullName = "fullName";
     public static final String columnAddress = "address";
@@ -28,14 +30,18 @@ public class TablesListImpl implements TablesListDAO {
     public static final String columnCategory = "category";
     public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
     public static String error;
-    public List<Order> getOrders(){
+
+    public List<Order> getOrders() throws DAOException {
+
         List<Order> orders = new ArrayList<>();
-        Connection connection = Listener.connectionPool.retrieve();
-        PreparedStatement statement;
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         try {
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(selectFromOrders + limit);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 Order order = new Order();
                 order.setId(resultSet.getString(columnId));
@@ -46,23 +52,37 @@ public class TablesListImpl implements TablesListDAO {
                 order.setDetails(resultSet.getString(columnDetails));
                 orders.add(order);
             }
+
         } catch (SQLException exc) {
             exc.printStackTrace();
             error = "Failed to show orders !";
             System.out.println("FAIL DB: Fail to show orders.");
+            throw new DAOException(exc);
+        } finally {
+            ConnectionPool.connectionPool.putBack(connection);
+            try {
+                resultSet.close();
+                statement.close();
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
+
         }
-        Listener.connectionPool.putBack(connection);
+
         return orders;
     }
 
-    public List<MenuItem> getMenu()  {
+    public List<MenuItem> getMenu() throws DAOException{
+
         List<MenuItem> menuItems = new ArrayList<>();
-        Connection connection = Listener.connectionPool.retrieve();
-        PreparedStatement statement;
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         try {
             System.out.println("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(selectFromMenu);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             while (resultSet.next()){
                 MenuItem menuItem = new MenuItem();
                 menuItem.setName(resultSet.getString(columnItemName));
@@ -71,12 +91,22 @@ public class TablesListImpl implements TablesListDAO {
                 menuItem.setCategory(resultSet.getString(columnCategory));
                 menuItems.add(menuItem);
             }
+
         } catch (SQLException exc) {
             exc.printStackTrace();
             error = "Failed to show menu !";
             System.out.println("FAIL DB: Fail to show menu.");
+            throw new DAOException(exc);
+        }finally {
+            ConnectionPool.connectionPool.putBack(connection);
+            try {
+                resultSet.close();
+                statement.close();
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
         }
-        Listener.connectionPool.putBack(connection);
+
         return menuItems;
     }
 }
