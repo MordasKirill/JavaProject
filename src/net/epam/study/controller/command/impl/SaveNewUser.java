@@ -6,7 +6,7 @@ import net.epam.study.service.CheckNewUserService;
 import net.epam.study.service.HashPasswordService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.validation.impl.FieldsValidationImpl;
+import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,27 +22,35 @@ public class SaveNewUser implements Command {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String role = String.valueOf(Role.USER);
+
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
         CheckNewUserService checkNewUserService = serviceProvider.getCheckNewUserService();
+
         session.setAttribute("auth", true);
         session.setAttribute("role", role);
+
         try {
+
             if(checkNewUserService.check(login, hashPasswordService.hashPassword(password), role)) {
                 request.setAttribute("errMsg", "");
-                FieldsValidationImpl.userLocale = request.getParameter("locale");
+                ValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
+
             }else{
+
                 request.setAttribute("errMsg", "User with such login already exist !");
-                FieldsValidationImpl.userLocale = request.getParameter("locale");
+                ValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
                 requestDispatcher.forward(request, response);
             }
+
         } catch (ServiceException e){
             session.setAttribute("error", "Save user fail!");
-            response.sendRedirect("/error.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            requestDispatcher.forward(request, response);
         }
     }
 }

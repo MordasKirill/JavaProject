@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DeleteOrderImpl implements DeleteOrderDAO {
-    public static final String deleteFrom = "delete from orders where id =";
+    public static final String deleteFrom = "delete from orders where order_id =";
 
     public void delete(String id) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();

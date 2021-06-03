@@ -1,16 +1,18 @@
 package net.epam.study.service.impl;
 
+import net.epam.study.dao.DAOProvider;
+import net.epam.study.dao.HashPasswordDAO;
 import net.epam.study.service.HashPasswordService;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class HashPasswordImpl implements HashPasswordService {
 
-    public String hashPassword(String password){
-        return BCrypt.hashpw(password, BCrypt.gensalt(15));
-    }
+    @Override
+    public String hashPassword(String password) {
+        DAOProvider provider = DAOProvider.getInstance();
+        HashPasswordDAO hashPasswordDAO = provider.getHashPasswordDAO();
 
-    public boolean checkHashPassword(String password, String hashPassword) {
-        return BCrypt.checkpw(password, hashPassword);
+        String result;
+        result = hashPasswordDAO.hashPassword(password);
+        return result;
     }
-
 }

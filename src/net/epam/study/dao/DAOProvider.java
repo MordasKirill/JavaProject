@@ -12,6 +12,7 @@ public final class DAOProvider {
     private final OrderCreateDAO orderCreateDAO = new OrderCreateImpl();
     private final TablesListDAO tablesListDAO = new TablesListImpl();
     private final CheckSessionDAO checkSessionDAO = new CheckSessionImpl();
+    private final HashPasswordDAO hashPasswordDAO = new HashPasswordImpl();
 
     private DAOProvider(){}
 
@@ -35,5 +36,8 @@ public final class DAOProvider {
     }
     public CheckSessionDAO  getCheckSessionDAO(){
         return checkSessionDAO;
+    }
+    public HashPasswordDAO getHashPasswordDAO(){
+        return hashPasswordDAO;
     }
 }

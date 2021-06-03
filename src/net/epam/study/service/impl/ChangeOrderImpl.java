@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeOrderImpl implements ChangeOrderService {
-    public static List<MenuItem> order = new ArrayList<>();
-    public static List<String> total = new ArrayList<>();
+    public static final List<MenuItem> order = new ArrayList<>();
+    public static final List<String> total = new ArrayList<>();
     public void deleteOrderItem(String item){
         for (int i = 0; i< order.size(); i++){
             if (order.get(i).toString().equals(item)){

@@ -12,7 +12,7 @@ public class CheckUserImpl implements CheckUserService {
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
         try {
-            return checkUserDAO.check(login, password);
+            return checkUserDAO.isUserExists(login, password);
         } catch (DAOException e){
             throw new ServiceException("Fail to check if user exist", e);
         }
@@ -20,13 +20,13 @@ public class CheckUserImpl implements CheckUserService {
     }
 
     @Override
-    public boolean isAdmin(String login) throws ServiceException{
+    public String getUserRole(String login) throws ServiceException{
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
         try {
-            return checkUserDAO.isAdmin(login);
+            return checkUserDAO.getUserRole(login);
         } catch (DAOException e){
-            throw new ServiceException("Fail to check isAdmin", e);
+            throw new ServiceException("Fail to check role", e);
         }
     }
 }

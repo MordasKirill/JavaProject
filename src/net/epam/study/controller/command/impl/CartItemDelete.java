@@ -15,8 +15,10 @@ public class CartItemDelete implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+
         String deleteValue = request.getParameter("item");
         changeOrderService.deleteOrderItem(deleteValue);
+
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basket-indexPage.jsp");
         requestDispatcher.forward(request, response);
     }

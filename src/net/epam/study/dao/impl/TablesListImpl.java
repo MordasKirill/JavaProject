@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablesListImpl implements TablesListDAO {
+
+    //todo remove
+    public static int limit = 8;
+
     public static final int defaultLimit = 8;
-    //todo remove static
-    public static  int limit = 8;
     public static final String columnId = "order_id";
     public static final String columnFullName = "fullName";
     public static final String columnAddress = "address";
@@ -29,7 +31,6 @@ public class TablesListImpl implements TablesListDAO {
     public static final String columnWaitTime = "waitTime";
     public static final String columnCategory = "category";
     public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
-    public static String error;
 
     public List<Order> getOrders() throws DAOException {
 
@@ -43,6 +44,7 @@ public class TablesListImpl implements TablesListDAO {
             statement = connection.prepareStatement(selectFromOrders + limit);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
+
                 Order order = new Order();
                 order.setId(resultSet.getString(columnId));
                 order.setFullName(resultSet.getString(columnFullName));
@@ -54,8 +56,6 @@ public class TablesListImpl implements TablesListDAO {
             }
 
         } catch (SQLException exc) {
-            exc.printStackTrace();
-            error = "Failed to show orders !";
             System.out.println("FAIL DB: Fail to show orders.");
             throw new DAOException(exc);
         } finally {
@@ -94,7 +94,6 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
             exc.printStackTrace();
-            error = "Failed to show menu !";
             System.out.println("FAIL DB: Fail to show menu.");
             throw new DAOException(exc);
         }finally {

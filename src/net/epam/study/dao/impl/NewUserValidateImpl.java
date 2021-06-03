@@ -1,6 +1,5 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.controller.command.impl.GoToMainPage;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.NewUserValidateDAO;
 import net.epam.study.dao.connection.ConnectionPool;
@@ -32,7 +31,6 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
                 result = false;
             } else{
                 System.out.println("SUCCESS DB: User created.");
-                GoToMainPage.userLogin = login;
                 statement.executeUpdate(insertInto + "('" + login + "','" + hashPassword + "','" + role + "')");
                 result = true;
             }

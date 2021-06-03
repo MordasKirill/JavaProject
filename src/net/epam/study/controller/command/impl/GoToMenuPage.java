@@ -1,13 +1,12 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.dao.CheckSessionDAO;
-import net.epam.study.dao.DAOProvider;
+import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 import net.epam.study.service.impl.ChangeOrderImpl;
-import net.epam.study.service.validation.impl.FieldsValidationImpl;
+import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,15 +16,19 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class GoToMenuPage implements Command {
-    DAOProvider provider = DAOProvider.getInstance();
-    CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
-    ServiceProvider serviceProvider = ServiceProvider.getInstance();
-    TablesListService tablesListService = serviceProvider.getTablesListService();
+    //todo remove
     public static String category;
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        TablesListService tablesListService = serviceProvider.getTablesListService();
+        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+
         HttpSession session = request.getSession(true);
-        if (!checkSessionDAO.checkSession(request, response)) {
+
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))) {
+
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             try {
@@ -35,16 +38,20 @@ public class GoToMenuPage implements Command {
                 request.setAttribute("size", ChangeOrderImpl.order.size());
                 request.setAttribute("menuItems", tablesListService.getMenu());
                 request.setAttribute("category", category);
+
                 category = null;
+
                 if (request.getParameter("locale") != null) {
-                    FieldsValidationImpl.userLocale = request.getParameter("locale");
+                    ValidationImpl.userLocale = request.getParameter("locale");
                 }
-                request.getSession(true).setAttribute("local", FieldsValidationImpl.userLocale);
+
+                request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
                 requestDispatcher.forward(request, response);
             } catch (ServiceException e){
                 session.setAttribute("error", "Show menu fail!");
-                response.sendRedirect("/error.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                requestDispatcher.forward(request, response);
             }
         }
     }
