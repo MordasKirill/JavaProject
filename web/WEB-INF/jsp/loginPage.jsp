@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib prefix = "customTag" uri = "/WEB-INF/tld/tagLib.tld"%>
 <%--
   Created by IntelliJ IDEA.
   User: Kirill
@@ -21,6 +21,8 @@
 <fmt:message bundle="${loc}" key="local.login.signup" var="signup"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
 <fmt:message bundle="${loc}" key="local.title.loginPage" var="loginPage"/>
+
+
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
@@ -34,7 +36,10 @@
     <div class="container">
         <div class="time" id="current_date_time_block2" ></div>
         <form action="Controller" method="post">
-        <span style="color:red; font-size: 13px" >${errMsg}</span>
+            <c:if test="${errMsg != null}">
+                <fmt:message bundle="${loc}" key="${errMsg}" var="err"/>
+                <span style="color:red; font-size: 13px" >${err}</span>
+            </c:if>
         <div class="field">
             <label>${login}:</label>
             <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" required/>
@@ -56,7 +61,7 @@
 </header>
 <footer class="site-footer">
     <div class="container">
-        <p>© KirMoSoft, 2021</p>
+        <customTag:MessageTag message="© KirMoSoft, 2021"/>
         <p>${footer}</p>
     </div>
 </footer>

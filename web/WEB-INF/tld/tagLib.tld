@@ -1,0 +1,18 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>messageTag</short-name>
+    <uri>/WEB-INF/tld/tagLib.tld</uri>
+    <tag>
+        <name>MessageTag</name>
+        <tag-class>net.epam.study.bean.MessageTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+    </tag>
+</taglib>

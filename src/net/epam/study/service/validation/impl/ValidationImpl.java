@@ -42,25 +42,25 @@ public class ValidationImpl implements ValidationService {
     }
     public String emailErrorMsg(String email){
         if (!isValidEmailAddress(email)){
-            return "Email is incorrect!";
+            return "local.error.orderErrorEmail";
         }
         return null;
     }
     public String fullNameErrorMsg(String fullName){
         if (!isValidFullName(fullName)){
-            return "Full name is incorrect!";
+            return "local.error.orderErrorFullName";
         }
         return null;
     }
     public String phoneErrorMsg(String phone){
         if (!isValidPhoneNumber(phone)){
-            return "Phone is incorrect!";
+            return "local.error.orderErrorPhone";
         }
         return null;
     }
     public String cityErrorMsg(String city){
         if (!isValidCity(city)){
-            return "Only Minsk required!";
+            return "local.error.orderErrorCity";
         }
         return null;
     }

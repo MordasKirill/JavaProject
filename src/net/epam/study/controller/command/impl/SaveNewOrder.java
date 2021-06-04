@@ -33,13 +33,13 @@ public class SaveNewOrder implements Command {
 
         try {
             if (validationService.emailErrorMsg(email)==null
-                    || validationService.fullNameErrorMsg(fullName)==null
-                    || validationService.phoneErrorMsg(phone)==null
-                    || validationService.cityErrorMsg(city)==null){
+                    && validationService.fullNameErrorMsg(fullName)==null
+                    && validationService.phoneErrorMsg(phone)==null
+                    && validationService.cityErrorMsg(city)==null){
 
                 if (ChangeOrderImpl.order.size() == 0) {
 
-                    request.setAttribute("error", "You cant checkout with empty cart!");
+                    request.setAttribute("error", "local.error.orderEmpty");
                     request.setAttribute("order", ChangeOrderImpl.order);
                     request.setAttribute("total", changeOrderService.getTotal());
                     request.setAttribute("size", ChangeOrderImpl.order.size());

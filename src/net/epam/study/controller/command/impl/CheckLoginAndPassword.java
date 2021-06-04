@@ -54,7 +54,7 @@ public class CheckLoginAndPassword implements Command {
                 }
             }else{
 
-                request.setAttribute("errMsg", "Username or password are incorrect !!!");
+                request.setAttribute("errMsg", "local.error.logerr");
                 ValidationImpl.userLocale = request.getParameter("locale");
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");

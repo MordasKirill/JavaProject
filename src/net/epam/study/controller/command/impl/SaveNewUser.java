@@ -42,7 +42,7 @@ public class SaveNewUser implements Command {
 
             }else{
 
-                request.setAttribute("errMsg", "User with such login already exist !");
+                request.setAttribute("errMsg", "local.error.regerr");
                 ValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
                 requestDispatcher.forward(request, response);

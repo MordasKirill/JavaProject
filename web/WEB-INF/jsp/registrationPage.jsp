@@ -35,7 +35,10 @@
     <div class="container">
         <div class="time" id="current_date_time_block2" ></div>
         <form action="Controller" method="post" >
-            <span style="color:red; font-size: 13px" >${errMsg}</span>
+            <c:if test="${errMsg != null}">
+                <fmt:message bundle="${loc}" key="${errMsg}" var="err"/>
+                <span style="color:red; font-size: 13px" >${err}</span>
+            </c:if>
             <div class="field">
                 <label>${login}:</label>
                 <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" required/>
