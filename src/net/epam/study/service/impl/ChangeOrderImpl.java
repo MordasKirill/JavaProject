@@ -24,9 +24,6 @@ public class ChangeOrderImpl implements ChangeOrderService {
             order.add(new MenuItem(name, price, time));
             total.add(price);
         }
-        for (int i = 0; i<order.size(); i++) {
-            System.out.println(order.get(i));
-        }
     }
     public double getTotal(){
         double sum =0;

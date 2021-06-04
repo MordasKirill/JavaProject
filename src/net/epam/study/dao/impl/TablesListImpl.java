@@ -5,6 +5,7 @@ import net.epam.study.dao.TablesListDAO;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.entity.MenuItem;
 import net.epam.study.entity.Order;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +28,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String columnWaitTime = "waitTime";
     public static final String columnCategory = "category";
     public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
+    private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException {
 
@@ -36,7 +38,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            System.out.println("SUCCESS DB: Connected.");
+            log.debug("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(selectFromOrders + limit);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -52,7 +54,7 @@ public class TablesListImpl implements TablesListDAO {
             }
 
         } catch (SQLException exc) {
-            System.out.println("FAIL DB: Fail to show orders.");
+            log.debug("FAIL DB: Fail to show orders.");
             throw new DAOException(exc);
         } finally {
             ConnectionPool.connectionPool.putBack(connection);
@@ -76,7 +78,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            System.out.println("SUCCESS DB: Connected.");
+            log.debug("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(selectFromMenu);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -89,8 +91,7 @@ public class TablesListImpl implements TablesListDAO {
             }
 
         } catch (SQLException exc) {
-            exc.printStackTrace();
-            System.out.println("FAIL DB: Fail to show menu.");
+            log.debug("FAIL DB: Fail to show menu.");
             throw new DAOException(exc);
         }finally {
             ConnectionPool.connectionPool.putBack(connection);

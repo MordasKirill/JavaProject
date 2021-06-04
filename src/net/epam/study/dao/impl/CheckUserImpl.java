@@ -3,6 +3,7 @@ package net.epam.study.dao.impl;
 import net.epam.study.dao.CheckUserDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
+import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
@@ -16,6 +17,8 @@ public class CheckUserImpl implements CheckUserDAO {
     public static final String columnLogin = "login";
     public static final String columnPassword = "password";
     public static final String columnRole = "role";
+    private static final Logger log = Logger.getLogger(CheckUserImpl.class);
+
     public boolean isUserExists(String login, String password) throws DAOException {
 
         boolean result = false;
@@ -26,19 +29,19 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
-            System.out.println("SUCCESS DB: Connected.");
+            log.debug("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 if (resultSet.getString(columnLogin).equals(login)
                     && BCrypt.checkpw(password, resultSet.getString(columnPassword))) {
-                    System.out.println("SUCCESS: Login success.");
+                    log.debug("SUCCESS: Login success.");
                     result = true;
                     break;
                 }
             }
         } catch (SQLException exc) {
-            System.out.println("FAIL DB: Fail to write DB.");
+            log.debug("FAIL DB: Fail to write DB.");
             throw new DAOException(exc);
         } finally {
             ConnectionPool.connectionPool.putBack(connection);
@@ -60,18 +63,18 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
-            System.out.println("SUCCESS DB: Connected.");
+            log.debug("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 if (resultSet.getString(columnLogin).equals(login)){
-                    System.out.println("SUCCESS: Role checked.");
+                    log.debug("SUCCESS: Role checked.");
                     return resultSet.getString(columnRole);
                 }
             }
 
         } catch (SQLException exc) {
-            System.out.println("FAIL DB: Fail to write DB.");
+            log.debug("FAIL DB: Fail to write DB.");
             throw new DAOException(exc);
 
         } finally {

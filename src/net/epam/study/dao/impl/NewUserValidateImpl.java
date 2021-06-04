@@ -3,6 +3,7 @@ package net.epam.study.dao.impl;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.NewUserValidateDAO;
 import net.epam.study.dao.connection.ConnectionPool;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
     public static final String columnLogin = "login";
     public static final String selectFrom = "select login from users where login =";
     public static final String insertInto = "INSERT INTO users (login,password,role) VALUES";
+    private static final Logger log = Logger.getLogger(NewUserValidateImpl.class);
 
     public boolean validate (String login, String hashPassword, String role) throws DAOException {
 
@@ -21,22 +23,21 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
         PreparedStatement statement = null;
 
         try {
-            System.out.println("SUCCESS DB: Connected.");
+            log.debug("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(selectFrom + "'" + login + "'");
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()
                     &&resultSet.getString(columnLogin).equals(login)) {
-                System.out.println("FAIL DB: User already exist.");
+                log.debug("FAIL DB: User already exist.");
                 result = false;
             } else{
-                System.out.println("SUCCESS DB: User created.");
                 statement.executeUpdate(insertInto + "('" + login + "','" + hashPassword + "','" + role + "')");
+                log.debug("SUCCESS DB: User created.");
             }
 
         } catch (SQLException exc) {
-            exc.printStackTrace();
-            System.out.println("FAIL DB: Fail to write DB.");
+            log.debug("FAIL DB: Fail to write DB.");
             throw new DAOException(exc);
         } finally {
             ConnectionPool.connectionPool.putBack(connection);
