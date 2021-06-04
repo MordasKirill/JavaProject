@@ -23,20 +23,19 @@ public class CheckLoginAndPassword implements Command {
         CheckUserService checkUserService = provider.getCheckUserService();
         ValidationService validationService = provider.getValidationService();
 
-        String login = request.getParameter("login");
+        String login = request.getParameter("login").trim();
         String password = request.getParameter("password");
         String role;
 
         HttpSession session = request.getSession(true);
-        session.setAttribute("auth", true);
-        session.setAttribute("login", login);
+
 
         try {
             role = checkUserService.getUserRole(login);
             if(checkUserService.validateUser(login, password)) {
 
                 if (validationService.isAdmin(role)) {
-
+                    session.setAttribute("auth", true);
                     request.setAttribute("errMsg", "");
                     session.setAttribute("role", role);
 
@@ -44,7 +43,8 @@ public class CheckLoginAndPassword implements Command {
                     ValidationImpl.userLocale = request.getParameter("locale");
                     requestDispatcher.forward(request, response);
                 } else {
-
+                    session.setAttribute("auth", true);
+                    session.setAttribute("login", login);
                     request.setAttribute("errMsg", "");
                     session.setAttribute("role", role);
 

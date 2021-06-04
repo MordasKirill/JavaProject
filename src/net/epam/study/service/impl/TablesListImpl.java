@@ -10,14 +10,20 @@ import net.epam.study.service.TablesListService;
 
 import java.util.List;
 
+
 public class TablesListImpl implements TablesListService {
+    public static final int defaultLimit = 8;
+
     @Override
-    public List<Order> getOrders() throws ServiceException {
+    public List<Order> getOrders(int limit) throws ServiceException {
+
         DAOProvider daoProvider = DAOProvider.getInstance();
         TablesListDAO showTables = daoProvider.getTablesListDAO();
+
         List<Order> orders;
+
         try {
-            orders = showTables.getOrders();
+            orders = showTables.getOrders(limit);
             return orders;
         } catch (DAOException e){
             throw new ServiceException("Get orders fail", e);
@@ -27,14 +33,24 @@ public class TablesListImpl implements TablesListService {
 
     @Override
     public List<MenuItem> getMenu() throws ServiceException{
+
         DAOProvider daoProvider = DAOProvider.getInstance();
         TablesListDAO showTables = daoProvider.getTablesListDAO();
+
         List<MenuItem> menuItems;
+
         try {
             menuItems = showTables.getMenu();
             return menuItems;
         } catch (DAOException e){
             throw new ServiceException("Get orders fail", e);
         }
+
+    }
+
+    @Override
+    public int getActualLimit(int limit){
+
+        return limit + defaultLimit;
     }
 }

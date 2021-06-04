@@ -32,7 +32,6 @@ public class NewUserValidateImpl implements NewUserValidateDAO {
             } else{
                 System.out.println("SUCCESS DB: User created.");
                 statement.executeUpdate(insertInto + "('" + login + "','" + hashPassword + "','" + role + "')");
-                result = true;
             }
 
         } catch (SQLException exc) {

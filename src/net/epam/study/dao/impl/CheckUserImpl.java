@@ -29,6 +29,7 @@ public class CheckUserImpl implements CheckUserDAO {
             System.out.println("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
+
                 if (resultSet.getString(columnLogin).equals(login)
                     && BCrypt.checkpw(password, resultSet.getString(columnPassword))) {
                     System.out.println("SUCCESS: Login success.");

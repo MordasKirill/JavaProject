@@ -1,7 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.dao.impl.TablesListImpl;
+import net.epam.study.service.impl.TablesListImpl;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -29,18 +29,23 @@ public class GoToAdminPage implements Command {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             try {
+                if (session.getAttribute("limit") == null){
+                    session.setAttribute("limit", TablesListImpl.defaultLimit);
+                }
+                int limit = (int) session.getAttribute("limit");
+
                 if (request.getParameter("load") != null) {
-                    TablesListImpl.limit = TablesListImpl.limit + TablesListImpl.defaultLimit;
+                    session.setAttribute("limit", tablesListService.getActualLimit(limit));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
 
                 }
 
-                int size = tablesListService.getOrders().size();
-                boolean result = size >= TablesListImpl.limit;
+                int size = tablesListService.getOrders(limit).size();
+                boolean result = size >= limit;
 
                 request.setAttribute("result", result);
-                request.setAttribute("orders", tablesListService.getOrders());
+                request.setAttribute("orders", tablesListService.getOrders(limit));
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
                 requestDispatcher.forward(request, response);

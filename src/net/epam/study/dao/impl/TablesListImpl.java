@@ -15,10 +15,6 @@ import java.util.List;
 
 public class TablesListImpl implements TablesListDAO {
 
-    //todo remove
-    public static int limit = 8;
-
-    public static final int defaultLimit = 8;
     public static final String columnId = "order_id";
     public static final String columnFullName = "fullName";
     public static final String columnAddress = "address";
@@ -32,7 +28,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String columnCategory = "category";
     public static final String selectFromMenu = "select itemName, price, waitTime, category from menu";
 
-    public List<Order> getOrders() throws DAOException {
+    public List<Order> getOrders(int limit) throws DAOException {
 
         List<Order> orders = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();

@@ -16,8 +16,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class GoToMenuPage implements Command {
-    //todo remove
-    public static String category;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,14 +30,12 @@ public class GoToMenuPage implements Command {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             try {
-                if (category == null) {
-                    category = request.getParameter("category");
+                if (request.getParameter("category")!=null
+                        &&request.getParameter("category")!=session.getAttribute("category")){
+                    session.setAttribute("category", request.getParameter("category"));
                 }
                 request.setAttribute("size", ChangeOrderImpl.order.size());
                 request.setAttribute("menuItems", tablesListService.getMenu());
-                request.setAttribute("category", category);
-
-                category = null;
 
                 if (request.getParameter("locale") != null) {
                     ValidationImpl.userLocale = request.getParameter("locale");

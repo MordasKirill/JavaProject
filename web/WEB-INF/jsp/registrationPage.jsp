@@ -30,16 +30,8 @@
 </head>
 <body>
 <header class="site-header" >
-    <form action="Controller" method="post" style="margin-top: -20px">
-        <input type="hidden" name="command" value="registration"/>
-        <input type="hidden" name="local" value="en"/>
-        <input type="submit" name="local" style="width: 55px; height: 30px" class="green" value="${en_button}"> <br />
-    </form>
-    <form action="Controller" method="post" style="margin-top: -50px">
-        <input type="hidden" name="command" value="registration"/>
-        <input type="hidden" name="local" value="ru"/>
-        <input type="submit" name="local" style="width: 55px; height: 30px" class="green" value="${ru_button} "/> <br />
-    </form>
+    <a href="Controller?command=registration&locale=en" class="green" style="width: 40px; margin-left: 100px">${en_button}</a>
+    <a href="Controller?command=registration&locale=ru" class="green" style="width: 40px; margin-left: 100px">${ru_button}</a>
     <div class="container">
         <div class="time" id="current_date_time_block2" ></div>
         <form action="Controller" method="post" >

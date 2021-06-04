@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +13,11 @@ public class GoToLoginPage implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        if (request.getParameter("locale")!=null) {
+            ValidationImpl.userLocale = request.getParameter("locale");
+        }
+        request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
         requestDispatcher.forward(request, response);

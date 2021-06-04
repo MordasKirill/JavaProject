@@ -21,9 +21,6 @@ public class Controller extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        request.getSession(true).setAttribute("local", request.getParameter("local"));
         process(response, request);
     }
     private void process(HttpServletResponse response, HttpServletRequest request) throws  IOException, ServletException{

@@ -19,7 +19,7 @@ public class SaveNewUser implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
+        String login = request.getParameter("login").trim();
         String password = request.getParameter("password");
         String role = String.valueOf(Role.USER);
 
@@ -28,13 +28,14 @@ public class SaveNewUser implements Command {
         HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
         CheckNewUserService checkNewUserService = serviceProvider.getCheckNewUserService();
 
-        session.setAttribute("auth", true);
-        session.setAttribute("role", role);
-
         try {
 
             if(checkNewUserService.check(login, hashPasswordService.hashPassword(password), role)) {
+                session.setAttribute("auth", true);
+                session.setAttribute("role", role);
+                session.setAttribute("login", login);
                 request.setAttribute("errMsg", "");
+
                 ValidationImpl.userLocale = request.getParameter("locale");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
                 requestDispatcher.forward(request, response);
