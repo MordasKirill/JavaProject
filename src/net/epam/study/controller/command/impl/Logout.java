@@ -18,6 +18,7 @@ public class Logout implements Command {
             session.removeAttribute("auth");
             session.removeAttribute("role");
             session.removeAttribute("limit");
+            session.removeAttribute("category");
             ChangeOrderImpl.ORDER.clear();
             ChangeOrderImpl.TOTAL.clear();
         }
