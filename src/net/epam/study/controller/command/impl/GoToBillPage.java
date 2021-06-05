@@ -20,8 +20,8 @@ public class GoToBillPage implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
 
-        ChangeOrderImpl.order.clear();
-        ChangeOrderImpl.total.clear();
+        ChangeOrderImpl.ORDER.clear();
+        ChangeOrderImpl.TOTAL.clear();
 
         HttpSession session = request.getSession(true);
 

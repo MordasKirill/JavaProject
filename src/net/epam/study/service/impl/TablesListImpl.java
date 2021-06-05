@@ -7,12 +7,13 @@ import net.epam.study.entity.MenuItem;
 import net.epam.study.entity.Order;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.TablesListService;
+import net.epam.study.dao.connection.ConnectionPoolException;
 
 import java.util.List;
 
 
 public class TablesListImpl implements TablesListService {
-    public static final int defaultLimit = 8;
+    public static final int DEFAULT_LIMIT = 8;
 
     @Override
     public List<Order> getOrders(int limit) throws ServiceException {
@@ -25,7 +26,7 @@ public class TablesListImpl implements TablesListService {
         try {
             orders = showTables.getOrders(limit);
             return orders;
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
@@ -42,7 +43,7 @@ public class TablesListImpl implements TablesListService {
         try {
             menuItems = showTables.getMenu();
             return menuItems;
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
@@ -51,6 +52,6 @@ public class TablesListImpl implements TablesListService {
     @Override
     public int getActualLimit(int limit){
 
-        return limit + defaultLimit;
+        return limit + DEFAULT_LIMIT;
     }
 }

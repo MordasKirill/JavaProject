@@ -5,6 +5,7 @@ import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.OrderCreateDAO;
 import net.epam.study.service.OrderCreateService;
 import net.epam.study.service.ServiceException;
+import net.epam.study.dao.connection.ConnectionPoolException;
 
 public class OrderCrateImpl implements OrderCreateService {
     @Override
@@ -13,7 +14,7 @@ public class OrderCrateImpl implements OrderCreateService {
         OrderCreateDAO orderCreateDAO = daoProvider.getOrderCreateDAO();
         try {
             orderCreateDAO.create(fullName, address, email, phone, stringBuilder);
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Order create fail", e);
         }
     }

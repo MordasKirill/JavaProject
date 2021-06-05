@@ -5,6 +5,7 @@ import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.service.CheckUserService;
 import net.epam.study.service.ServiceException;
+import net.epam.study.dao.connection.ConnectionPoolException;
 
 public class CheckUserImpl implements CheckUserService {
     @Override
@@ -13,7 +14,7 @@ public class CheckUserImpl implements CheckUserService {
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
         try {
             return checkUserDAO.isUserExists(login, password);
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to check if user exist", e);
         }
 
@@ -25,7 +26,7 @@ public class CheckUserImpl implements CheckUserService {
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
         try {
             return checkUserDAO.getUserRole(login);
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to check role", e);
         }
     }

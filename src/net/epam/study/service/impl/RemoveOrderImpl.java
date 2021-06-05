@@ -5,6 +5,7 @@ import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.DeleteOrderDAO;
 import net.epam.study.service.RemoveOrderService;
 import net.epam.study.service.ServiceException;
+import net.epam.study.dao.connection.ConnectionPoolException;
 
 public class RemoveOrderImpl implements RemoveOrderService {
     @Override
@@ -13,7 +14,7 @@ public class RemoveOrderImpl implements RemoveOrderService {
         DeleteOrderDAO deleteOrderDAO = daoProvider.getDeleteOrderDAO();
         try {
             deleteOrderDAO.delete(id);
-        } catch (DAOException e){
+        } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to delete order", e);
         }
     }

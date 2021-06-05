@@ -30,7 +30,7 @@ public class GoToAdminPage implements Command {
         } else {
             try {
                 if (session.getAttribute("limit") == null){
-                    session.setAttribute("limit", TablesListImpl.defaultLimit);
+                    session.setAttribute("limit", TablesListImpl.DEFAULT_LIMIT);
                 }
                 int limit = (int) session.getAttribute("limit");
 

@@ -34,7 +34,7 @@ public class GoToMenuPage implements Command {
                         &&request.getParameter("category")!=session.getAttribute("category")){
                     session.setAttribute("category", request.getParameter("category"));
                 }
-                request.setAttribute("size", ChangeOrderImpl.order.size());
+                request.setAttribute("size", ChangeOrderImpl.ORDER.size());
                 request.setAttribute("menuItems", tablesListService.getMenu());
 
                 if (request.getParameter("locale") != null) {

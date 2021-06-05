@@ -28,9 +28,9 @@ public class GoToBasketPage implements Command {
 
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
-            request.setAttribute("order", ChangeOrderImpl.order);
+            request.setAttribute("order", ChangeOrderImpl.ORDER);
             request.setAttribute("total", changeOrderService.getTotal());
-            request.setAttribute("size", ChangeOrderImpl.order.size());
+            request.setAttribute("size", ChangeOrderImpl.ORDER.size());
 
             request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");

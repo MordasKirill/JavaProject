@@ -18,8 +18,8 @@ public class Logout implements Command {
             session.removeAttribute("auth");
             session.removeAttribute("role");
             session.removeAttribute("limit");
-            ChangeOrderImpl.order.clear();
-            ChangeOrderImpl.total.clear();
+            ChangeOrderImpl.ORDER.clear();
+            ChangeOrderImpl.TOTAL.clear();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
         requestDispatcher.forward(request, response);

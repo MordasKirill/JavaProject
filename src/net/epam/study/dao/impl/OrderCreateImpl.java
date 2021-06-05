@@ -3,6 +3,8 @@ package net.epam.study.dao.impl;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.OrderCreateDAO;
 import net.epam.study.dao.connection.ConnectionPool;
+import net.epam.study.dao.connection.ConnectionPoolException;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -10,30 +12,29 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class OrderCreateImpl implements OrderCreateDAO {
-    public static final String insertInto = "INSERT INTO orders (fullName,address,email,phone,details) VALUES";
+    public static final String INSERT_INTO = "INSERT INTO orders (fullName,address,email,phone,details) VALUES";
     private static final Logger log = Logger.getLogger(OrderCreateImpl.class);
 
-    public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws DAOException {
+    public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws DAOException, ConnectionPoolException {
+
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
 
         try {
-            statement = connection.prepareStatement(insertInto + "('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')");
-            log.debug("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(INSERT_INTO + "('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "')");
+            log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.debug("SUCCESS DB: Order created.");
+            log.info("SUCCESS DB: Order created.");
 
         } catch (SQLException exc) {
-            log.debug("FAIL DB: Fail to write DB.");
+
+            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
+
             ConnectionPool.connectionPool.putBack(connection);
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new DAOException(e);
-            }
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement);
         }
     }
 }

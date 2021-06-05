@@ -10,6 +10,7 @@ public class ValidationImpl implements ValidationService {
     public static Pattern pattern;
     public static Matcher matcher;
     public static String userLocale;
+
     public boolean isValidEmailAddress(String email) {
         String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         pattern = Pattern.compile(ePattern);

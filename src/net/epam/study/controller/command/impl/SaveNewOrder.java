@@ -37,12 +37,12 @@ public class SaveNewOrder implements Command {
                     && validationService.phoneErrorMsg(phone)==null
                     && validationService.cityErrorMsg(city)==null){
 
-                if (ChangeOrderImpl.order.size() == 0) {
+                if (ChangeOrderImpl.ORDER.size() == 0) {
 
                     request.setAttribute("error", "local.error.orderEmpty");
-                    request.setAttribute("order", ChangeOrderImpl.order);
+                    request.setAttribute("order", ChangeOrderImpl.ORDER);
                     request.setAttribute("total", changeOrderService.getTotal());
-                    request.setAttribute("size", ChangeOrderImpl.order.size());
+                    request.setAttribute("size", ChangeOrderImpl.ORDER.size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                     requestDispatcher.forward(request, response);
@@ -56,9 +56,9 @@ public class SaveNewOrder implements Command {
                 request.setAttribute("errMsgFullName", validationService.fullNameErrorMsg(fullName));
                 request.setAttribute("errMsgPhone", validationService.phoneErrorMsg(phone));
                 request.setAttribute("errMsgCity", validationService.cityErrorMsg(city));
-                request.setAttribute("order", ChangeOrderImpl.order);
+                request.setAttribute("order", ChangeOrderImpl.ORDER);
                 request.setAttribute("total", changeOrderService.getTotal());
-                request.setAttribute("size", ChangeOrderImpl.order.size());
+                request.setAttribute("size", ChangeOrderImpl.ORDER.size());
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                 requestDispatcher.forward(request, response);
