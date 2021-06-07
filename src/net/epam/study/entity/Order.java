@@ -9,6 +9,7 @@ public class Order {
         private String email;
         private String phone;
         private String details;
+        private String status;
 
         public Order() {
             super();
@@ -49,7 +50,7 @@ public class Order {
             this.id = id;
         }
 
-    public void setFullName(String fullName) {
+        public void setFullName(String fullName) {
             this.fullName = fullName;
         }
 
@@ -68,14 +69,24 @@ public class Order {
         public void setDetails(String details) {
             this.details = details;
         }
-        @Override
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+    @Override
         public String toString() {
             return "Id: " + id +
                     ", fullName: " + fullName +
                     ", address: " + address +
                     ", email: " + email +
                     ", phone: " + phone +
-                    ", email: " + details + ".";
+                    ", email: " + details +
+                    ", status: " + status +".";
         }
 
     @Override
@@ -88,11 +99,12 @@ public class Order {
                 getAddress().equals(order.getAddress()) &&
                 getEmail().equals(order.getEmail()) &&
                 getPhone().equals(order.getPhone()) &&
-                getDetails().equals(order.getDetails());
+                getDetails().equals(order.getDetails())&&
+                getStatus().equals(order.getStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFullName(), getAddress(), getEmail(), getPhone(), getDetails());
+        return Objects.hash(getId(), getFullName(), getAddress(), getEmail(), getPhone(), getDetails(), getStatus());
     }
 }

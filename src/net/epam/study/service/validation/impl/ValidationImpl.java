@@ -66,6 +66,6 @@ public class ValidationImpl implements ValidationService {
         return null;
     }
     public boolean isAdmin(String role){
-        return role.equals(String.valueOf(Role.ADMIN)) || role.equals(String.valueOf(Role.OWNER));
+        return role.equals(String.valueOf(Role.ADMIN).toLowerCase()) || role.equals(String.valueOf(Role.OWNER).toLowerCase());
     }
 }

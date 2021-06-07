@@ -12,6 +12,7 @@ public class OrderCrateImpl implements OrderCreateService {
     public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderCreateDAO orderCreateDAO = daoProvider.getOrderCreateDAO();
+
         try {
             orderCreateDAO.create(fullName, address, email, phone, stringBuilder);
         } catch (DAOException | ConnectionPoolException e){

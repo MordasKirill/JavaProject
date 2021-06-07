@@ -1,7 +1,7 @@
 package net.epam.study.dao.impl;
 
+import net.epam.study.dao.ChangeOrderStatusDAO;
 import net.epam.study.dao.DAOException;
-import net.epam.study.dao.OrderCreateDAO;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
@@ -11,20 +11,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class OrderCreateImpl implements OrderCreateDAO {
-    public static final String INSERT_INTO = "INSERT INTO orders (fullName,address,email,phone,details,status) VALUES";
-    private static final Logger log = Logger.getLogger(OrderCreateImpl.class);
+public class ChangeOrderStatusImpl implements ChangeOrderStatusDAO {
 
-    public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws DAOException, ConnectionPoolException {
+    public static final String UPDATE_ACCEPT = "update orders set status =";
+    public static final String WHERE = "where order_id =";
+    private static final Logger log = Logger.getLogger(ChangeOrderStatusImpl.class);
 
+    @Override
+    public void accept(String id, String status) throws DAOException, ConnectionPoolException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
-        String status = "processing";
+
         try {
-            statement = connection.prepareStatement(INSERT_INTO + "('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "','" + status + "')");
+
+            statement = connection.prepareStatement(UPDATE_ACCEPT + "'" + status + "'" + WHERE + "'" + id + "'");
             log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Order created.");
+            log.info("SUCCESS DB: Order status changed.");
 
         } catch (SQLException exc) {
 

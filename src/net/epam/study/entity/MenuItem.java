@@ -8,6 +8,7 @@ public class MenuItem {
     private String filingTime;
     private String category;
 
+
     public MenuItem(){
         super();
     }

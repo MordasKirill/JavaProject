@@ -60,7 +60,7 @@
             <div class="product-list" >
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                 <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=appetizer" class="button">${localAddToCart}</a>
             </div>
         </div>
@@ -82,7 +82,7 @@
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                 <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=soups" class="button">${localAddToCart}</a>
             </div>
         </div>
@@ -104,7 +104,7 @@
             <div class="product-list">
                 <h3><c:out value = "${row.name}"/></h3>
                 <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                 <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=meat" class="button">${localAddToCart}</a>
             </div>
         </div>
@@ -126,7 +126,7 @@
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                         <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=poultry" class="button">${localAddToCart}</a>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                         <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=fish-and-sea-food" class="button">${localAddToCart}</a>
                     </div>
                 </div>
@@ -170,7 +170,7 @@
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                         <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=deserts" class="button">${localAddToCart}</a>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                         <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=soft-drinks" class="button">${localAddToCart}</a>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                     <div class="product-list">
                         <h3><c:out value = "${row.name}"/></h3>
                         <span class="price">${localPrice}: $<c:out value = "${row.price}"/></span>
-                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/>${localTimeMin}</span>
+                        <span class="time">${localTime}: <c:out value = "${row.filingTime}"/> ${localTimeMin}</span>
                         <a href="Controller?command=addtocart&name=${row.name}&price=${row.price}&time= ${row.filingTime}&category=hot-drinks" class="button">${localAddToCart}</a>
                     </div>
                 </div>

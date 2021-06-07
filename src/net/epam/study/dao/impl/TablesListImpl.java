@@ -24,11 +24,12 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_DETAILS = "details";
-    public static final String SELECT_FROM_ORDERS = "select order_id, fullName, address, email, phone, details from orders where order_id>0 LIMIT ";
+    public static final String SELECT_FROM_ORDERS = "select order_id, fullName, address, email, phone, details, status from orders where order_id>0 LIMIT ";
     public static final String COLUMN_ITEM_NAME = "itemName";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_WAIT_TIME = "waitTime";
     public static final String COLUMN_CATEGORY = "category";
+    public static final String COLUMN_STATUS = "status";
     public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
     private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
@@ -53,6 +54,7 @@ public class TablesListImpl implements TablesListDAO {
                 order.setEmail(resultSet.getString(COLUMN_EMAIL));
                 order.setPhone(resultSet.getString(COLUMN_PHONE));
                 order.setDetails(resultSet.getString(COLUMN_DETAILS));
+                order.setStatus(resultSet.getString(COLUMN_STATUS));
                 orders.add(order);
             }
 

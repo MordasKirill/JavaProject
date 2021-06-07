@@ -17,6 +17,7 @@ public final class ServiceProvider {
     private final RemoveOrderService removeOrderService = new RemoveOrderImpl();
     private final HashPasswordService hashPasswordService = new HashPasswordImpl();
     private final CheckSessionService checkSessionService = new CheckSessionImpl();
+    private final ChangeOrderStatusService changeOrderStatusService = new ChangeOrderStatusImpl();
 
     private ServiceProvider(){}
 
@@ -49,5 +50,8 @@ public final class ServiceProvider {
     }
     public CheckSessionService getCheckSessionService(){
         return checkSessionService;
+    }
+    public ChangeOrderStatusService getChangeOrderStatusService(){
+        return changeOrderStatusService;
     }
 }

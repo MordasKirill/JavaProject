@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ConnectionPool {
+public final class ConnectionPool {
     private BlockingQueue<Connection> availableConnections;
     private BlockingQueue<Connection> usedConnections;
     private String url;
@@ -16,7 +16,9 @@ public class ConnectionPool {
     private String driver;
     private int initConnCnt;
     public static ConnectionPool connectionPool;
+
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
+
     public ConnectionPool() {
         DBResourceManager dbResourceManager = DBResourceManager.getInstance();
 
@@ -135,6 +137,6 @@ public class ConnectionPool {
     public int getAvailableConnectionsCnt() {
         return availableConnections.size();
     }
-    
+
 
 }

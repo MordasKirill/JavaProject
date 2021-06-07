@@ -9,6 +9,7 @@ import java.util.List;
 public class ChangeOrderImpl implements ChangeOrderService {
     public static final List<MenuItem> ORDER = new ArrayList<>();
     public static final List<String> TOTAL = new ArrayList<>();
+
     public void deleteOrderItem(String item){
         for (int i = 0; i< ORDER.size(); i++){
             if (ORDER.get(i).toString().equals(item)){
@@ -19,12 +20,14 @@ public class ChangeOrderImpl implements ChangeOrderService {
             getTotal();
         }
     }
+
     public void addToOrder(String name, String price, String time){
         if (name != null && price != null && time != null) {
             ORDER.add(new MenuItem(name, price, time));
             TOTAL.add(price);
         }
     }
+
     public double getTotal(){
         double sum =0;
         for (int i = 0; i< TOTAL.size(); i++){
@@ -33,6 +36,7 @@ public class ChangeOrderImpl implements ChangeOrderService {
         }
         return sum;
     }
+
     public StringBuilder getOrder(){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i< ORDER.size(); i++){

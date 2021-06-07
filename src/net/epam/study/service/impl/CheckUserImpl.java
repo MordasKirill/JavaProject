@@ -12,6 +12,7 @@ public class CheckUserImpl implements CheckUserService {
     public boolean validateUser(String login, String password) throws ServiceException{
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
+
         try {
             return checkUserDAO.isUserExists(login, password);
         } catch (DAOException | ConnectionPoolException e){
@@ -24,6 +25,7 @@ public class CheckUserImpl implements CheckUserService {
     public String getUserRole(String login) throws ServiceException{
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
+
         try {
             return checkUserDAO.getUserRole(login);
         } catch (DAOException | ConnectionPoolException e){

@@ -12,6 +12,7 @@ public class RemoveOrderImpl implements RemoveOrderService {
     public void delete(String id) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         DeleteOrderDAO deleteOrderDAO = daoProvider.getDeleteOrderDAO();
+
         try {
             deleteOrderDAO.delete(id);
         } catch (DAOException | ConnectionPoolException e){
