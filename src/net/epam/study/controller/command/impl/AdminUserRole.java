@@ -1,7 +1,10 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.service.*;
+import net.epam.study.service.ChangeTableInfoService;
+import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class AdminOrderStatus implements Command {
-
+public class AdminUserRole implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -25,13 +27,13 @@ public class AdminOrderStatus implements Command {
         } else {
 
             String id = request.getParameter("id");
-            String status = request.getParameter("status");
+            String role = request.getParameter("role");
             if (id != null) {
 
                 try {
-                    changeTableInfoService.changeStatus(id, status);
+                    changeTableInfoService.changeRole(id, role);
                 } catch (ServiceException e){
-                    session.setAttribute("error", "Change status error!");
+                    session.setAttribute("error", "Change role error!");
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
                     requestDispatcher.forward(request, response);
                 }

@@ -6,6 +6,7 @@ import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.entity.MenuItem;
 import net.epam.study.entity.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
+import net.epam.study.entity.User;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class TablesListImpl implements TablesListDAO {
 
-    public static final String COLUMN_ID = "order_id";
+    public static final String COLUMN_ID_ORDER = "order_id";
     public static final String COLUMN_FULL_NAME = "fullName";
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_EMAIL = "email";
@@ -30,7 +31,11 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_WAIT_TIME = "waitTime";
     public static final String COLUMN_CATEGORY = "category";
     public static final String COLUMN_STATUS = "status";
-    public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
+    public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu where";
+    public static final String COLUMN_LOGIN = "login";
+    public static final String COLUMN_ROLE = "role";
+    public static final String COLUMN_ID_USER = "id";
+    public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
     private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
@@ -42,13 +47,13 @@ public class TablesListImpl implements TablesListDAO {
 
         try {
             log.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_ORDERS + limit);
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
 
                 Order order = new Order();
-                order.setId(resultSet.getString(COLUMN_ID));
+                order.setId(resultSet.getString(COLUMN_ID_ORDER));
                 order.setFullName(resultSet.getString(COLUMN_FULL_NAME));
                 order.setAddress(resultSet.getString(COLUMN_ADDRESS));
                 order.setEmail(resultSet.getString(COLUMN_EMAIL));
@@ -106,5 +111,41 @@ public class TablesListImpl implements TablesListDAO {
         }
 
         return menuItems;
+    }
+
+    @Override
+    public List<User> getUsers(int limit) throws DAOException, ConnectionPoolException {
+
+        List<User> users = new ArrayList<>();
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            log.info("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(SELECT_FROM_USERS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+
+                User user = new User();
+                user.setId(resultSet.getString(COLUMN_ID_USER));
+                user.setLogin(resultSet.getString(COLUMN_LOGIN));
+                user.setRole(resultSet.getString(COLUMN_ROLE));
+                users.add(user);
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to show users.", exc);
+            throw new DAOException(exc);
+        }finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+
+        return users;
     }
 }

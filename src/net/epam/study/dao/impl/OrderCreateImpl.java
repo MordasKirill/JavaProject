@@ -20,6 +20,7 @@ public class OrderCreateImpl implements OrderCreateDAO {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         String status = "processing";
+
         try {
             statement = connection.prepareStatement(INSERT_INTO + "('" + fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "','" + status + "')");
             log.info("SUCCESS DB: Connected.");

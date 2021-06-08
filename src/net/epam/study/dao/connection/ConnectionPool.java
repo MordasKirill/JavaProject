@@ -44,7 +44,7 @@ public final class ConnectionPool {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, userName, password);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.ERROR,"Driver error.", e);
         }
         return conn;
     }

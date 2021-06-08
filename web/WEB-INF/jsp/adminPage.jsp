@@ -21,6 +21,43 @@
     </div>
     <a href="Controller?command=logout" class="green" style="width: 200px; ">Logout</a>
 </div>
+<c:if test="${role == 'owner'}">
+    <section>
+        <c:forEach var = "row" items = "${users}">
+            <div class="product-item">
+                <div class="product-list" data-id="${row.id}">
+                    <c:set var = "role" value = "${row.role}"/>
+                    <c:if test="${role == 'owner'}">
+                        <h3 style="color: red"><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                    </c:if>
+                    <c:if test="${row.role == 'admin'}">
+                        <h3 style="color: blue"><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                    </c:if>
+                    <c:if test="${row.role == 'user'}">
+                        <h3><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                    </c:if>
+                    <span class="price">Login: <c:out value = "${row.login}"/></span>
+                    <div class="form-buttons">
+                        <c:if test="${row.role == 'admin'}">
+                            <a href="Controller?command=userrole&id=${row.id}&role=user" class="green">Change to User</a>
+                        </c:if>
+                        <c:if test="${row.role == 'user'}">
+                            <a href="Controller?command=userrole&id=${row.id}&role=admin" class="green">Change to Admin</a>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </section>
+    <div class="container">
+        <c:if test="${resultUsersBack}">
+            <a href="Controller?command=gotoadminpage&back_users=1" class="green" style="width: 200px;">Back</a>
+        </c:if>
+        <c:if test="${resultUsersNext}">
+            <a href="Controller?command=gotoadminpage&load_users=1" class="green" style="width: 200px;">Next</a>
+        </c:if>
+    </div>
+</c:if>
 <section>
     <c:forEach var = "row" items = "${orders}">
         <div class="product-item">
@@ -43,15 +80,21 @@
                     <c:if test="${row.status == 'accepted'}">
                         <a href="Controller?command=orderstatus&id=${row.id}&status=rejected" class="green">Reject</a>
                     </c:if>
-                    <a href="Controller?command=orderdelete&id=${row.id}" class="green" style="color: darkred">Delete</a>
+                    <c:if test="${role == 'owner'}">
+                        <a href="Controller?command=orderdelete&id=${row.id}" class="green" style="color: darkred">Delete</a>
+                    </c:if>
                 </div>
             </div>
         </div>
     </c:forEach>
 </section>
     <div class="container">
-        <c:if test="${result}">
-            <a href="Controller?command=gotoadminpage&load=1" class="green" style="width: 200px;">Load more</a>
+
+        <c:if test="${resultOrdersBack}">
+            <a href="Controller?command=gotoadminpage&back_orders=1" class="green" style="width: 200px;">Back</a>
+        </c:if>
+        <c:if test="${resultOrdersNext}">
+            <a href="Controller?command=gotoadminpage&load_orders=1" class="green" style="width: 200px;">Next</a>
         </c:if>
     </div>
 </body>

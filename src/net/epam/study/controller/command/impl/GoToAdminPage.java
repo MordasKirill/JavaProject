@@ -1,7 +1,6 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
-import net.epam.study.service.impl.TablesListImpl;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -30,22 +29,52 @@ public class GoToAdminPage implements Command {
         } else {
             try {
                 if (session.getAttribute("limit") == null){
-                    session.setAttribute("limit", TablesListImpl.DEFAULT_LIMIT);
+                    session.setAttribute("limit", 0);
                 }
-                int limit = (int) session.getAttribute("limit");
+                if (session.getAttribute("limit_users") == null){
+                    session.setAttribute("limit_users", 0);
+                }
+                int limitOrders = (int) session.getAttribute("limit");
+                int limitUsers = (int) session.getAttribute("limit_users");
 
-                if (request.getParameter("load") != null) {
-                    session.setAttribute("limit", tablesListService.getActualLimit(limit));
+                if (request.getParameter("load_orders") != null) {
+                    session.setAttribute("limit", tablesListService.getActualLimit(limitOrders));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
-
                 }
 
-                int size = tablesListService.getOrders(limit).size();
-                boolean result = size >= limit;
+                if (request.getParameter("back_orders") != null) {
+                    session.setAttribute("limit", tablesListService.getPreviousLimit(limitOrders));
+                    response.sendRedirect("Controller?command=gotoadminpage");
+                    return;
+                }
 
-                request.setAttribute("result", result);
-                request.setAttribute("orders", tablesListService.getOrders(limit));
+                if (request.getParameter("load_users") != null) {
+                    session.setAttribute("limit_users", tablesListService.getActualLimit(limitUsers));
+                    response.sendRedirect("Controller?command=gotoadminpage");
+                    return;
+                }
+
+                if (request.getParameter("back_users") != null) {
+                    session.setAttribute("limit_users", tablesListService.getPreviousLimit(limitUsers));
+                    response.sendRedirect("Controller?command=gotoadminpage");
+                    return;
+                }
+
+                int ordersSize = tablesListService.getOrders(limitOrders).size();
+                int usersSize = tablesListService.getUsers(limitUsers).size();
+
+                boolean resultOrdersNext = ordersSize >= limitOrders;
+                boolean resultOrdersBack = limitOrders != 0;
+                boolean resultUsersNext = usersSize >= limitUsers;
+                boolean resultUsersBack = limitUsers != 0;
+
+                request.setAttribute("resultOrdersNext", resultOrdersNext);
+                request.setAttribute("resultOrdersBack", resultOrdersBack);
+                request.setAttribute("resultUsersNext", resultUsersNext);
+                request.setAttribute("resultUsersBack", resultUsersBack);
+                request.setAttribute("orders", tablesListService.getOrders(limitOrders));
+                request.setAttribute("users", tablesListService.getUsers(limitUsers));
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
                 requestDispatcher.forward(request, response);

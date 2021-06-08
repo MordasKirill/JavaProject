@@ -24,6 +24,7 @@ public class CommandProvider {
 		commands.put(CommandName.LOGOUT, new Logout());
 		commands.put(CommandName.ITEMDELETE, new CartItemDelete());
 		commands.put(CommandName.ORDERSTATUS, new AdminOrderStatus());
+		commands.put(CommandName.USERROLE, new AdminUserRole());
 	}
 	
 	
