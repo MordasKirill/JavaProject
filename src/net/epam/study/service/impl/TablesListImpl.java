@@ -70,12 +70,23 @@ public class TablesListImpl implements TablesListService {
     @Override
     public int getActualLimit(int limit){
 
-        return limit + DEFAULT_LIMIT;
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        TablesListDAO showTables = daoProvider.getTablesListDAO();
+
+        int result;
+        result = showTables.getActualLimit(limit);
+
+        return result;
     }
 
     @Override
     public int getPreviousLimit(int limit){
 
-        return limit - DEFAULT_LIMIT;
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        TablesListDAO showTables = daoProvider.getTablesListDAO();
+
+        int result;
+        result = showTables.getPreviousLimit(limit);
+        return result;
     }
 }

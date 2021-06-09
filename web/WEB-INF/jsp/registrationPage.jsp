@@ -13,8 +13,8 @@
 <fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
-<fmt:message bundle="${loc}" key="local.login.login" var="login"/>
-<fmt:message bundle="${loc}" key="local.login.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.login.login" var="loginLabel"/>
+<fmt:message bundle="${loc}" key="local.login.password" var="passwordLabel"/>
 <fmt:message bundle="${loc}" key="local.login.placeholder.login" var="placeholder_login"/>
 <fmt:message bundle="${loc}" key="local.login.placeholder.password" var="placeholder_password"/>
 <fmt:message bundle="${loc}" key="local.login.register" var="reg"/>
@@ -37,14 +37,14 @@
         <form action="Controller" method="post" >
             <c:if test="${errMsg != null}">
                 <fmt:message bundle="${loc}" key="${errMsg}" var="err"/>
-                <span style="color:red; font-size: 13px" >${err}</span>
+                <span style="color:red; font-size: 15px; background: #fe8687;" >${err}</span>
             </c:if>
             <div class="field">
-                <label>${login}:</label>
-                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" required/>
+                <label>${loginLabel}:</label>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" value="${login}" required/>
             </div>
             <div class="field">
-                <label>${password}:</label>
+                <label>${passwordLabel}:</label>
                 <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="${placeholder_password}" name="password" required/>
             </div>
             <buttons >

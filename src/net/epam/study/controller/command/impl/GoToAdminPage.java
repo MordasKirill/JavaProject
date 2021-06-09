@@ -28,23 +28,26 @@ public class GoToAdminPage implements Command {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
             try {
-                if (session.getAttribute("limit") == null){
-                    session.setAttribute("limit", 0);
+
+                if (session.getAttribute("limit_orders") == null){
+                    session.setAttribute("limit_orders", 0);
                 }
+
                 if (session.getAttribute("limit_users") == null){
                     session.setAttribute("limit_users", 0);
                 }
-                int limitOrders = (int) session.getAttribute("limit");
+
+                int limitOrders = (int) session.getAttribute("limit_orders");
                 int limitUsers = (int) session.getAttribute("limit_users");
 
                 if (request.getParameter("load_orders") != null) {
-                    session.setAttribute("limit", tablesListService.getActualLimit(limitOrders));
+                    session.setAttribute("limit_orders", tablesListService.getActualLimit(limitOrders));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
 
                 if (request.getParameter("back_orders") != null) {
-                    session.setAttribute("limit", tablesListService.getPreviousLimit(limitOrders));
+                    session.setAttribute("limit_orders", tablesListService.getPreviousLimit(limitOrders));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
@@ -80,6 +83,7 @@ public class GoToAdminPage implements Command {
                 requestDispatcher.forward(request, response);
 
             } catch (ServiceException e){
+
                 session.setAttribute("error", "Show orders fail!");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
                 requestDispatcher.forward(request, response);

@@ -19,6 +19,7 @@ public class SaveNewOrder implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
@@ -32,6 +33,7 @@ public class SaveNewOrder implements Command {
         HttpSession session = request.getSession(true);
 
         try {
+
             if (validationService.emailErrorMsg(email)==null
                     && validationService.fullNameErrorMsg(fullName)==null
                     && validationService.phoneErrorMsg(phone)==null
@@ -46,12 +48,22 @@ public class SaveNewOrder implements Command {
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                     requestDispatcher.forward(request, response);
+
                 } else {
+
                     orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder());
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
                     requestDispatcher.forward(request, response);
                 }
+
             } else{
+
+                session.setAttribute("emailSession", email);
+                session.setAttribute("fullNameSession", fullName);
+                session.setAttribute("addressSession", address);
+                session.setAttribute("phoneSession", phone);
+                session.setAttribute("citySession", city);
+
                 request.setAttribute("errMsgEmail", validationService.emailErrorMsg(email));
                 request.setAttribute("errMsgFullName", validationService.fullNameErrorMsg(fullName));
                 request.setAttribute("errMsgPhone", validationService.phoneErrorMsg(phone));
@@ -63,7 +75,9 @@ public class SaveNewOrder implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                 requestDispatcher.forward(request, response);
             }
+
         } catch (ServiceException e){
+
             session.setAttribute("error", "Save order fail!");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
             requestDispatcher.forward(request, response);

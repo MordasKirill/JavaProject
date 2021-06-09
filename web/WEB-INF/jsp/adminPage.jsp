@@ -26,15 +26,15 @@
         <c:forEach var = "row" items = "${users}">
             <div class="product-item">
                 <div class="product-list" data-id="${row.id}">
-                    <c:set var = "role" value = "${row.role}"/>
-                    <c:if test="${role == 'owner'}">
-                        <h3 style="color: red"><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                    <c:set var = "roleParsed" value = "${row.role}"/>
+                    <c:if test="${roleParsed == 'owner'}">
+                        <h3 style="color: red"><c:out value = "${fn:toUpperCase(roleParsed)}"/></h3>
                     </c:if>
                     <c:if test="${row.role == 'admin'}">
-                        <h3 style="color: blue"><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                        <h3 style="color: blue"><c:out value = "${fn:toUpperCase(roleParsed)}"/></h3>
                     </c:if>
                     <c:if test="${row.role == 'user'}">
-                        <h3><c:out value = "${fn:toUpperCase(role)}"/></h3>
+                        <h3><c:out value = "${fn:toUpperCase(roleParsed)}"/></h3>
                     </c:if>
                     <span class="price">Login: <c:out value = "${row.login}"/></span>
                     <div class="form-buttons">
@@ -63,7 +63,15 @@
         <div class="product-item">
             <div class="product-list" data-id="${row.id}">
                 <c:set var = "status" value = "${row.status}"/>
-                <h3><c:out value = "${fn:toUpperCase(status)}"/></h3>
+                <c:if test="${status == 'accepted'}">
+                    <h3 style="color: green"><c:out value = "${fn:toUpperCase(status)}"/></h3>
+                </c:if>
+                <c:if test="${status == 'rejected'}">
+                    <h3 style="color: red"><c:out value = "${fn:toUpperCase(status)}"/></h3>
+                </c:if>
+                <c:if test="${status == 'processing'}">
+                    <h3 style="color: black"><c:out value = "${fn:toUpperCase(status)}"/></h3>
+                </c:if>
                 <span class="price"><c:out value = "${row.fullName}"/></span>
                 <span class="price">Address: <c:out value = "${row.address}"/></span>
                 <span class="time">Email: <c:out value = "${row.email}"/></span>

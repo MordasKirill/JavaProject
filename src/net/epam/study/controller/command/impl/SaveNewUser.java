@@ -50,6 +50,7 @@ public class SaveNewUser implements Command {
 
         } catch (ServiceException e){
             session.setAttribute("error", "Save user fail!");
+            session.setAttribute("login", login);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
             requestDispatcher.forward(request, response);
         }

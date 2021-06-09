@@ -13,15 +13,30 @@ import java.io.IOException;
 public class Logout implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         HttpSession session = request.getSession();
+
         if (session != null){
+
             session.removeAttribute("auth");
             session.removeAttribute("role");
-            session.removeAttribute("limit");
+            session.removeAttribute("login");
+
+            session.removeAttribute("limit_orders");
+            session.removeAttribute("limit_users");
             session.removeAttribute("category");
+
+            session.removeAttribute("emailSession");
+            session.removeAttribute("fullNameSession");
+            session.removeAttribute("addressSession");
+            session.removeAttribute("phoneSession");
+            session.removeAttribute("citySession");
+
             ChangeOrderImpl.ORDER.clear();
             ChangeOrderImpl.TOTAL.clear();
+
         }
+
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
         requestDispatcher.forward(request, response);
     }

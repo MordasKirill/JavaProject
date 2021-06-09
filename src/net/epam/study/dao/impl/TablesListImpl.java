@@ -31,7 +31,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_WAIT_TIME = "waitTime";
     public static final String COLUMN_CATEGORY = "category";
     public static final String COLUMN_STATUS = "status";
-    public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu where";
+    public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_ROLE = "role";
     public static final String COLUMN_ID_USER = "id";
@@ -147,5 +147,17 @@ public class TablesListImpl implements TablesListDAO {
         }
 
         return users;
+    }
+
+    @Override
+    public int getActualLimit(int limit){
+
+        return limit + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT;
+    }
+
+    @Override
+    public int getPreviousLimit(int limit){
+
+        return limit - net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT;
     }
 }

@@ -32,6 +32,7 @@ public class CheckLoginAndPassword implements Command {
 
         try {
             role = checkUserService.getUserRole(login);
+
             if(checkUserService.validateUser(login, password)) {
 
                 if (validationService.isAdmin(role)) {
@@ -55,6 +56,7 @@ public class CheckLoginAndPassword implements Command {
             }else{
 
                 request.setAttribute("errMsg", "local.error.logerr");
+                session.setAttribute("login", login);
                 ValidationImpl.userLocale = request.getParameter("locale");
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
