@@ -25,6 +25,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_DETAILS = "details";
+    public static final String SELECT_MAX_ID_ORDERS = "select order_id from orders where order_id>0";
     public static final String SELECT_FROM_ORDERS = "select order_id, fullName, address, email, phone, details, status from orders where order_id>0 LIMIT ";
     public static final String COLUMN_ITEM_NAME = "itemName";
     public static final String COLUMN_PRICE = "price";
@@ -77,6 +78,8 @@ public class TablesListImpl implements TablesListDAO {
         return orders;
     }
 
+
+
     public List<MenuItem> getMenu() throws DAOException, ConnectionPoolException {
 
         List<MenuItem> menuItems = new ArrayList<>();
@@ -112,6 +115,7 @@ public class TablesListImpl implements TablesListDAO {
 
         return menuItems;
     }
+
 
     @Override
     public List<User> getUsers(int limit) throws DAOException, ConnectionPoolException {
@@ -149,11 +153,13 @@ public class TablesListImpl implements TablesListDAO {
         return users;
     }
 
+
     @Override
     public int getActualLimit(int limit){
 
         return limit + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT;
     }
+
 
     @Override
     public int getPreviousLimit(int limit){

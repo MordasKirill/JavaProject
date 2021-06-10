@@ -24,6 +24,8 @@ public class Logout implements Command {
 
             session.removeAttribute("limit_orders");
             session.removeAttribute("limit_users");
+            session.removeAttribute("orders_size");
+            session.removeAttribute("users_size");
             session.removeAttribute("category");
 
             session.removeAttribute("emailSession");

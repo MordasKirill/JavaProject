@@ -5,6 +5,7 @@ import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
+import net.epam.study.service.impl.TablesListImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,11 +38,20 @@ public class GoToAdminPage implements Command {
                     session.setAttribute("limit_users", 0);
                 }
 
+                if (session.getAttribute("orders_size") == null){
+                    session.setAttribute("orders_size", TablesListImpl.DEFAULT_LIMIT);
+                }
+
+                if (session.getAttribute("users_size") == null){
+                    session.setAttribute("users_size", TablesListImpl.DEFAULT_LIMIT);
+                }
+
                 int limitOrders = (int) session.getAttribute("limit_orders");
                 int limitUsers = (int) session.getAttribute("limit_users");
 
                 if (request.getParameter("load_orders") != null) {
                     session.setAttribute("limit_orders", tablesListService.getActualLimit(limitOrders));
+                    session.setAttribute("orders_size", tablesListService.getActualLimit(tablesListService.getOrders(limitOrders).size()));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
@@ -54,6 +64,7 @@ public class GoToAdminPage implements Command {
 
                 if (request.getParameter("load_users") != null) {
                     session.setAttribute("limit_users", tablesListService.getActualLimit(limitUsers));
+                    session.setAttribute("users_size", tablesListService.getActualLimit(tablesListService.getUsers(limitUsers).size()));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
@@ -64,18 +75,19 @@ public class GoToAdminPage implements Command {
                     return;
                 }
 
-                int ordersSize = tablesListService.getOrders(limitOrders).size();
-                int usersSize = tablesListService.getUsers(limitUsers).size();
+                int ordersSize = (int) session.getAttribute("orders_size");
+                int usersSize = (int) session.getAttribute("users_size");
 
                 boolean resultOrdersNext = ordersSize >= limitOrders;
                 boolean resultOrdersBack = limitOrders != 0;
-                boolean resultUsersNext = usersSize >= limitUsers;
+                boolean resultUsersNext = usersSize >= limitUsers + TablesListImpl.DEFAULT_LIMIT;
                 boolean resultUsersBack = limitUsers != 0;
 
                 request.setAttribute("resultOrdersNext", resultOrdersNext);
                 request.setAttribute("resultOrdersBack", resultOrdersBack);
                 request.setAttribute("resultUsersNext", resultUsersNext);
                 request.setAttribute("resultUsersBack", resultUsersBack);
+
                 request.setAttribute("orders", tablesListService.getOrders(limitOrders));
                 request.setAttribute("users", tablesListService.getUsers(limitUsers));
 

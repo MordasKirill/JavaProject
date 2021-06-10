@@ -27,11 +27,13 @@ public class TablesListImpl implements TablesListService {
         try {
             orders = showTables.getOrders(limit);
             return orders;
+            
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
     }
+
 
     @Override
     public List<MenuItem> getMenu() throws ServiceException{
@@ -44,11 +46,13 @@ public class TablesListImpl implements TablesListService {
         try {
             menuItems = showTables.getMenu();
             return menuItems;
+
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
     }
+
 
     @Override
     public List<User> getUsers(int limit) throws ServiceException{
@@ -61,11 +65,13 @@ public class TablesListImpl implements TablesListService {
         try {
             users = showTables.getUsers(limit);
             return users;
+
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
     }
+
 
     @Override
     public int getActualLimit(int limit){
@@ -79,6 +85,7 @@ public class TablesListImpl implements TablesListService {
         return result;
     }
 
+
     @Override
     public int getPreviousLimit(int limit){
 
@@ -87,6 +94,7 @@ public class TablesListImpl implements TablesListService {
 
         int result;
         result = showTables.getPreviousLimit(limit);
+
         return result;
     }
 }
