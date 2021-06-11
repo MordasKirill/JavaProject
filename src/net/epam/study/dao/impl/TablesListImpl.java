@@ -25,7 +25,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_DETAILS = "details";
-    public static final String SELECT_MAX_ID_ORDERS = "select order_id from orders where order_id>0";
+    public static final String SELECT_ALL_ORDERS = "select order_id from orders where order_id>0";
     public static final String SELECT_FROM_ORDERS = "select order_id, fullName, address, email, phone, details, status from orders where order_id>0 LIMIT ";
     public static final String COLUMN_ITEM_NAME = "itemName";
     public static final String COLUMN_PRICE = "price";
@@ -36,6 +36,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_ROLE = "role";
     public static final String COLUMN_ID_USER = "id";
+    public static final String SELECT_ALL_USERS = "select id from users where id>0";
     public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
     private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
@@ -78,7 +79,38 @@ public class TablesListImpl implements TablesListDAO {
         return orders;
     }
 
+    public List<Order> getAllOrders() throws DAOException, ConnectionPoolException {
 
+        List<Order> orders = new ArrayList<>();
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            log.info("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(SELECT_ALL_ORDERS);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+
+                Order order = new Order();
+                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                orders.add(order);
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+
+        return orders;
+    }
 
     public List<MenuItem> getMenu() throws DAOException, ConnectionPoolException {
 
@@ -144,6 +176,39 @@ public class TablesListImpl implements TablesListDAO {
             log.log(Level.ERROR,"FAIL DB: Fail to show users.", exc);
             throw new DAOException(exc);
         }finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+
+        return users;
+    }
+
+    public List<User> getAllUsers() throws DAOException, ConnectionPoolException {
+
+        List<User> users = new ArrayList<>();
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            log.info("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(SELECT_ALL_USERS);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+
+                User user = new User();
+                user.setId(resultSet.getString(COLUMN_ID_USER));
+                users.add(user);
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            throw new DAOException(exc);
+        } finally {
 
             ConnectionPool.connectionPool.putBack(connection);
             assert statement != null;

@@ -10,6 +10,7 @@ import net.epam.study.entity.User;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.TablesListService;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 
@@ -34,6 +35,23 @@ public class TablesListImpl implements TablesListService {
 
     }
 
+    @Override
+    public List<Order> getAllOrders() throws ServiceException {
+
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        TablesListDAO showTables = daoProvider.getTablesListDAO();
+
+        List<Order> orders;
+
+        try {
+            orders = showTables.getAllOrders();
+            return orders;
+
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Get all orders fail", e);
+        }
+
+    }
 
     @Override
     public List<MenuItem> getMenu() throws ServiceException{
@@ -72,6 +90,23 @@ public class TablesListImpl implements TablesListService {
 
     }
 
+    @Override
+    public List<User> getAllUsers() throws ServiceException {
+
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        TablesListDAO showTables = daoProvider.getTablesListDAO();
+
+        List<User> users;
+
+        try {
+            users = showTables.getAllUsers();
+            return users;
+
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Get all orders fail", e);
+        }
+
+    }
 
     @Override
     public int getActualLimit(int limit){

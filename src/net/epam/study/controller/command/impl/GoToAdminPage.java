@@ -28,30 +28,22 @@ public class GoToAdminPage implements Command {
 
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
+            
             try {
 
-                if (session.getAttribute("limit_orders") == null){
-                    session.setAttribute("limit_orders", 0);
-                }
+                if (session.getAttribute("limit_orders") == null &&
+                        session.getAttribute("limit_users") == null){
 
-                if (session.getAttribute("limit_users") == null){
+                    session.setAttribute("limit_orders", 0);
                     session.setAttribute("limit_users", 0);
                 }
 
-                if (session.getAttribute("orders_size") == null){
-                    session.setAttribute("orders_size", TablesListImpl.DEFAULT_LIMIT);
-                }
-
-                if (session.getAttribute("users_size") == null){
-                    session.setAttribute("users_size", TablesListImpl.DEFAULT_LIMIT);
-                }
 
                 int limitOrders = (int) session.getAttribute("limit_orders");
                 int limitUsers = (int) session.getAttribute("limit_users");
 
                 if (request.getParameter("load_orders") != null) {
                     session.setAttribute("limit_orders", tablesListService.getActualLimit(limitOrders));
-                    session.setAttribute("orders_size", tablesListService.getActualLimit(tablesListService.getOrders(limitOrders).size()));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
@@ -64,7 +56,6 @@ public class GoToAdminPage implements Command {
 
                 if (request.getParameter("load_users") != null) {
                     session.setAttribute("limit_users", tablesListService.getActualLimit(limitUsers));
-                    session.setAttribute("users_size", tablesListService.getActualLimit(tablesListService.getUsers(limitUsers).size()));
                     response.sendRedirect("Controller?command=gotoadminpage");
                     return;
                 }
@@ -75,12 +66,12 @@ public class GoToAdminPage implements Command {
                     return;
                 }
 
-                int ordersSize = (int) session.getAttribute("orders_size");
-                int usersSize = (int) session.getAttribute("users_size");
+                int ordersSize = tablesListService.getAllOrders().size();
+                int usersSize = tablesListService.getAllUsers().size();
 
-                boolean resultOrdersNext = ordersSize >= limitOrders;
+                boolean resultOrdersNext =  ordersSize > limitOrders + TablesListImpl.DEFAULT_LIMIT;
                 boolean resultOrdersBack = limitOrders != 0;
-                boolean resultUsersNext = usersSize >= limitUsers + TablesListImpl.DEFAULT_LIMIT;
+                boolean resultUsersNext = usersSize > limitUsers + TablesListImpl.DEFAULT_LIMIT;
                 boolean resultUsersBack = limitUsers != 0;
 
                 request.setAttribute("resultOrdersNext", resultOrdersNext);

@@ -8,7 +8,7 @@ public final class DAOProvider {
 
     private final CheckUserDAO checkUserDAO = new CheckUserImpl();
     private final NewUserValidateDAO newUserValidateDAO = new NewUserValidateImpl();
-    private final DeleteOrderDAO deleteOrderDAO = new DeleteOrderImpl();
+    private final DeleteTableInfoDAO deleteTableInfoDAO = new DeleteTableInfoImpl();
     private final OrderCreateDAO orderCreateDAO = new OrderCreateImpl();
     private final TablesListDAO tablesListDAO = new TablesListImpl();
     private final CheckSessionDAO checkSessionDAO = new CheckSessionImpl();
@@ -26,8 +26,8 @@ public final class DAOProvider {
     public NewUserValidateDAO getNewUserValidateDAO(){
         return newUserValidateDAO;
     }
-    public DeleteOrderDAO getDeleteOrderDAO(){
-        return deleteOrderDAO;
+    public DeleteTableInfoDAO getDeleteTableInfoDAO(){
+        return deleteTableInfoDAO;
     }
     public OrderCreateDAO getOrderCreateDAO(){
         return orderCreateDAO;

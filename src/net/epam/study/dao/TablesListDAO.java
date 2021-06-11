@@ -9,8 +9,10 @@ import java.util.List;
 
 public interface TablesListDAO {
     List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException;
+    List<Order> getAllOrders() throws DAOException, ConnectionPoolException;
     List<MenuItem> getMenu() throws DAOException, ConnectionPoolException;
     List<User> getUsers(int limit) throws DAOException, ConnectionPoolException;
+    List<User> getAllUsers() throws DAOException, ConnectionPoolException;
     int getActualLimit(int limit);
     int getPreviousLimit(int limit);
 }

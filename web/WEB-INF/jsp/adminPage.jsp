@@ -39,10 +39,13 @@
                     <span class="price">Login: <c:out value = "${row.login}"/></span>
                     <div class="form-buttons">
                         <c:if test="${row.role == 'admin'}">
-                            <a href="Controller?command=userrole&id=${row.id}&role=user" class="green">Change to User</a>
+                            <a href="Controller?command=userrole&id=${row.id}&role=user" class="green">To User</a>
                         </c:if>
                         <c:if test="${row.role == 'user'}">
-                            <a href="Controller?command=userrole&id=${row.id}&role=admin" class="green">Change to Admin</a>
+                            <a href="Controller?command=userrole&id=${row.id}&role=admin" class="green">To Admin</a>
+                        </c:if>
+                        <c:if test="${row.role == 'user' || row.role == 'admin'}">
+                            <a href="Controller?command=dbinfodelete&idUser=${row.id}" class="green" style="color: darkred">Delete</a>
                         </c:if>
                     </div>
                 </div>
@@ -89,7 +92,7 @@
                         <a href="Controller?command=orderstatus&id=${row.id}&status=rejected" class="green">Reject</a>
                     </c:if>
                     <c:if test="${role == 'owner'}">
-                        <a href="Controller?command=orderdelete&id=${row.id}" class="green" style="color: darkred">Delete</a>
+                        <a href="Controller?command=dbinfodelete&idOrder=${row.id}" class="green" style="color: darkred">Delete</a>
                     </c:if>
                 </div>
             </div>
