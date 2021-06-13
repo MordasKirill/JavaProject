@@ -1,4 +1,4 @@
-package net.epam.study.entity;
+package net.epam.study.bean.entity;
 
 import java.util.Objects;
 

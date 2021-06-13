@@ -38,12 +38,12 @@ public class ChangeTableInfoImpl implements ChangeTableInfoService {
     }
 
     @Override
-    public void changePaymentStatus(String status) throws ServiceException {
+    public void changePaymentStatus(String status, String login) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         ChangeTableInfoDAO changeTableInfoDAO = daoProvider.getChangeTableInfoDAO();
 
         try {
-            changeTableInfoDAO.changePaymentStatus(status);
+            changeTableInfoDAO.changePaymentStatus(status, login);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to change role", e);
         }

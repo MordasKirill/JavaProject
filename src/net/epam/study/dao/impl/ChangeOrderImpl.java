@@ -3,7 +3,7 @@ package net.epam.study.dao.impl;
 import net.epam.study.dao.ChangeOrderDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.entity.MenuItem;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
@@ -61,6 +61,9 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
                     result = (sum * 10) / 100;
                     result = sum - result;
                     result = (double) Math.round(result * 100) / 100;
+                }
+                if (tablesListService.getDonePayments(login) < 3){
+                    result = (double) Math.round(sum * 100) / 100;
                 }
 
             } catch (ServiceException e){

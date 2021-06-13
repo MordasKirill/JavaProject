@@ -1,9 +1,9 @@
 package net.epam.study.dao;
 
-import net.epam.study.entity.MenuItem;
-import net.epam.study.entity.Order;
+import net.epam.study.bean.MenuItem;
+import net.epam.study.bean.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.entity.User;
+import net.epam.study.bean.User;
 
 import java.util.List;
 

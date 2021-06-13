@@ -4,7 +4,7 @@ import net.epam.study.dao.ChangeOrderDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.entity.MenuItem;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceException;
 

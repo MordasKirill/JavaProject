@@ -1,8 +1,9 @@
-package net.epam.study.bean.entity;
+package net.epam.study.bean;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
         private String id;
         private String fullName;
         private String address;

@@ -34,7 +34,7 @@ public class GoToBasketPage implements Command {
 
                 try {
 
-                    changeTableInfoService.changePaymentStatus("rejected");
+                    changeTableInfoService.changePaymentStatus("rejected", login);
 
                 } catch (ServiceException e){
 

@@ -33,7 +33,7 @@ public class SaveNewPayment implements Command {
             try {
                 String status = "done";
 
-                changeTableInfoService.changePaymentStatus(status);
+                changeTableInfoService.changePaymentStatus(status, login);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
                 requestDispatcher.forward(request, response);

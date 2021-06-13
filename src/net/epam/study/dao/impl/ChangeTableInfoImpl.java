@@ -20,7 +20,8 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     public static final String WHERE_ID_USERS = "where id =";
     public static final String UPDATE_PAYMENT = "update payment set paymentStatus =";
     public static final String COLUMN_ID_ORDER = "order_id";
-    public static final String GET_LAST = "SELECT order_id FROM payment ORDER BY order_id DESC LIMIT 1";
+    public static final String GET_LAST = "SELECT order_id, user_login FROM payment WHERE user_login=";
+    public static final String ORDER = " ORDER BY order_id DESC LIMIT 1";
     public static final String WHERE_ID_PAYMENT = "where order_id =";
     private static final Logger log = Logger.getLogger(ChangeTableInfoImpl.class);
 
@@ -75,14 +76,14 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     }
 
     @Override
-    public void changePaymentStatus(String status) throws DAOException, ConnectionPoolException {
+    public void changePaymentStatus(String status, String login) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
 
         try {
 
-            int id = getLastId();
+            int id = getLastId(login);
             statement = connection.prepareStatement(UPDATE_PAYMENT + "'" + status + "'" + WHERE_ID_PAYMENT + "'" + id + "'");
             log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
@@ -100,7 +101,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         }
     }
 
-    public int getLastId() throws DAOException, ConnectionPoolException {
+    public int getLastId(String login) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -109,12 +110,14 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(GET_LAST);
+            statement = connection.prepareStatement(GET_LAST+ "'" + login + "'" + ORDER);
             log.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             log.info("SUCCESS DB: Last element success.");
             if (resultSet.next()){
-                lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
+                if(resultSet.getString(COLUMN_ID_ORDER).equals(login)) {
+                    lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
+                }
             }
 
         } catch (SQLException exc) {

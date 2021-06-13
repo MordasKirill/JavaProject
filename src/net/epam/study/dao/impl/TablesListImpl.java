@@ -3,10 +3,10 @@ package net.epam.study.dao.impl;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.TablesListDAO;
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.entity.MenuItem;
-import net.epam.study.entity.Order;
+import net.epam.study.bean.MenuItem;
+import net.epam.study.bean.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.entity.User;
+import net.epam.study.bean.User;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
