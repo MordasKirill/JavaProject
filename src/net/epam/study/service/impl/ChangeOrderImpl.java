@@ -8,6 +8,7 @@ import net.epam.study.bean.MenuItem;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class ChangeOrderImpl implements ChangeOrderService {
         changeOrder.addToOrder(name, price, time);
     }
 
-    public double getTotal(String login) throws ServiceException{
+    public BigDecimal getTotal(String login) throws ServiceException{
         DAOProvider daoProvider = DAOProvider.getInstance();
         ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
 
-        double total;
+        BigDecimal total;
 
 
         try {

@@ -20,6 +20,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     public static final String WHERE_ID_USERS = "where id =";
     public static final String UPDATE_PAYMENT = "update payment set paymentStatus =";
     public static final String COLUMN_ID_ORDER = "order_id";
+    public static final String COLUMN_LOGIN = "user_login";
     public static final String GET_LAST = "SELECT order_id, user_login FROM payment WHERE user_login=";
     public static final String ORDER = " ORDER BY order_id DESC LIMIT 1";
     public static final String WHERE_ID_PAYMENT = "where order_id =";
@@ -84,6 +85,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         try {
 
             int id = getLastId(login);
+            System.out.println(id);
             statement = connection.prepareStatement(UPDATE_PAYMENT + "'" + status + "'" + WHERE_ID_PAYMENT + "'" + id + "'");
             log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
@@ -115,7 +117,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
             resultSet = statement.executeQuery();
             log.info("SUCCESS DB: Last element success.");
             if (resultSet.next()){
-                if(resultSet.getString(COLUMN_ID_ORDER).equals(login)) {
+                if(resultSet.getString(COLUMN_LOGIN).equals(login)) {
                     lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
                 }
             }

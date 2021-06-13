@@ -24,6 +24,9 @@
 <fmt:message bundle="${loc}" key="local.basket.discountOrders" var="orders"/>
 <fmt:message bundle="${loc}" key="local.basket.yourDiscount" var="yourDiscount"/>
 <fmt:message bundle="${loc}" key="local.basket.yourOrders" var="yourOrders"/>
+<fmt:message bundle="${loc}" key="local.basket.payment" var="payment"/>
+<fmt:message bundle="${loc}" key="local.basket.payment.online" var="online"/>
+<fmt:message bundle="${loc}" key="local.basket.payment.uponReceipt" var="uponReceipt"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,14 +103,15 @@
                         <div class="row">
                             <div class="col-50">
                                 <label for="ph">${phone}</label>
+                                <label for="ph">+375*********</label>
                                 <c:if test="${errMsgPhone != null}">
                                     <fmt:message bundle="${loc}" key="${errMsgPhone}" var="err"/>
                                     <span style="color:red; font-size: 15px" >${err}</span>
                                 </c:if>
                                 <input type="text" style="border-radius:7px; width: 160px;" id="ph" name="phone" placeholder="+375291234567" value="${phoneSession}" required>
-                                <h2>Choose payment method</h2>
-                                <p><input style="text-align: center" name="method" type="radio" value="online" checked> Online</p>
-                                <p><input name="method" type="radio" value="upon"> Upon receipt</p>
+                                <h2>${payment}</h2>
+                                <p><input style="text-align: center" name="method" type="radio" value="online" checked> ${online}</p>
+                                <p><input name="method" type="radio" value="upon"> ${uponReceipt}</p>
                             </div>
                         </div>
                     </div>

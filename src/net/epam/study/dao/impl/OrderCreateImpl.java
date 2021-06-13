@@ -7,6 +7,7 @@ import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ public class OrderCreateImpl implements OrderCreateDAO {
 
     private static final Logger log = Logger.getLogger(OrderCreateImpl.class);
 
-    public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder, String login, double total) throws DAOException, ConnectionPoolException {
+    public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -44,15 +45,17 @@ public class OrderCreateImpl implements OrderCreateDAO {
         }
     }
 
-    public void payment(String login, double total, String status) throws DAOException, ConnectionPoolException {
+    public void payment(String login, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
+
         int lastId = getLastId();
+        double doubleTotal = total.doubleValue();
 
         try {
 
-            statement = connection.prepareStatement(INSERT_INTO_PAYMENT + "('" + login + "','" + status + "','" + total + "','" + lastId + "')");
+            statement = connection.prepareStatement(INSERT_INTO_PAYMENT + "('" + login + "','" + status + "','" + doubleTotal + "','" + lastId + "')");
             log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             log.info("SUCCESS DB: Payment created.");

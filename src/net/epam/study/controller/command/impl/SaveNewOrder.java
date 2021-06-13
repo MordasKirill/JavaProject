@@ -55,7 +55,7 @@ public class SaveNewOrder implements Command {
 
                 } else {
 
-                    orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder(), login, changeOrderService.getTotal(login));
+                    orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder());
 
 
                     if (paymentMethod.equals("online")){

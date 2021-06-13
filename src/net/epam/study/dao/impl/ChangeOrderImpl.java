@@ -10,6 +10,8 @@ import net.epam.study.service.TablesListService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
+
 public class ChangeOrderImpl implements ChangeOrderDAO {
 
     private static final Logger log = Logger.getLogger(ChangeOrderImpl.class);
@@ -38,32 +40,33 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
         }
     }
 
-    public double getTotal(String login) throws DAOException, ConnectionPoolException{
+    public BigDecimal getTotal(String login) throws DAOException, ConnectionPoolException{
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         TablesListService tablesListService = serviceProvider.getTablesListService();
 
-        double sum = 0;
-        double result = 0;
+
+        BigDecimal result = new BigDecimal(0);
+        BigDecimal sum = new BigDecimal(0);
 
         for (int i = 0; i< net.epam.study.service.impl.ChangeOrderImpl.TOTAL.size(); i++){
-
-            sum = sum + Double.parseDouble(net.epam.study.service.impl.ChangeOrderImpl.TOTAL.get(i));
-            sum = (double) Math.round(sum * 100) / 100;
+            BigDecimal total = new BigDecimal(net.epam.study.service.impl.ChangeOrderImpl.TOTAL.get(i));
+            sum = sum.add(total);
 
             try {
                 if (tablesListService.getDonePayments(login) >= 3){
-                    result = (sum * 3) / 100;
-                    result = sum - result;
-                    result = (double) Math.round(result * 100) / 100;
+                    BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(3))));
+                    amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
+                    result = sum.subtract(amount);
                 }
 
                 if (tablesListService.getDonePayments(login) >= 10){
-                    result = (sum * 10) / 100;
-                    result = sum - result;
-                    result = (double) Math.round(result * 100) / 100;
+                    BigDecimal amount =  new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(10))));
+                    amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
+                    result = sum.subtract(amount);
                 }
+
                 if (tablesListService.getDonePayments(login) < 3){
-                    result = (double) Math.round(sum * 100) / 100;
+                    result = sum;
                 }
 
             } catch (ServiceException e){
