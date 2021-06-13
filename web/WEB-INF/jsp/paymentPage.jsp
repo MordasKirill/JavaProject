@@ -18,7 +18,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Pay</title>
-    <link rel="stylesheet" href="css/test.css">
+    <link rel="stylesheet" href="css/stylePayment.css">
 </head>
 <body>
 <header>
