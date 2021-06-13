@@ -11,9 +11,8 @@ public final class ServiceProvider {
     private final ValidationService validationService = new ValidationImpl();
     private final ChangeOrderService changeOrderService = new ChangeOrderImpl();
     private final CheckUserService checkUserService = new CheckUserImpl();
-    private final CheckNewUserService checkNewUserService = new CheckNewUserImpl();
     private final TablesListService tablesListService = new TablesListImpl();
-    private final OrderCreateService orderCreateService = new OrderCrateImpl();
+    private final OrderCreateService orderCreateService = new OrderCreateImpl();
     private final DeleteTableInfoService deleteTableInfoService = new DeleteTableInfoImpl();
     private final HashPasswordService hashPasswordService = new HashPasswordImpl();
     private final CheckSessionService checkSessionService = new CheckSessionImpl();
@@ -32,9 +31,6 @@ public final class ServiceProvider {
     }
     public CheckUserService getCheckUserService(){
         return checkUserService;
-    }
-    public CheckNewUserService getCheckNewUserService(){
-        return checkNewUserService;
     }
     public TablesListService getTablesListService(){
         return tablesListService;

@@ -25,19 +25,22 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_DETAILS = "details";
-    public static final String SELECT_ALL_ORDERS = "select order_id from orders where order_id>0";
-    public static final String SELECT_FROM_ORDERS = "select order_id, fullName, address, email, phone, details, status from orders where order_id>0 LIMIT ";
+    public static final String SELECT_ALL_ORDERS = "select order_id from payment where order_id>0";
+    public static final String SELECT_FROM_ORDERS_PAYMENTS = "select * from orders, payment where Orders.order_id = Payment.order_id LIMIT ";
     public static final String COLUMN_ITEM_NAME = "itemName";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_WAIT_TIME = "waitTime";
     public static final String COLUMN_CATEGORY = "category";
     public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_PAYMENT_STATUS = "paymentStatus";
     public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_ROLE = "role";
     public static final String COLUMN_ID_USER = "id";
     public static final String SELECT_ALL_USERS = "select id from users where id>0";
     public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
+    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_login=";
+    public static final String COLUMN_LOGIN_PAYMENT = "user_login";
     private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
@@ -49,7 +52,7 @@ public class TablesListImpl implements TablesListDAO {
 
         try {
             log.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_ORDERS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
@@ -62,6 +65,7 @@ public class TablesListImpl implements TablesListDAO {
                 order.setPhone(resultSet.getString(COLUMN_PHONE));
                 order.setDetails(resultSet.getString(COLUMN_DETAILS));
                 order.setStatus(resultSet.getString(COLUMN_STATUS));
+                order.setPaymentStatus(resultSet.getString(COLUMN_PAYMENT_STATUS));
                 orders.add(order);
             }
 
@@ -216,6 +220,39 @@ public class TablesListImpl implements TablesListDAO {
         }
 
         return users;
+    }
+
+    public int getDonePayments(String login) throws DAOException, ConnectionPoolException {
+
+        int result = 0;
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            log.info("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(SELECT_FROM_PAYMENTS +  "'" + login + "'" +("and paymentStatus='done'"));
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+
+                if (resultSet.getString(COLUMN_LOGIN_PAYMENT).equals(login)){
+                    result ++;
+                }
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+
+        return result;
     }
 
 

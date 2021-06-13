@@ -77,5 +77,4 @@ public class ValidationImpl implements ValidationService {
         return role.equals(String.valueOf(Role.ADMIN).toLowerCase()) || role.equals(String.valueOf(Role.OWNER).toLowerCase());
     }
 
-
 }

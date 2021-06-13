@@ -34,6 +34,12 @@ public class Logout implements Command {
             session.removeAttribute("phoneSession");
             session.removeAttribute("citySession");
 
+            session.removeAttribute("numberPayment");
+            session.removeAttribute("fullNamePayment");
+
+            session.removeAttribute("ordersAmount");
+            session.removeAttribute("discount");
+
             ChangeOrderImpl.ORDER.clear();
             ChangeOrderImpl.TOTAL.clear();
 

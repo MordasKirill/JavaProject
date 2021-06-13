@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.Role;
-import net.epam.study.service.CheckNewUserService;
+import net.epam.study.service.CheckUserService;
 import net.epam.study.service.HashPasswordService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -26,11 +26,11 @@ public class SaveNewUser implements Command {
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
-        CheckNewUserService checkNewUserService = serviceProvider.getCheckNewUserService();
+        CheckUserService checkUserService = serviceProvider.getCheckUserService();
 
         try {
 
-            if(checkNewUserService.check(login, hashPasswordService.hashPassword(password), role)) {
+            if(checkUserService.isUserNew(login, hashPasswordService.hashPassword(password), role)) {
                 session.setAttribute("auth", true);
                 session.setAttribute("role", role);
                 session.setAttribute("login", login);

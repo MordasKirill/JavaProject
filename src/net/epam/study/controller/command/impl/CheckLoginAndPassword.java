@@ -33,7 +33,7 @@ public class CheckLoginAndPassword implements Command {
         try {
             role = checkUserService.getUserRole(login);
 
-            if(checkUserService.validateUser(login, password)) {
+            if(checkUserService.isUser(login, password)) {
 
                 if (validationService.isAdmin(role)) {
                     session.setAttribute("auth", true);

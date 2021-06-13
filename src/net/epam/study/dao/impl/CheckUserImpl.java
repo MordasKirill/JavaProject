@@ -16,10 +16,12 @@ import java.sql.SQLException;
 public class CheckUserImpl implements CheckUserDAO {
 
 
-    public static final String SELECT_FROM = "select login, password, role from users where login =";
+    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login =";
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
+    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =";
+    public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES";
     private static final Logger log = Logger.getLogger(CheckUserImpl.class);
 
     public boolean isUserExists(String login, String password) throws DAOException, ConnectionPoolException {
@@ -32,7 +34,7 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
 
-            statement = connection.prepareStatement(SELECT_FROM + "'" + login + "'");
+            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
             log.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -56,6 +58,8 @@ public class CheckUserImpl implements CheckUserDAO {
 
         return result;
     }
+
+
     public String getUserRole(String login) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
@@ -63,7 +67,7 @@ public class CheckUserImpl implements CheckUserDAO {
         ResultSet resultSet = null;
 
         try {
-            statement = connection.prepareStatement(SELECT_FROM + "'" + login + "'");
+            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
             log.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -85,5 +89,41 @@ public class CheckUserImpl implements CheckUserDAO {
             ConnectionPool.connectionPool.closeConnection(statement, resultSet);
         }
         return null;
+    }
+
+
+    public boolean isUserNew (String login, String hashPassword, String role) throws DAOException, ConnectionPoolException {
+
+        boolean result = true;
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+
+        try {
+            log.info("SUCCESS DB: Connected.");
+            statement = connection.prepareStatement(SELECT_LOGIN_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()
+                    &&resultSet.getString(COLUMN_LOGIN).equals(login)) {
+                log.info("FAIL DB: User already exist.");
+                result = false;
+
+            } else{
+                statement.executeUpdate(INSERT_INTO + "('" + login + "','" + hashPassword + "','" + role + "')");
+                log.info("SUCCESS DB: User created.");
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement);
+        }
+
+        return result;
     }
 }

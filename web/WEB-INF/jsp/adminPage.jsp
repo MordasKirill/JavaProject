@@ -75,6 +75,16 @@
                 <c:if test="${status == 'processing'}">
                     <h3 style="color: black"><c:out value = "${fn:toUpperCase(status)}"/></h3>
                 </c:if>
+                <c:set var = "paymentStatus" value = "${row.paymentStatus}"/>
+                <c:if test="${paymentStatus == 'done' || paymentStatus == 'uponReceipt'}">
+                    <h3 style="color: green"><c:out value = "Payment: ${fn:toUpperCase(paymentStatus)}"/></h3>
+                </c:if>
+                <c:if test="${paymentStatus == 'rejected'}">
+                    <h3 style="color: red"><c:out value = "Payment: ${fn:toUpperCase(paymentStatus)}"/></h3>
+                </c:if>
+                <c:if test="${paymentStatus == 'processing'}">
+                    <h3 style="color: black"><c:out value = "Payment: ${fn:toUpperCase(paymentStatus)}"/></h3>
+                </c:if>
                 <span class="price"><c:out value = "${row.fullName}"/></span>
                 <span class="price">Address: <c:out value = "${row.address}"/></span>
                 <span class="time">Email: <c:out value = "${row.email}"/></span>

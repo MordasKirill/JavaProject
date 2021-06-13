@@ -30,7 +30,11 @@ public class SaveNewOrder implements Command {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String city = request.getParameter("city");
+        String paymentMethod = request.getParameter("method");
+
         HttpSession session = request.getSession(true);
+        String login = (String) session.getAttribute("login");
+
 
         try {
 
@@ -43,7 +47,7 @@ public class SaveNewOrder implements Command {
 
                     request.setAttribute("error", "local.error.orderEmpty");
                     request.setAttribute("order", ChangeOrderImpl.ORDER);
-                    request.setAttribute("total", changeOrderService.getTotal());
+                    request.setAttribute("total", changeOrderService.getTotal(login));
                     request.setAttribute("size", ChangeOrderImpl.ORDER.size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
@@ -51,9 +55,23 @@ public class SaveNewOrder implements Command {
 
                 } else {
 
-                    orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder());
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
-                    requestDispatcher.forward(request, response);
+                    orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder(), login, changeOrderService.getTotal(login));
+
+
+                    if (paymentMethod.equals("online")){
+                        String status = "processing";
+                        orderCreateService.payment(login, changeOrderService.getTotal(login), status);
+
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/payment-indexPage.jsp");
+                        requestDispatcher.forward(request, response);
+                    }else {
+
+                        String status = "uponReceipt";
+                        orderCreateService.payment(login, changeOrderService.getTotal(login), status);
+
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
+                        requestDispatcher.forward(request, response);
+                    }
                 }
 
             } else{
@@ -69,8 +87,9 @@ public class SaveNewOrder implements Command {
                 request.setAttribute("errMsgPhone", validationService.phoneErrorMsg(phone));
                 request.setAttribute("errMsgCity", validationService.cityErrorMsg(city));
                 request.setAttribute("order", ChangeOrderImpl.ORDER);
-                request.setAttribute("total", changeOrderService.getTotal());
+                request.setAttribute("total", changeOrderService.getTotal(login));
                 request.setAttribute("size", ChangeOrderImpl.ORDER.size());
+
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
                 requestDispatcher.forward(request, response);

@@ -25,6 +25,8 @@ public class CommandProvider {
 		commands.put(CommandName.ITEMDELETE, new CartItemDelete());
 		commands.put(CommandName.ORDERSTATUS, new AdminOrderStatus());
 		commands.put(CommandName.USERROLE, new AdminUserRole());
+		commands.put(CommandName.GOTOPAYMENTPAGE, new GoToPaymentPage());
+		commands.put(CommandName.SAVEPAYMENT, new SaveNewPayment());
 	}
 	
 	

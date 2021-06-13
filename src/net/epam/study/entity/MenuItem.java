@@ -57,9 +57,8 @@ public class MenuItem {
 
     @Override
     public String toString() {
-        return "Name: " + name +
-                ", price: " + price +
-                ", filing time: " + filingTime +".";
+        return  name +
+                ", price: $" + price +".";
     }
 
     @Override

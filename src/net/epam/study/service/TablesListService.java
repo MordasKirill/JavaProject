@@ -12,6 +12,7 @@ public interface TablesListService {
     List<MenuItem> getMenu() throws ServiceException;
     List<User> getUsers(int limit) throws ServiceException;
     List<User> getAllUsers() throws ServiceException;
+    int getDonePayments(String login) throws ServiceException;
     int getActualLimit(int limit);
     int getPreviousLimit(int limit);
 }

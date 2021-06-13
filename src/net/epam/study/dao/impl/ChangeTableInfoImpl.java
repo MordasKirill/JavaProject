@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
@@ -17,6 +18,10 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     public static final String WHERE_ORDER_ID = "where order_id =";
     public static final String UPDATE_ROLE = "update users set role =";
     public static final String WHERE_ID_USERS = "where id =";
+    public static final String UPDATE_PAYMENT = "update payment set paymentStatus =";
+    public static final String COLUMN_ID_ORDER = "order_id";
+    public static final String GET_LAST = "SELECT order_id FROM payment ORDER BY order_id DESC LIMIT 1";
+    public static final String WHERE_ID_PAYMENT = "where order_id =";
     private static final Logger log = Logger.getLogger(ChangeTableInfoImpl.class);
 
     @Override
@@ -67,5 +72,61 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
             assert statement != null;
             ConnectionPool.connectionPool.closeConnection(statement);
         }
+    }
+
+    @Override
+    public void changePaymentStatus(String status) throws DAOException, ConnectionPoolException {
+
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+
+        try {
+
+            int id = getLastId();
+            statement = connection.prepareStatement(UPDATE_PAYMENT + "'" + status + "'" + WHERE_ID_PAYMENT + "'" + id + "'");
+            log.info("SUCCESS DB: Connected.");
+            statement.executeUpdate();
+            log.info("SUCCESS DB: Payment status changed.");
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement);
+        }
+    }
+
+    public int getLastId() throws DAOException, ConnectionPoolException {
+
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int lastId = 0;
+
+        try {
+
+            statement = connection.prepareStatement(GET_LAST);
+            log.info("SUCCESS DB: Connected.");
+            resultSet = statement.executeQuery();
+            log.info("SUCCESS DB: Last element success.");
+            if (resultSet.next()){
+                lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
+            }
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
+            throw new DAOException(exc);
+        }  finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+        return lastId;
     }
 }

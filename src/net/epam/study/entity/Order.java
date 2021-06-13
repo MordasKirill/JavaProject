@@ -10,6 +10,7 @@ public class Order {
         private String phone;
         private String details;
         private String status;
+        private String paymentStatus;
 
         public Order() {
             super();
@@ -78,6 +79,14 @@ public class Order {
             this.status = status;
         }
 
+        public String getPaymentStatus() {
+            return paymentStatus;
+        }
+
+        public void setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
+        }
+
     @Override
         public String toString() {
             return "Id: " + id +
@@ -100,11 +109,12 @@ public class Order {
                 getEmail().equals(order.getEmail()) &&
                 getPhone().equals(order.getPhone()) &&
                 getDetails().equals(order.getDetails())&&
-                getStatus().equals(order.getStatus());
+                getStatus().equals(order.getStatus())&&
+                getPaymentStatus().equals(order.getPaymentStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFullName(), getAddress(), getEmail(), getPhone(), getDetails(), getStatus());
+        return Objects.hash(getId(), getFullName(), getAddress(), getEmail(), getPhone(), getDetails(), getStatus(), getPaymentStatus());
     }
 }

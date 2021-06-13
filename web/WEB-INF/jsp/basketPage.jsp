@@ -20,6 +20,10 @@
 <fmt:message bundle="${loc}" key="local.basket.empty" var="emptyCart"/>
 <fmt:message bundle="${loc}" key="local.login.footer" var="footer"/>
 <fmt:message bundle="${loc}" key="local.title.basket" var="basket"/>
+<fmt:message bundle="${loc}" key="local.basket.discount" var="diskount"/>
+<fmt:message bundle="${loc}" key="local.basket.discountOrders" var="orders"/>
+<fmt:message bundle="${loc}" key="local.basket.yourDiscount" var="yourDiscount"/>
+<fmt:message bundle="${loc}" key="local.basket.yourOrders" var="yourOrders"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +59,13 @@
                     </c:choose>
 
                     <hr>
-                    <p>${total_sum} <span class="price" style="color:black"><b>$<c:out value="${total}"/></b></span></p>
+                    <b>${diskount}!</b>
+                    <p>3 ${orders} - 3%</p>
+                    <p>10 ${orders} - 10%</p>
+                    <p>${yourOrders} - ${ordersAmount}</p>
+                    <p>${yourDiscount} - ${discount}%</p>
+                    <p></p>
+                    <p><b>${total_sum}</b> <span class="price" style="color:black"><b>$<c:out value="${total}"/></b></span></p>
                     <form action="Controller" method="post">
                         <input type="hidden" name="command" value="gotomenupage" />
                         <input type="submit" class="btn" value="${somemore}">
@@ -95,12 +105,16 @@
                                     <span style="color:red; font-size: 15px" >${err}</span>
                                 </c:if>
                                 <input type="text" style="border-radius:7px; width: 160px;" id="ph" name="phone" placeholder="+375291234567" value="${phoneSession}" required>
+                                <h2>Choose payment method</h2>
+                                <p><input style="text-align: center" name="method" type="radio" value="online" checked> Online</p>
+                                <p><input name="method" type="radio" value="upon"> Upon receipt</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="command" value="saveneworder">
-                <input type="submit" value="${checkout}" class="btn">
+
+                    <input type="hidden" name="command" value="saveneworder">
+                    <input type="submit" value="${checkout}" class="btn">
             </form>
         </div>
     </div>

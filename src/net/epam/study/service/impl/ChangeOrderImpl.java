@@ -1,7 +1,12 @@
 package net.epam.study.service.impl;
 
+import net.epam.study.dao.ChangeOrderDAO;
+import net.epam.study.dao.DAOException;
+import net.epam.study.dao.DAOProvider;
+import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.entity.MenuItem;
 import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,38 +15,48 @@ public class ChangeOrderImpl implements ChangeOrderService {
     public static final List<MenuItem> ORDER = new ArrayList<>();
     public static final List<String> TOTAL = new ArrayList<>();
 
-    public void deleteOrderItem(String item){
-        for (int i = 0; i< ORDER.size(); i++){
-            if (ORDER.get(i).toString().equals(item)){
-                ORDER.remove(ORDER.get(i));
-                TOTAL.remove(TOTAL.get(i));
-                break;
-            }
-            getTotal();
+    public void deleteOrderItem(String item, String login)throws ServiceException{
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
+
+        try {
+            changeOrder.deleteOrderItem(item, login);
+        } catch (DAOException e){
+        throw new ServiceException("Get orders fail", e);
         }
     }
 
     public void addToOrder(String name, String price, String time){
-        if (name != null && price != null && time != null) {
-            ORDER.add(new MenuItem(name, price, time));
-            TOTAL.add(price);
-        }
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
+
+        changeOrder.addToOrder(name, price, time);
     }
 
-    public double getTotal(){
-        double sum =0;
-        for (int i = 0; i< TOTAL.size(); i++){
-            sum = sum + Double.parseDouble(TOTAL.get(i));
-            sum = (double) Math.round(sum * 100) / 100;
+    public double getTotal(String login) throws ServiceException{
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
+
+        double total;
+
+
+        try {
+            total = changeOrder.getTotal(login);
+
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Get orders fail", e);
         }
-        return sum;
+
+        return total;
     }
 
     public StringBuilder getOrder(){
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
+
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i< ORDER.size(); i++){
-            stringBuilder.append(ORDER.get(i).toString()).append(" ");
-        }
+        stringBuilder = changeOrder.getOrder();
         return stringBuilder;
+
     }
 }
