@@ -32,6 +32,21 @@ public class ValidationImpl implements ValidationService {
         return matcher.matches();
     }
 
+
+    public boolean isValidPrice(String price){
+        String ePattern = "\\d{1,4}\\.\\d{1,3}";
+        pattern = Pattern.compile(ePattern);
+        matcher = pattern.matcher(price);
+        return matcher.matches();
+    }
+
+    public boolean isValidTime(String time){
+        String ePattern = "\\d{1,4}";
+        pattern = Pattern.compile(ePattern);
+        matcher = pattern.matcher(time);
+        return matcher.matches();
+    }
+
     public boolean isValidCity(String city){
         //todo use pattern
         boolean result = false;
@@ -69,6 +84,20 @@ public class ValidationImpl implements ValidationService {
     public String cityErrorMsg(String city){
         if (!isValidCity(city)){
             return "local.error.orderErrorCity";
+        }
+        return null;
+    }
+
+    public String priceErrorMsg(String price){
+        if (!isValidPrice(price)){
+            return "Price is invalid!";
+        }
+        return null;
+    }
+
+    public String timeErrorMsg(String time){
+        if (!isValidTime(time)){
+            return "Time is invalid!";
         }
         return null;
     }

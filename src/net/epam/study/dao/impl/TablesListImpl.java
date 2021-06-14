@@ -7,7 +7,7 @@ import net.epam.study.bean.MenuItem;
 import net.epam.study.bean.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.bean.User;
-import net.epam.study.service.OrderCreateService;
+import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
@@ -233,13 +233,13 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        OrderCreateService orderCreateService = serviceProvider.getOrderCreateService();
+        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
         int id = 0;
 
         try {
 
             try {
-                id = orderCreateService.getUserId(login);
+                id = createTableInfoService.getUserId(login);
             } catch (ServiceException e) {
                 log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
                 throw new DAOException(e);

@@ -9,11 +9,15 @@ import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
+    public static final String COLUMN_NAME = "itemName";
     public static final String DELETE_FROM_ORDERS = "delete from orders where order_id =";
     public static final String DELETE_FROM_USERS = "delete from users where id =";
+    public static final String DELETE_FROM_MENU = "delete from menu where itemName =";
+    public static final String SELECT_FROM_MENU = "select * from menu where itemName=";
 
     private static final Logger log = Logger.getLogger(DeleteTableInfoImpl.class);
 
@@ -53,6 +57,64 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
             log.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             log.info("SUCCESS DB: User deleted.");
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement);
+        }
+    }
+
+    public boolean isMenuItemExists(String itemName, String category) throws DAOException, ConnectionPoolException {
+
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        boolean result = false;
+
+        try {
+
+            statement = connection.prepareStatement(SELECT_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
+            log.info("SUCCESS DB: Connected.");
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()){
+                if (resultSet.getString(COLUMN_NAME).equals(itemName)) {
+                    result = true;
+                    log.info("SUCCESS DB: Menu item checked.");
+                }
+            }
+
+
+        } catch (SQLException exc) {
+
+            log.log(Level.ERROR,"FAIL DB: Fail to check MenuItem.", exc);
+            throw new DAOException(exc);
+        } finally {
+
+            ConnectionPool.connectionPool.putBack(connection);
+            assert statement != null;
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+        return result;
+    }
+
+    public void deleteMenuItem(String itemName, String category) throws DAOException, ConnectionPoolException {
+
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+
+        try {
+
+            statement = connection.prepareStatement(DELETE_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
+            log.info("SUCCESS DB: Connected.");
+            statement.executeUpdate();
+            log.info("SUCCESS DB: Menu item deleted.");
 
         } catch (SQLException exc) {
 

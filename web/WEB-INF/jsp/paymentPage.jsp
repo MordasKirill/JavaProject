@@ -138,22 +138,22 @@
             <fmt:message bundle="${loc}" key="${errMsgFullName}" var="err"/>
             <span style="color:red; font-size: 15px" >${err}</span>
         </c:if>
-        <input id="name" name="name" maxlength="20" type="text" placeholder="${err}" value="${fullNamePayment}">
+        <input id="name" name="name" maxlength="20" type="text" placeholder="${err}" value="${fullNamePayment}" required>
     </div>
     <div class="field-container">
         <label for="cardnumber">${number}</label><span id="generatecard">generate random</span>
-        <input id="cardnumber" name="cardnumber" type="text" inputmode="numeric" value="${numberPayment}">
+        <input id="cardnumber" name="cardnumber" type="text" inputmode="numeric" value="${numberPayment}" required>
         <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1"
              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         </svg>
     </div>
     <div class="field-container">
         <label for="expirationdate">${expiration}</label>
-        <input id="expirationdate" name="expirationdate" type="text" inputmode="numeric">
+        <input id="expirationdate" name="expirationdate" type="text" inputmode="numeric" required>
     </div>
     <div class="field-container">
         <label for="securitycode">${sc}</label>
-        <input id="securitycode" name="securitycode" type="text" inputmode="numeric">
+        <input id="securitycode" name="securitycode" type="text" inputmode="numeric" required>
 
     </div>
     <input type="hidden" name="command" value="savepayment">

@@ -31,4 +31,31 @@ public class DeleteTableInfoImpl implements DeleteTableInfoService {
             throw new ServiceException("Fail to delete user", e);
         }
     }
+
+    @Override
+    public void deleteMenuItem(String itemName, String category) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        DeleteTableInfoDAO deleteTableInfoDAO = daoProvider.getDeleteTableInfoDAO();
+
+        try {
+            deleteTableInfoDAO.deleteMenuItem(itemName, category);
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Fail to delete user", e);
+        }
+    }
+
+    @Override
+    public boolean isMenuItemExists(String itemName, String category) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        DeleteTableInfoDAO deleteTableInfoDAO = daoProvider.getDeleteTableInfoDAO();
+
+        boolean result;
+
+        try {
+            result = deleteTableInfoDAO.isMenuItemExists(itemName, category);
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Fail to delete user", e);
+        }
+        return result;
+    }
 }

@@ -4,7 +4,7 @@ import net.epam.study.dao.ChangeTableInfoDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.service.OrderCreateService;
+import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
@@ -114,10 +114,10 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         int userId = 0;
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        OrderCreateService orderCreateService = serviceProvider.getOrderCreateService();
+        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
         try {
-            userId = orderCreateService.getUserId(login);
+            userId = createTableInfoService.getUserId(login);
         } catch (ServiceException e) {
             log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
             throw new DAOException(e);

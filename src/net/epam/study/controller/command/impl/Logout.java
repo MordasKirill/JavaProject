@@ -40,6 +40,12 @@ public class Logout implements Command {
             session.removeAttribute("ordersAmount");
             session.removeAttribute("discount");
 
+            session.removeAttribute("success");
+            session.removeAttribute("successDelete");
+            session.removeAttribute("notFound");
+            session.removeAttribute("errMsgPrice");
+            session.removeAttribute("errMsgWaitTime");
+
             ChangeOrderImpl.ORDER.clear();
             ChangeOrderImpl.TOTAL.clear();
 

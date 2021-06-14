@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.service.ChangeOrderService;
-import net.epam.study.service.OrderCreateService;
+import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
@@ -23,7 +23,7 @@ public class SaveNewOrder implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
-        OrderCreateService orderCreateService = serviceProvider.getOrderCreateService();
+        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullName");
@@ -55,19 +55,19 @@ public class SaveNewOrder implements Command {
 
                 } else {
 
-                    orderCreateService.create(fullName, address, email, phone, changeOrderService.getOrder());
+                    createTableInfoService.create(fullName, address, email, phone, changeOrderService.getOrder());
 
 
                     if (paymentMethod.equals("online")){
                         String status = "processing";
-                        orderCreateService.payment(login, changeOrderService.getTotal(login), status);
+                        createTableInfoService.payment(login, changeOrderService.getTotal(login), status);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/payment-indexPage.jsp");
                         requestDispatcher.forward(request, response);
                     }else {
 
                         String status = "uponReceipt";
-                        orderCreateService.payment(login, changeOrderService.getTotal(login), status);
+                        createTableInfoService.payment(login, changeOrderService.getTotal(login), status);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
                         requestDispatcher.forward(request, response);

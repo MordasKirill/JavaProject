@@ -8,7 +8,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Admin</title>
-    <link rel="stylesheet" href="css/styleAdminPage.css">
+    <link rel="stylesheet" href="css/test.css">
 </head>
 <body>
 <header>
@@ -118,6 +118,83 @@
             <a href="Controller?command=gotoadminpage&load_orders=1" class="green" style="width: 200px;">Next</a>
         </c:if>
     </div>
+    <form action="Controller" method="post" >
+        <div class="container-form">
+            <h1>Add new menu item</h1>
+            <c:if test="${success != null}">
+                <c:set var = "success" value = "${success}"/>
+                <h3 style="color: green"><c:out value = "${fn:toUpperCase(success)}"/></h3>
+            </c:if>
+            <div class="field">
+                <label>Name:</label>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="Product name" name="itemName" value="${login}" maxlength="70" inputmode="text" required/>
+            </div>
+            <div class="field">
+                <label>Price:</label>
+                <c:if test="${errMsgPrice != null}">
+                    <span style="color:red; font-size: 15px" >${errMsgPrice}</span>
+                </c:if>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="Product price" name="itemPrice" value="${login}" maxlength="60" inputmode="decimal" required/>
+            </div>
+            <div class="field">
+                <label>Wait time:</label>
+                <c:if test="${errMsgWaitTime != null}">
+                    <span style="color:red; font-size: 15px" >${errMsgWaitTime}</span>
+                </c:if>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="Product wait time" name="itemWaitTime" value="${login}" maxlength="60" inputmode="numeric" required/>
+            </div>
+            <div class="field">
+                <label>Category:</label>
+                <p><select name="category">
+                    <option selected value="appetizer">Appetizer</option>
+                    <option value="soups">Soups</option>
+                    <option value="meat">Meat</option>
+                    <option value="poultry">Poultry</option>
+                    <option value="fish-and-sea-food">Fish-and-sea-food</option>
+                    <option value="deserts">Deserts</option>
+                    <option value="soft-drinks">Soft-drinks</option>
+                    <option value="hot-drinks">Hot-drinks</option>
+                    <option value="alcohol">Alcohol</option>
+                </select></p>
+            </div>
+            <input type="hidden" name="command" value="savemenuitem" />
+            <input type="submit" class="green" style="text-align: center" value="Create">
+        </div>
+    </form>
+<form action="Controller" method="post" >
+    <div class="container-form">
+        <h1>Delete menu item</h1>
+        <c:if test="${successDelete != null}">
+            <c:set var = "successDelete" value = "${successDelete}"/>
+            <h3 style="color: green"><c:out value = "${fn:toUpperCase(successDelete)}"/></h3>
+        </c:if>
+        <c:if test="${notFound != null}">
+            <c:set var = "notFound" value = "${notFound}"/>
+            <h3 style="color: red"><c:out value = "${fn:toUpperCase(notFound)}"/></h3>
+        </c:if>
+        <div class="field">
+            <label>Name:</label>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="Product name" name="itemNameDelete" value="${login}" maxlength="70" inputmode="text" required/>
+        </div>
+        <div class="field">
+            <label>Category:</label>
+            <p><select name="categoryDelete">
+                <option selected value="appetizer">Appetizer</option>
+                <option value="soups">Soups</option>
+                <option value="meat">Meat</option>
+                <option value="poultry">Poultry</option>
+                <option value="fish-and-sea-food">Fish-and-sea-food</option>
+                <option value="deserts">Deserts</option>
+                <option value="soft-drinks">Soft-drinks</option>
+                <option value="hot-drinks">Hot-drinks</option>
+                <option value="alcohol">Alcohol</option>
+            </select></p>
+        </div>
+        <input type="hidden" name="command" value="deletemenuitem" />
+        <input type="submit" class="green" style="text-align: center; color: darkred" value="Delete">
+    </div>
+</form>
+
 </body>
 <script>
     let cords = ['scrollX', 'scrollY'];

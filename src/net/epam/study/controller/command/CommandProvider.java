@@ -27,6 +27,8 @@ public class CommandProvider {
 		commands.put(CommandName.USERROLE, new AdminUserRole());
 		commands.put(CommandName.GOTOPAYMENTPAGE, new GoToPaymentPage());
 		commands.put(CommandName.SAVEPAYMENT, new SaveNewPayment());
+		commands.put(CommandName.SAVEMENUITEM, new AdminSaveNewMenuItem());
+		commands.put(CommandName.DELETEMENUITEM, new AdminDeleteMenuItem());
 	}
 	
 	
