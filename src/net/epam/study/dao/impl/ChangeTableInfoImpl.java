@@ -4,6 +4,9 @@ import net.epam.study.dao.ChangeTableInfoDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.dao.connection.ConnectionPoolException;
+import net.epam.study.service.OrderCreateService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -20,8 +23,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     public static final String WHERE_ID_USERS = "where id =";
     public static final String UPDATE_PAYMENT = "update payment set paymentStatus =";
     public static final String COLUMN_ID_ORDER = "order_id";
-    public static final String COLUMN_LOGIN = "user_login";
-    public static final String GET_LAST = "SELECT order_id, user_login FROM payment WHERE user_login=";
+    public static final String GET_LAST = "SELECT order_id, user_id FROM payment WHERE user_id=";
     public static final String ORDER = " ORDER BY order_id DESC LIMIT 1";
     public static final String WHERE_ID_PAYMENT = "where order_id =";
     private static final Logger log = Logger.getLogger(ChangeTableInfoImpl.class);
@@ -109,17 +111,26 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         int lastId = 0;
+        int userId = 0;
+
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        OrderCreateService orderCreateService = serviceProvider.getOrderCreateService();
+
+        try {
+            userId = orderCreateService.getUserId(login);
+        } catch (ServiceException e) {
+            log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
+            throw new DAOException(e);
+        }
 
         try {
 
-            statement = connection.prepareStatement(GET_LAST+ "'" + login + "'" + ORDER);
+            statement = connection.prepareStatement(GET_LAST+ "'" + userId + "'" + ORDER);
             log.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             log.info("SUCCESS DB: Last element success.");
             if (resultSet.next()){
-                if(resultSet.getString(COLUMN_LOGIN).equals(login)) {
-                    lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
-                }
+                lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
             }
 
         } catch (SQLException exc) {

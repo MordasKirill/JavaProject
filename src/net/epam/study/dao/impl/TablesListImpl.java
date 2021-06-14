@@ -7,6 +7,9 @@ import net.epam.study.bean.MenuItem;
 import net.epam.study.bean.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.bean.User;
+import net.epam.study.service.OrderCreateService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -39,8 +42,8 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_ID_USER = "id";
     public static final String SELECT_ALL_USERS = "select id from users where id>0";
     public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
-    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_login=";
-    public static final String COLUMN_LOGIN_PAYMENT = "user_login";
+    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id=";
+    public static final String COLUMN_USER_ID_PAYMENT = "user_id";
     private static final Logger log = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
@@ -229,16 +232,27 @@ public class TablesListImpl implements TablesListDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        OrderCreateService orderCreateService = serviceProvider.getOrderCreateService();
+        int id = 0;
+
         try {
+
+            try {
+                id = orderCreateService.getUserId(login);
+            } catch (ServiceException e) {
+                log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
+                throw new DAOException(e);
+            }
+
             log.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_PAYMENTS +  "'" + login + "'" +("and paymentStatus='done'"));
+            statement = connection.prepareStatement(SELECT_FROM_PAYMENTS +  "'" + id + "'" +("and paymentStatus='done'"));
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
 
-                if (resultSet.getString(COLUMN_LOGIN_PAYMENT).equals(login)){
-                    result ++;
-                }
+                result ++;
+
             }
 
         } catch (SQLException exc) {

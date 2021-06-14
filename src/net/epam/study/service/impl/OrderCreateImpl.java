@@ -33,4 +33,20 @@ public class OrderCreateImpl implements OrderCreateService {
             throw new ServiceException("Payment create fail", e);
         }
     }
+
+    @Override
+    public int getUserId(String login) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        OrderCreateDAO orderCreateDAO = daoProvider.getOrderCreateDAO();
+
+        int result = 0;
+
+        try {
+
+            result = orderCreateDAO.getUserId(login);
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Payment create fail", e);
+        }
+        return result;
+    }
 }

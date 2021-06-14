@@ -42,11 +42,11 @@
             </c:if>
         <div class="field">
             <label>${loginLabel}:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" value="${login}" required/>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholder_login}" name="login" value="${login}" maxlength="60" required/>
         </div>
         <div class="field">
             <label>${passwordLabel}:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="${placeholder_password}" name="password" required/>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="password" placeholder="${placeholder_password}" name="password" maxlength="100" required/>
         </div>
         <buttons >
             <div class="form-buttons">

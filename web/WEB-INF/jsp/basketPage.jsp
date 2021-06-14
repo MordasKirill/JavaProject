@@ -84,13 +84,13 @@
                             <fmt:message bundle="${loc}" key="${errMsgFullName}" var="err"/>
                             <span style="color:red; font-size: 15px" >${err}</span>
                         </c:if>
-                        <input type="text" style="border-radius:7px; width: 160px;" id="fname" name="fullName" placeholder="${placeholder_fullname}" value="${fullNameSession}" required>
+                        <input type="text" style="border-radius:7px; width: 160px;" id="fname" name="fullName" placeholder="${placeholder_fullname}" value="${fullNameSession}" maxlength="90" required>
                         <label for="email"> Email</label>
                         <c:if test="${errMsgEmail != null}">
                             <fmt:message bundle="${loc}" key="${errMsgEmail}" var="err"/>
                             <span style="color:red; font-size: 15px" >${err}</span>
                         </c:if>
-                        <input type="text" style="border-radius:7px; width: 160px;" id="email" name="email" placeholder="kir.mo@gmail.ru" value="${emailSession}"
+                        <input type="text" style="border-radius:7px; width: 160px;" id="email" name="email" placeholder="kir.mo@gmail.ru" value="${emailSession}" maxlength="60"
                                required>
                         <label for="adr">${address}</label>
                         <input type="text" style="border-radius:7px; width: 160px;" id="adr" name="address" placeholder="${placeholder_address}" value="${addressSession}" required>
@@ -108,7 +108,7 @@
                                     <fmt:message bundle="${loc}" key="${errMsgPhone}" var="err"/>
                                     <span style="color:red; font-size: 15px" >${err}</span>
                                 </c:if>
-                                <input type="text" style="border-radius:7px; width: 160px;" id="ph" name="phone" placeholder="+375291234567" value="${phoneSession}" required>
+                                <input type="text" style="border-radius:7px; width: 160px;" id="ph" name="phone" placeholder="+375291234567" value="${phoneSession}" maxlength="20" required>
                                 <h2>${payment}</h2>
                                 <p><input style="text-align: center" name="method" type="radio" value="online" checked> ${online}</p>
                                 <p><input name="method" type="radio" value="upon"> ${uponReceipt}</p>
