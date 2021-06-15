@@ -22,7 +22,8 @@ public class AdminUserRole implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
+                || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
 

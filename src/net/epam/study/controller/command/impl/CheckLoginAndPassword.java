@@ -40,8 +40,8 @@ public class CheckLoginAndPassword implements Command {
                     request.setAttribute("errMsg", "");
                     session.setAttribute("role", role);
 
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
                     ValidationImpl.userLocale = request.getParameter("locale");
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
                     requestDispatcher.forward(request, response);
                 } else {
                     session.setAttribute("auth", true);

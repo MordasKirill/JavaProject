@@ -6,6 +6,7 @@ import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 import net.epam.study.service.impl.TablesListImpl;
+import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,7 +25,8 @@ public class GoToAdminPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
+        || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
 
             response.sendRedirect("Controller?command=gotologinpage");
         } else {
@@ -82,6 +84,11 @@ public class GoToAdminPage implements Command {
                 request.setAttribute("orders", tablesListService.getOrders(limitOrders));
                 request.setAttribute("users", tablesListService.getUsers(limitUsers));
 
+                if (request.getParameter("locale") != null) {
+                    ValidationImpl.userLocale = request.getParameter("locale");
+                }
+
+                request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
                 requestDispatcher.forward(request, response);
 

@@ -90,14 +90,14 @@ public class ValidationImpl implements ValidationService {
 
     public String priceErrorMsg(String price){
         if (!isValidPrice(price)){
-            return "Price is invalid!";
+            return "local.error.adminErrorPrice";
         }
         return null;
     }
 
     public String timeErrorMsg(String time){
         if (!isValidTime(time)){
-            return "Time is invalid!";
+            return "local.error.adminErrorTime";
         }
         return null;
     }

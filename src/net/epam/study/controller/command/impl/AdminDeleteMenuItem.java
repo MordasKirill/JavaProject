@@ -21,9 +21,9 @@ public class AdminDeleteMenuItem implements Command {
 
         String itemName = request.getParameter("itemNameDelete");
         String category = request.getParameter("categoryDelete");
-        String notFound = "Item not found";
+        String notFound = "local.error.notfound";
 
-        String success = "Success!";
+        String success = "local.error.sucess";
 
         HttpSession session = request.getSession(true);
 

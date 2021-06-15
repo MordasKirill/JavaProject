@@ -15,4 +15,24 @@ public class CheckSessionImpl implements CheckSessionService {
         result = checkSessionDAO.checkSession(auth, role);
         return result;
     }
+
+    @Override
+    public boolean checkAdmin(String role) {
+        DAOProvider provider = DAOProvider.getInstance();
+        CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
+
+        boolean result;
+        result = checkSessionDAO.checkAdmin(role);
+        return result;
+    }
+
+    @Override
+    public boolean checkUser(String role) {
+        DAOProvider provider = DAOProvider.getInstance();
+        CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
+
+        boolean result;
+        result = checkSessionDAO.checkUser(role);
+        return result;
+    }
 }
