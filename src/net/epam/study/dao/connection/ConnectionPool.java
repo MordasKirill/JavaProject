@@ -58,6 +58,7 @@ public final class ConnectionPool {
                 newConn = availableConnections.take();
                 availableConnections.remove(newConn);
             } catch (InterruptedException e) {
+                log.log(Level.ERROR,"Error connecting to the data source.", e);
                 throw new ConnectionPoolException("Error connecting to the data source.", e);
             }
         }
@@ -65,15 +66,14 @@ public final class ConnectionPool {
         return newConn;
     }
 
-    public void putBack(Connection connection) throws NullPointerException {
+    public void putBack(Connection connection) {
         if (connection != null) {
             if (usedConnections.remove(connection)) {
                 availableConnections.add(connection);
-            } else {
-                throw new NullPointerException("Connection not in the usedConnections array");
             }
         }
     }
+
     public void dispose() {
         clearConnectionQueue();
     }
@@ -126,10 +126,11 @@ public final class ConnectionPool {
             log.log(Level.ERROR, "Error closing the connection.", e);
         }
     }
-    private void closeConnectionsQueue(BlockingQueue<Connection> queue)
-            throws SQLException { Connection connection;
+    private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
+        Connection connection;
         while ((connection = queue.poll()) != null) {
-            if (!connection.getAutoCommit()) { connection.commit();
+            if (!connection.getAutoCommit()) {
+                connection.commit();
             }
             ((PooledConnection) connection).reallyClose();
         }

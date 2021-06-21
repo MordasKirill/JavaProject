@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.impl.ChangeOrderImpl;
@@ -15,6 +16,10 @@ import java.io.IOException;
 
 public class GoToBillPage implements Command {
 
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+    public static final String ATTR_LOCAL = "local";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -25,14 +30,14 @@ public class GoToBillPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkAdmin((String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
-            response.sendRedirect("Controller?command=gotologinpage");
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-            request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
+            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
 
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/billPage.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL);
             requestDispatcher.forward(request, response);
         }
     }

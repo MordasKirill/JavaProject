@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -11,6 +12,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AdminOrderStatus implements Command {
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+
+    public static final String PARAM_ID = "id";
+    public static final String PARAM_STATUS = "status";
+    public static final String ATTR_ERROR = "error";
+    public static final String MSG_ERROR = "Change status error!";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -20,25 +28,25 @@ public class AdminOrderStatus implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
-            response.sendRedirect("Controller?command=gotologinpage");
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
+                || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            String id = request.getParameter("id");
-            String status = request.getParameter("status");
+            String id = request.getParameter(PARAM_ID);
+            String status = request.getParameter(PARAM_STATUS);
             if (id != null) {
 
                 try {
                     changeTableInfoService.changeStatus(id, status);
                 } catch (ServiceException e){
-                    session.setAttribute("error", "Change status error!");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
 
             }
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         }
     }

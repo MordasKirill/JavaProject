@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -17,6 +18,33 @@ import java.io.IOException;
 
 public class GoToAdminPage implements Command {
 
+    public static final String ATTR_AUTH = "auth";
+
+    public static final String LIMIT_ORDERS = "limit_orders";
+    public static final String LIMIT_USERS = "limit_users";
+
+    public static final String LOAD_USERS = "load_users";
+    public static final String BACK_USERS = "back_users";
+
+    public static final String LOAD_ORDERS = "load_orders";
+    public static final String BACK_ORDERS = "back_orders";
+
+    public static final String ATTR_ROLE = "role";
+
+    public static final String PARAM_NEXT_ORDERS = "resultOrdersNext";
+    public static final String PARAM_BACK_ORDERS = "resultOrdersBack";
+    public static final String PARAM_NEXT_USERS = "resultUsersNext";
+    public static final String PARAM_BACK_USERS = "resultUsersBack";
+
+    public static final String PARAM_ORDERS = "orders";
+    public static final String PARAM_USERS = "users";
+
+    public static final String PARAM_LOCALE = "locale";
+    public static final String PARAM_LOCAL = "local";
+
+    public static final String PARAM_ERROR = "error";
+    public static final String ERROR_MSG = "Show orders fail!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -25,46 +53,46 @@ public class GoToAdminPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-        || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+        || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
 
-            response.sendRedirect("Controller?command=gotologinpage");
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             
             try {
 
-                if (session.getAttribute("limit_orders") == null &&
-                        session.getAttribute("limit_users") == null){
+                if (session.getAttribute(LIMIT_ORDERS) == null &&
+                        session.getAttribute(LIMIT_USERS) == null){
 
-                    session.setAttribute("limit_orders", 0);
-                    session.setAttribute("limit_users", 0);
+                    session.setAttribute(LIMIT_ORDERS, 0);
+                    session.setAttribute(LIMIT_USERS, 0);
                 }
 
 
-                int limitOrders = (int) session.getAttribute("limit_orders");
-                int limitUsers = (int) session.getAttribute("limit_users");
+                int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
+                int limitUsers = (int) session.getAttribute(LIMIT_USERS);
 
-                if (request.getParameter("load_orders") != null) {
-                    session.setAttribute("limit_orders", tablesListService.getActualLimit(limitOrders));
-                    response.sendRedirect("Controller?command=gotoadminpage");
+                if (request.getParameter(LOAD_ORDERS) != null) {
+                    session.setAttribute(LIMIT_ORDERS, tablesListService.getActualLimit(limitOrders));
+                    response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter("back_orders") != null) {
-                    session.setAttribute("limit_orders", tablesListService.getPreviousLimit(limitOrders));
-                    response.sendRedirect("Controller?command=gotoadminpage");
+                if (request.getParameter(BACK_ORDERS) != null) {
+                    session.setAttribute(LIMIT_ORDERS, tablesListService.getPreviousLimit(limitOrders));
+                    response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter("load_users") != null) {
-                    session.setAttribute("limit_users", tablesListService.getActualLimit(limitUsers));
-                    response.sendRedirect("Controller?command=gotoadminpage");
+                if (request.getParameter(LOAD_USERS) != null) {
+                    session.setAttribute(LIMIT_USERS, tablesListService.getActualLimit(limitUsers));
+                    response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter("back_users") != null) {
-                    session.setAttribute("limit_users", tablesListService.getPreviousLimit(limitUsers));
-                    response.sendRedirect("Controller?command=gotoadminpage");
+                if (request.getParameter(BACK_USERS) != null) {
+                    session.setAttribute(LIMIT_USERS, tablesListService.getPreviousLimit(limitUsers));
+                    response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
@@ -76,26 +104,26 @@ public class GoToAdminPage implements Command {
                 boolean resultUsersNext = usersSize > limitUsers + TablesListImpl.DEFAULT_LIMIT;
                 boolean resultUsersBack = limitUsers != 0;
 
-                request.setAttribute("resultOrdersNext", resultOrdersNext);
-                request.setAttribute("resultOrdersBack", resultOrdersBack);
-                request.setAttribute("resultUsersNext", resultUsersNext);
-                request.setAttribute("resultUsersBack", resultUsersBack);
+                request.setAttribute(PARAM_NEXT_ORDERS, resultOrdersNext);
+                request.setAttribute(PARAM_BACK_ORDERS, resultOrdersBack);
+                request.setAttribute(PARAM_NEXT_USERS, resultUsersNext);
+                request.setAttribute(PARAM_BACK_USERS, resultUsersBack);
 
-                request.setAttribute("orders", tablesListService.getOrders(limitOrders));
-                request.setAttribute("users", tablesListService.getUsers(limitUsers));
+                request.setAttribute(PARAM_ORDERS, tablesListService.getOrders(limitOrders));
+                request.setAttribute(PARAM_USERS, tablesListService.getUsers(limitUsers));
 
-                if (request.getParameter("locale") != null) {
-                    ValidationImpl.userLocale = request.getParameter("locale");
+                if (request.getParameter(PARAM_LOCALE) != null) {
+                    ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
                 }
 
-                request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp");
+                request.getSession(true).setAttribute(PARAM_LOCAL, ValidationImpl.userLocale);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN);
                 requestDispatcher.forward(request, response);
 
             } catch (ServiceException e){
 
-                session.setAttribute("error", "Show orders fail!");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                session.setAttribute(PARAM_ERROR, ERROR_MSG);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
         }

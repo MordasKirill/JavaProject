@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.DeleteTableInfoService;
 import net.epam.study.service.ServiceException;
@@ -12,9 +13,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+/**
+ * Class represents an adminDelete command
+ * command that provides tools that can
+ * help admin to delete user or order.
+ */
 
 public class AdminDelete implements Command {
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
 
+    public static final String ID_ORDER = "idOrder";
+    public static final String ID_USER = "idUser";
+    public static final String ATTR_ERROR = "error";
+    public static final String MSG_ERROR = "Delete order error!";
+    /**
+     *
+     * @param request stores information about the request
+     * @param response manages the response to the request
+     * @throws ServletException servlet exceptions
+     * @throws IOException exceptions produced by failed or
+     * interrupted I/O operations.
+     *
+     * In case incorrect role user will be redirected to loginPage
+     * to prevent security breach.
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -23,21 +46,21 @@ public class AdminDelete implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
-            response.sendRedirect("Controller?command=gotologinpage");
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            String idOrder = request.getParameter("idOrder");
-            String idUser = request.getParameter("idUser");
+            String idOrder = request.getParameter(ID_ORDER);
+            String idUser = request.getParameter(ID_USER);
 
             if (idOrder != null) {
 
                 try {
                     deleteTableInfoService.deleteOrder(idOrder);
                 } catch (ServiceException e){
-                    session.setAttribute("error", "Delete order error!");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
 
@@ -48,14 +71,14 @@ public class AdminDelete implements Command {
                 try {
                     deleteTableInfoService.deleteUser(idUser);
                 } catch (ServiceException e){
-                    session.setAttribute("error", "Delete order error!");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
 
             }
 
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         }
     }

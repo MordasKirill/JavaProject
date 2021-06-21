@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
@@ -17,6 +18,36 @@ import java.io.IOException;
 
 public class SaveNewOrder implements Command {
 
+    public static final String ATTR_EMAIL = "email";
+    public static final String ATTR_FULL_NAME = "fullName";
+    public static final String ATTR_ADDRESS = "address";
+    public static final String ATTR_PHONE = "phone";
+    public static final String ATTR_CITY = "city";
+    public static final String ATTR_METHOD = "method";
+    public static final String ATTR_METHOD_ONLINE = "online";
+    public static final String ATTR_LOGIN = "login";
+
+    public static final String ATTR_EMAIL_SESSION = "emailSession";
+    public static final String ATTR_FULL_NAME_SESSION = "fullNameSession";
+    public static final String ATTR_ADDRESS_SESSION = "addressSession";
+    public static final String ATTR_PHONE_SESSION = "phoneSession";
+    public static final String ATTR_CITY_SESSION = "citySession";
+    public static final String ATTR_ERR_MSG_EMAIL = "errMsgEmail";
+    public static final String ATTR_ERR_MSG_FULL_NAME = "errMsgFullName";
+    public static final String ATTR_ERR_MSG_PHONE = "errMsgPhone";
+    public static final String ATTR_ERR_MSG_CITY = "errMsgCity";
+
+    public static final String ATTR_ORDER = "order";
+    public static final String ATTR_TOTAL = "total";
+    public static final String ATTR_SIZE = "size";
+
+    public static final String STATUS_PROCESSING = "processing";
+    public static final String STATUS_UPON_RECEIPT = "uponReceipt";
+
+    public static final String ATTR_ERROR = "error";
+    public static final String ATTR_ERROR_MSG = "local.error.orderEmpty";
+    public static final String ATTR_ERROR_ORDER_MSG = "Save order fail!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -25,15 +56,15 @@ public class SaveNewOrder implements Command {
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
         CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
-        String email = request.getParameter("email");
-        String fullName = request.getParameter("fullName");
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phone");
-        String city = request.getParameter("city");
-        String paymentMethod = request.getParameter("method");
+        String email = request.getParameter(ATTR_EMAIL);
+        String fullName = request.getParameter(ATTR_FULL_NAME);
+        String address = request.getParameter(ATTR_ADDRESS);
+        String phone = request.getParameter(ATTR_PHONE);
+        String city = request.getParameter(ATTR_CITY);
+        String paymentMethod = request.getParameter(ATTR_METHOD);
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute("login");
+        String login = (String) session.getAttribute(ATTR_LOGIN);
 
 
         try {
@@ -45,12 +76,12 @@ public class SaveNewOrder implements Command {
 
                 if (ChangeOrderImpl.ORDER.size() == 0) {
 
-                    request.setAttribute("error", "local.error.orderEmpty");
-                    request.setAttribute("order", ChangeOrderImpl.ORDER);
-                    request.setAttribute("total", changeOrderService.getTotal(login));
-                    request.setAttribute("size", ChangeOrderImpl.ORDER.size());
+                    request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
+                    request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
+                    request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                    request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
 
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
 
                 } else {
@@ -58,47 +89,44 @@ public class SaveNewOrder implements Command {
                     createTableInfoService.create(fullName, address, email, phone, changeOrderService.getOrder());
 
 
-                    if (paymentMethod.equals("online")){
-                        String status = "processing";
-                        createTableInfoService.payment(login, changeOrderService.getTotal(login), status);
+                    if (paymentMethod.equals(ATTR_METHOD_ONLINE)){
+                        createTableInfoService.payment(login, changeOrderService.getTotal(login), STATUS_PROCESSING);
 
-                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/payment-indexPage.jsp");
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
                     }else {
+                        createTableInfoService.payment(login, changeOrderService.getTotal(login), STATUS_UPON_RECEIPT);
 
-                        String status = "uponReceipt";
-                        createTableInfoService.payment(login, changeOrderService.getTotal(login), status);
-
-                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/bill-indexPage.jsp");
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
                     }
                 }
 
             } else{
 
-                session.setAttribute("emailSession", email);
-                session.setAttribute("fullNameSession", fullName);
-                session.setAttribute("addressSession", address);
-                session.setAttribute("phoneSession", phone);
-                session.setAttribute("citySession", city);
+                session.setAttribute(ATTR_EMAIL_SESSION, email);
+                session.setAttribute(ATTR_FULL_NAME_SESSION, fullName);
+                session.setAttribute(ATTR_ADDRESS_SESSION, address);
+                session.setAttribute(ATTR_PHONE_SESSION, phone);
+                session.setAttribute(ATTR_CITY_SESSION, city);
 
-                request.setAttribute("errMsgEmail", validationService.emailErrorMsg(email));
-                request.setAttribute("errMsgFullName", validationService.fullNameErrorMsg(fullName));
-                request.setAttribute("errMsgPhone", validationService.phoneErrorMsg(phone));
-                request.setAttribute("errMsgCity", validationService.cityErrorMsg(city));
-                request.setAttribute("order", ChangeOrderImpl.ORDER);
-                request.setAttribute("total", changeOrderService.getTotal(login));
-                request.setAttribute("size", ChangeOrderImpl.ORDER.size());
+                request.setAttribute(ATTR_ERR_MSG_EMAIL, validationService.emailErrorMsg(email));
+                request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
+                request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
+                request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
+                request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
+                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
 
 
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                 requestDispatcher.forward(request, response);
             }
 
         } catch (ServiceException e){
 
-            session.setAttribute("error", "Save order fail!");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            session.setAttribute(ATTR_ERROR, ATTR_ERROR_ORDER_MSG);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
     }

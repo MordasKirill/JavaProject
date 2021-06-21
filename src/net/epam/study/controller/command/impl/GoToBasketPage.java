@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.*;
 import net.epam.study.service.impl.ChangeOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
@@ -14,6 +15,23 @@ import java.io.IOException;
 
 public class GoToBasketPage implements Command {
 
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_LOGIN = "login";
+    public static final String ATTR_ROLE = "role";
+    public static final String ATTR_DISCOUNT = "discount";
+    public static final String ATTR_ORDER = "order";
+    public static final String ATTR_TOTAL = "total";
+    public static final String ATTR_ORDERS_AMOUNT = "ordersAmount";
+    public static final String ATTR_SIZE = "size";
+    public static final String ATTR_LOCAL = "local";
+
+    public static final String PARAM_PAYMENT = "payment";
+    public static final String PARAM_REJECTED = "rejected";
+
+    public static final String PARAM_ERROR = "error";
+    public static final String ERROR_MSG = "Get total fail!";
+    public static final String ERROR_MSG_PAYMENT = "Payment status change fail!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -23,54 +41,54 @@ public class GoToBasketPage implements Command {
         TablesListService tablesListService = serviceProvider.getTablesListService();
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute("login");
+        String login = (String) session.getAttribute(ATTR_LOGIN);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkAdmin((String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
-            response.sendRedirect("Controller?command=gotologinpage");
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            if (request.getParameter("payment") != null){
+            if (request.getParameter(PARAM_PAYMENT) != null){
 
                 try {
 
-                    changeTableInfoService.changePaymentStatus("rejected", login);
+                    changeTableInfoService.changePaymentStatus(PARAM_REJECTED, login);
 
                 } catch (ServiceException e){
 
-                    session.setAttribute("error", "Payment status change fail!");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    session.setAttribute(PARAM_ERROR, ERROR_MSG_PAYMENT);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
             }
 
-            request.setAttribute("order", ChangeOrderImpl.ORDER);
+            request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
 
             try {
-                request.setAttribute("total", changeOrderService.getTotal(login));
-                session.setAttribute("ordersAmount", tablesListService.getDonePayments(login));
+                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                session.setAttribute(ATTR_ORDERS_AMOUNT, tablesListService.getDonePayments(login));
 
                 if (tablesListService.getDonePayments(login) >= 3){
-                    session.setAttribute("discount", 3);
+                    session.setAttribute(ATTR_DISCOUNT, 3);
                 }  else{
-                    session.setAttribute("discount", 0);
+                    session.setAttribute(ATTR_DISCOUNT, 0);
                 }
                 if (tablesListService.getDonePayments(login) >= 10){
-                    session.setAttribute("discount", 10);
+                    session.setAttribute(ATTR_DISCOUNT, 10);
                 }
 
 
             } catch (ServiceException e){
 
-                session.setAttribute("error", "Get total fail!");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                session.setAttribute(PARAM_ERROR, ERROR_MSG);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-            request.setAttribute("size", ChangeOrderImpl.ORDER.size());
+            request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
 
-            request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/basketPage.jsp");
+            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
             requestDispatcher.forward(request, response);
         }
     }

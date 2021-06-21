@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -17,6 +18,17 @@ import java.io.IOException;
 
 public class GoToMenuPage implements Command {
 
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+    public static final String ATTR_CATEGORY = "category";
+    public static final String ATTR_SIZE = "size";
+    public static final String ATTR_MENU_ITEMS = "menuItems";
+    public static final String ATTR_LOCAL = "local";
+    public static final String ATTR_LOCALE = "locale";
+
+    public static final String ATTR_ERROR = "error";
+    public static final String ATTR_ERROR_MSG = "Show menu fail!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -25,29 +37,29 @@ public class GoToMenuPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkAdmin((String) session.getAttribute("role"))) {
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
-            response.sendRedirect("Controller?command=gotologinpage");
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
-                if (request.getParameter("category")!=null
-                        &&request.getParameter("category")!=session.getAttribute("category")){
-                    session.setAttribute("category", request.getParameter("category"));
+                if (request.getParameter(ATTR_CATEGORY)!=null
+                        &&request.getParameter(ATTR_CATEGORY)!=session.getAttribute(ATTR_CATEGORY)){
+                    session.setAttribute(ATTR_CATEGORY, request.getParameter(ATTR_CATEGORY));
                 }
-                request.setAttribute("size", ChangeOrderImpl.ORDER.size());
-                request.setAttribute("menuItems", tablesListService.getMenu());
+                request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
+                request.setAttribute(ATTR_MENU_ITEMS, tablesListService.getMenu());
 
-                if (request.getParameter("locale") != null) {
-                    ValidationImpl.userLocale = request.getParameter("locale");
+                if (request.getParameter(ATTR_LOCALE) != null) {
+                    ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
                 }
 
-                request.getSession(true).setAttribute("local", ValidationImpl.userLocale);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/menuPage.jsp");
+                request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU);
                 requestDispatcher.forward(request, response);
             } catch (ServiceException e){
-                session.setAttribute("error", "Show menu fail!");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
         }

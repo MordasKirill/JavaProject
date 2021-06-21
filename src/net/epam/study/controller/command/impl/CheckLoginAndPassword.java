@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckUserService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -16,6 +17,18 @@ import java.io.IOException;
 
 public class CheckLoginAndPassword implements Command {
 
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ERROR = "errMsg";
+    public static final String ATTR_ERROR_MSG = "local.error.logerr";
+    public static final String ATTR_ROLE = "role";
+
+    public static final String PARAM_LOGIN = "login";
+    public static final String PARAM_PASSWORD = "password";
+    public static final String PARAM_LOCALE = "locale";
+
+    public static final String PARAM_ERROR = "error";
+    public static final String ERROR_MSG = "Login error!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -23,8 +36,8 @@ public class CheckLoginAndPassword implements Command {
         CheckUserService checkUserService = provider.getCheckUserService();
         ValidationService validationService = provider.getValidationService();
 
-        String login = request.getParameter("login").trim();
-        String password = request.getParameter("password");
+        String login = request.getParameter(PARAM_LOGIN).trim();
+        String password = request.getParameter(PARAM_PASSWORD);
         String role;
 
         HttpSession session = request.getSession(true);
@@ -36,36 +49,36 @@ public class CheckLoginAndPassword implements Command {
             if(checkUserService.isUser(login, password)) {
 
                 if (validationService.isAdmin(role)) {
-                    session.setAttribute("auth", true);
-                    request.setAttribute("errMsg", "");
-                    session.setAttribute("role", role);
+                    session.setAttribute(ATTR_AUTH, true);
+                    request.setAttribute(ATTR_ERROR, "");
+                    session.setAttribute(ATTR_ROLE, role);
 
-                    ValidationImpl.userLocale = request.getParameter("locale");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+                    ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                     requestDispatcher.forward(request, response);
                 } else {
-                    session.setAttribute("auth", true);
-                    session.setAttribute("login", login);
-                    request.setAttribute("errMsg", "");
-                    session.setAttribute("role", role);
+                    session.setAttribute(ATTR_AUTH, true);
+                    session.setAttribute(PARAM_LOGIN, login);
+                    request.setAttribute(ATTR_ERROR, "");
+                    session.setAttribute(ATTR_ROLE, role);
 
-                    ValidationImpl.userLocale = request.getParameter("locale");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
+                    ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                     requestDispatcher.forward(request, response);
                 }
             }else{
 
-                request.setAttribute("errMsg", "local.error.logerr");
-                session.setAttribute("login", login);
-                ValidationImpl.userLocale = request.getParameter("locale");
+                request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
+                session.setAttribute(PARAM_LOGIN, login);
+                ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
 
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
                 requestDispatcher.forward(request, response);
             }
 
         } catch (ServiceException e){
-            session.setAttribute("error", "Login error!");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            session.setAttribute(PARAM_ERROR, ERROR_MSG);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
     }

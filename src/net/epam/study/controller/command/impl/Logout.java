@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.impl.ChangeOrderImpl;
 
 import javax.servlet.RequestDispatcher;
@@ -51,7 +52,7 @@ public class Logout implements Command {
 
         }
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
         requestDispatcher.forward(request, response);
     }
 }

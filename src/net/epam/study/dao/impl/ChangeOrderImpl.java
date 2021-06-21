@@ -12,11 +12,22 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 
+/**
+ * implementation of ChangeOrderDAO
+ *
+ */
 public class ChangeOrderImpl implements ChangeOrderDAO {
+
 
     private static final Logger log = Logger.getLogger(ChangeOrderImpl.class);
 
-
+    /**
+     * Method to delete an item from order
+     * @param item name of item to delete
+     * @param login user login to get total
+     * @throws DAOException exception in dao
+     * throws in case something goes wrong
+     */
     public void deleteOrderItem(String item, String login) throws DAOException{
         for (int i = 0; i< net.epam.study.service.impl.ChangeOrderImpl.ORDER.size(); i++){
             if (net.epam.study.service.impl.ChangeOrderImpl.ORDER.get(i).toString().equals(item)){
@@ -33,6 +44,12 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
         }
     }
 
+    /**
+     * Add to cart method
+     * @param name name of item to be added to cart
+     * @param price price of an item
+     * @param time time of an item
+     */
     public void addToOrder(String name, String price, String time){
         if (name != null && price != null && time != null) {
             net.epam.study.service.impl.ChangeOrderImpl.ORDER.add(new MenuItem(name, price, time));
@@ -40,6 +57,15 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
         }
     }
 
+    /**
+     * Method to get order total
+     * @param login user login
+     * @return returns BigDecimal total of order
+     * @throws DAOException exception in dao
+     * throws in case something goes wrong
+     * @throws ConnectionPoolException in case problems
+     * with open/retrieve connection
+     */
     public BigDecimal getTotal(String login) throws DAOException, ConnectionPoolException{
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         TablesListService tablesListService = serviceProvider.getTablesListService();
@@ -77,6 +103,11 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
         return result;
     }
 
+    /**
+     * Get order method
+     * @return returns a StringBuilder value
+     * of all products in a cart
+     */
     public StringBuilder getOrder(){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i< net.epam.study.service.impl.ChangeOrderImpl.ORDER.size(); i++){

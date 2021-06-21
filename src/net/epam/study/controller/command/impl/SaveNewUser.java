@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
 import net.epam.study.service.CheckUserService;
 import net.epam.study.service.HashPasswordService;
@@ -17,10 +18,20 @@ import java.io.IOException;
 
 public class SaveNewUser implements Command {
 
+    public static final String ATTR_PASSWORD = "password";
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+    public static final String ERR_MSG = "errMsg";
+    public static final String ATTR_LOCALE = "locale";
+    public static final String ATTR_LOGIN = "login";
+
+    public static final String ATTR_ERR_REG = "local.error.regerr";
+    public static final String ATTR_ERR_USER = "Save user fail!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login").trim();
-        String password = request.getParameter("password");
+        String login = request.getParameter(ATTR_LOGIN).trim();
+        String password = request.getParameter(ATTR_PASSWORD);
         String role = String.valueOf(Role.USER);
 
         HttpSession session = request.getSession(true);
@@ -31,27 +42,27 @@ public class SaveNewUser implements Command {
         try {
 
             if(checkUserService.isUserNew(login, hashPasswordService.hashPassword(password), role)) {
-                session.setAttribute("auth", true);
-                session.setAttribute("role", role);
-                session.setAttribute("login", login);
-                request.setAttribute("errMsg", "");
+                session.setAttribute(ATTR_AUTH, true);
+                session.setAttribute(ATTR_ROLE, role);
+                session.setAttribute(ATTR_LOGIN, login);
+                request.setAttribute(ERR_MSG, "");
 
-                ValidationImpl.userLocale = request.getParameter("locale");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main-indexPage.jsp");
+                ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                 requestDispatcher.forward(request, response);
 
             }else{
 
-                request.setAttribute("errMsg", "local.error.regerr");
-                ValidationImpl.userLocale = request.getParameter("locale");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/registrationPage.jsp");
+                request.setAttribute(ERR_MSG, ATTR_ERR_REG);
+                ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_REGISTRATION);
                 requestDispatcher.forward(request, response);
             }
 
         } catch (ServiceException e){
-            session.setAttribute("error", "Save user fail!");
-            session.setAttribute("login", login);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+            session.setAttribute(ERR_MSG, ATTR_ERR_USER);
+            session.setAttribute(ATTR_LOGIN, login);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
     }

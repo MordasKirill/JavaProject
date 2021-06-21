@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
+import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ChangeTableInfoService;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
@@ -14,6 +15,16 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AdminUserRole implements Command {
+
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+
+    public static final String PARAM_ID = "id";
+    public static final String PARAM_ROLE = "role";
+
+    public static final String PARAM_ERROR = "error";
+    public static final String ERROR_MSG = "Change role error!";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -22,25 +33,25 @@ public class AdminUserRole implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute("auth"), (String) session.getAttribute("role"))
-                || !checkSessionService.checkUser((String) session.getAttribute("role"))) {
-            response.sendRedirect("Controller?command=gotologinpage");
+        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
+                || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            String id = request.getParameter("id");
-            String role = request.getParameter("role");
+            String id = request.getParameter(PARAM_ID);
+            String role = request.getParameter(PARAM_ROLE);
             if (id != null) {
 
                 try {
                     changeTableInfoService.changeRole(id, role);
                 } catch (ServiceException e){
-                    session.setAttribute("error", "Change role error!");
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
+                    session.setAttribute(PARAM_ERROR, ERROR_MSG);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
 
             }
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin-indexPage.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         }
     }
