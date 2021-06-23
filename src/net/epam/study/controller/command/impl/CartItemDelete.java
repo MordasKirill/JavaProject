@@ -5,6 +5,8 @@ import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +23,8 @@ public class CartItemDelete implements Command {
     public static final String PARAM_ERROR = "error";
     public static final String ERROR_MSG = "Delete item fail!";
 
+    private static final Logger log = Logger.getLogger(CartItemDelete.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -36,6 +40,7 @@ public class CartItemDelete implements Command {
 
         } catch (ServiceException e){
 
+            log.log(Level.ERROR,"CartItemDelete error.", e);
             session.setAttribute(PARAM_ERROR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

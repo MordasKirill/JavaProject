@@ -8,6 +8,8 @@ import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 import net.epam.study.service.impl.TablesListImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -44,6 +46,8 @@ public class GoToAdminPage implements Command {
 
     public static final String PARAM_ERROR = "error";
     public static final String ERROR_MSG = "Show orders fail!";
+
+    private static final Logger log = Logger.getLogger(GoToAdminPage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -122,6 +126,7 @@ public class GoToAdminPage implements Command {
 
             } catch (ServiceException e){
 
+                log.log(Level.ERROR,"GoToAdminPage error.", e);
                 session.setAttribute(PARAM_ERROR, ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

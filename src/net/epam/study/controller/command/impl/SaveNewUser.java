@@ -8,6 +8,8 @@ import net.epam.study.service.HashPasswordService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.impl.ValidationImpl;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,14 +21,17 @@ import java.io.IOException;
 public class SaveNewUser implements Command {
 
     public static final String ATTR_PASSWORD = "password";
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ERR_MSG = "errMsg";
-    public static final String ATTR_LOCALE = "locale";
     public static final String ATTR_LOGIN = "login";
 
+    public static final String ATTR_AUTH = "auth";
+    public static final String ATTR_ROLE = "role";
+    public static final String ATTR_LOCALE = "locale";
+
+    public static final String ERR_MSG = "errMsg";
     public static final String ATTR_ERR_REG = "local.error.regerr";
     public static final String ATTR_ERR_USER = "Save user fail!";
+
+    private static final Logger log = Logger.getLogger(SaveNewUser.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,6 +65,8 @@ public class SaveNewUser implements Command {
             }
 
         } catch (ServiceException e){
+
+            log.log(Level.ERROR,"SaveNewUser error.", e);
             session.setAttribute(ERR_MSG, ATTR_ERR_USER);
             session.setAttribute(ATTR_LOGIN, login);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);

@@ -5,6 +5,8 @@ import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.*;
 import net.epam.study.service.impl.ChangeOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,6 +33,8 @@ public class GoToBasketPage implements Command {
     public static final String PARAM_ERROR = "error";
     public static final String ERROR_MSG = "Get total fail!";
     public static final String ERROR_MSG_PAYMENT = "Payment status change fail!";
+
+    private static final Logger log = Logger.getLogger(GoToBasketPage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -81,6 +85,7 @@ public class GoToBasketPage implements Command {
 
             } catch (ServiceException e){
 
+                log.log(Level.ERROR,"GoToBasketPage error.", e);
                 session.setAttribute(PARAM_ERROR, ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

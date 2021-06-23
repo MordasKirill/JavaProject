@@ -7,6 +7,8 @@ import net.epam.study.service.ChangeTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,16 +22,22 @@ public class SaveNewPayment implements Command {
     public static final String ATTR_NAME = "name";
     public static final String ATTR_AUTH = "auth";
     public static final String ATTR_ROLE = "role";
-    public static final String ERR_MSG = "errMsg";
+
     public static final String ATTR_CARD_NUMBER = "cardnumber";
     public static final String ATTR_LOGIN = "login";
+
     public static final String STATUS_DONE = "done";
     public static final String ATTR_TOTAL = "total";
+
     public static final String ATTR_NUMBER_PAYMENT = "numberPayment";
     public static final String ATTR_FULL_NAME_PAYMENT = "fullNamePayment";
+
+    public static final String ERR_MSG = "errMsg";
     public static final String ATTR_ERR_PAYMENT = "Payment fail!";
     public static final String ATTR_ERR_TOTAL = "Get total fail!";
     public static final String ERR_MSG_FULL_NAME = "errMsgFullName";
+
+    private static final Logger log = Logger.getLogger(SaveNewPayment.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,6 +63,7 @@ public class SaveNewPayment implements Command {
 
             } catch (ServiceException e){
 
+                log.log(Level.ERROR,"changePaymentStatus error.", e);
                 session.setAttribute(ERR_MSG, ATTR_ERR_PAYMENT);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
@@ -69,6 +78,7 @@ public class SaveNewPayment implements Command {
 
             } catch (ServiceException e){
 
+                log.log(Level.ERROR,"getTotal error.", e);
                 session.setAttribute(ERR_MSG, ATTR_ERR_TOTAL);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

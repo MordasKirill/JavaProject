@@ -5,6 +5,8 @@ import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.DeleteTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,6 +31,8 @@ public class AdminDeleteMenuItem implements Command {
     public static final String ERROR_MSG = "Remove menu item fail!";
     public static final String NOTFOUND_MSG = "local.error.notfound";
     public static final String SUCCESS_MSG = "local.error.sucess";
+
+    private static final Logger log = Logger.getLogger(AdminDeleteMenuItem.class);
     /**
      *
      * @param request stores information about the request
@@ -74,6 +78,7 @@ public class AdminDeleteMenuItem implements Command {
             }
         } catch (ServiceException e){
 
+            log.log(Level.ERROR,"AdminDeleteMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

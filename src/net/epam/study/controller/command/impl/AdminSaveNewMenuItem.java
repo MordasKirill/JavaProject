@@ -7,6 +7,8 @@ import net.epam.study.service.DeleteTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +32,9 @@ public class AdminSaveNewMenuItem implements Command {
     public static final String ITEM_ERROR_ERR_MSG_ITEM_EXIST = "errMsgItemExist";
     public static final String ERROR_MSG = "Add menu item fail!";
     public static final String ERROR_ATTR = "error";
+
+    private static final Logger log = Logger.getLogger(AdminSaveNewMenuItem.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -81,6 +86,7 @@ public class AdminSaveNewMenuItem implements Command {
             }
         } catch (ServiceException e){
 
+            log.log(Level.ERROR,"AdminSaveNewMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
