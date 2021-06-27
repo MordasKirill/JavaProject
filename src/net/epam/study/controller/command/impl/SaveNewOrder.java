@@ -60,11 +60,11 @@ public class SaveNewOrder implements Command {
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
         CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
-        String email = request.getParameter(ATTR_EMAIL);
-        String fullName = request.getParameter(ATTR_FULL_NAME);
+        String email = request.getParameter(ATTR_EMAIL).trim();
+        String fullName = request.getParameter(ATTR_FULL_NAME).trim();
         String address = request.getParameter(ATTR_ADDRESS);
-        String phone = request.getParameter(ATTR_PHONE);
-        String city = request.getParameter(ATTR_CITY);
+        String phone = request.getParameter(ATTR_PHONE).trim();
+        String city = request.getParameter(ATTR_CITY).trim();
         String paymentMethod = request.getParameter(ATTR_METHOD);
 
         HttpSession session = request.getSession(true);

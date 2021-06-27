@@ -1,6 +1,7 @@
 package net.epam.study.controller.listener;
 
 import net.epam.study.dao.connection.ConnectionPool;
+import net.epam.study.dao.email.SendEmail;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,7 @@ public class Listener implements ServletContextListener {
 
         LOG.log(Level.INFO, "ServletContextListener was created!");
         ConnectionPool.connectionPool = new ConnectionPool();
-        //SendEmail.sendEmail = new SendEmail();
+        SendEmail.sendEmail = new SendEmail();
     }
 
     @Override

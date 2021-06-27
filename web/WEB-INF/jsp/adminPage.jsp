@@ -156,14 +156,14 @@
                 <span class="time">${details}: <c:out value = "${row.details}"/></span>
                 <div class="form-buttons">
                     <c:if test="${row.status == 'processing'}">
-                        <a href="Controller?command=orderstatus&id=${row.id}&status=accepted" class="green">${accept}</a>
-                        <a href="Controller?command=orderstatus&id=${row.id}&status=rejected" class="green">${reject}</a>
+                        <a href="Controller?command=orderstatus&id=${row.id}&status=accepted&email=${row.email}" class="green">${accept}</a>
+                        <a href="Controller?command=orderstatus&id=${row.id}&status=rejected&email=${row.email}" class="green">${reject}</a>
                     </c:if>
                     <c:if test="${row.status == 'rejected'}">
-                        <a href="Controller?command=orderstatus&id=${row.id}&status=accepted" class="green">${accept}</a>
+                        <a href="Controller?command=orderstatus&id=${row.id}&status=accepted&email=${row.email}" class="green">${accept}</a>
                     </c:if>
                     <c:if test="${row.status == 'accepted'}">
-                        <a href="Controller?command=orderstatus&id=${row.id}&status=rejected" class="green">${reject}</a>
+                        <a href="Controller?command=orderstatus&id=${row.id}&status=rejected&email=${row.email}" class="green">${reject}</a>
                     </c:if>
                     <c:if test="${role == 'owner'}">
                         <a href="Controller?command=dbinfodelete&idOrder=${row.id}" class="green" style="color: darkred">${delete}</a>

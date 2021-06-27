@@ -2,6 +2,8 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
+import net.epam.study.dao.email.EmailException;
+import net.epam.study.dao.email.SendEmail;
 import net.epam.study.service.ChangeTableInfoService;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
@@ -22,6 +24,8 @@ public class AdminOrderStatus implements Command {
 
     public static final String PARAM_ID = "id";
     public static final String PARAM_STATUS = "status";
+    public static final String PARAM_EMAIL = "email";
+
     public static final String ATTR_ERROR = "error";
     public static final String MSG_ERROR = "Change status error!";
     public static final String MSG_EMAIL = "Send email error!";
@@ -43,16 +47,24 @@ public class AdminOrderStatus implements Command {
 
             String id = request.getParameter(PARAM_ID);
             String status = request.getParameter(PARAM_STATUS);
+            String email = request.getParameter(PARAM_EMAIL);
+
             if (id != null) {
 
                 try {
                     changeTableInfoService.changeStatus(id, status);
-                    //SendEmail.sendEmail.send("Food bar online", "test", "kirill.mordas@gmail.com");
+                    SendEmail.sendEmail.send(status, email);
 
                 } catch (ServiceException e){
 
                     LOG.log(Level.ERROR,"AdminOrderStatus error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
+                    requestDispatcher.forward(request, response);
+                } catch (EmailException e) {
+
+                    LOG.log(Level.ERROR,"SendEmail error.", e);
+                    session.setAttribute(ATTR_ERROR, MSG_EMAIL);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 }
