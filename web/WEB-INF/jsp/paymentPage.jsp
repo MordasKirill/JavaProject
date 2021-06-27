@@ -3,7 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
-<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:setBundle basename="resources.local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.payment.info" var="info"/>
 <fmt:message bundle="${loc}" key="local.payment.name" var="cardholder"/>
 <fmt:message bundle="${loc}" key="local.payment.number" var="number"/>

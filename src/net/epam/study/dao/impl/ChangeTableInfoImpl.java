@@ -26,7 +26,7 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
     public static final String GET_LAST = "SELECT order_id, user_id FROM payment WHERE user_id=";
     public static final String ORDER = " ORDER BY order_id DESC LIMIT 1";
     public static final String WHERE_ID_PAYMENT = "where order_id =";
-    private static final Logger log = Logger.getLogger(ChangeTableInfoImpl.class);
+    private static final Logger LOG = Logger.getLogger(ChangeTableInfoImpl.class);
 
     @Override
     public void changeStatus(String id, String status) throws DAOException, ConnectionPoolException {
@@ -36,13 +36,13 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(UPDATE_ACCEPT + "'" + status + "'" + WHERE_ORDER_ID + "'" + id + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Order status changed.");
+            LOG.info("SUCCESS DB: Order status changed.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -62,13 +62,13 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(UPDATE_ROLE + "'" + role + "'" + WHERE_ID_USERS + "'" + id + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: User role changed.");
+            LOG.info("SUCCESS DB: User role changed.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -89,13 +89,13 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
             int id = getLastId(login);
             System.out.println(id);
             statement = connection.prepareStatement(UPDATE_PAYMENT + "'" + status + "'" + WHERE_ID_PAYMENT + "'" + id + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Payment status changed.");
+            LOG.info("SUCCESS DB: Payment status changed.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -119,23 +119,23 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         try {
             userId = createTableInfoService.getUserId(login);
         } catch (ServiceException e) {
-            log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
             throw new DAOException(e);
         }
 
         try {
 
             statement = connection.prepareStatement(GET_LAST+ "'" + userId + "'" + ORDER);
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
-            log.info("SUCCESS DB: Last element success.");
+            LOG.info("SUCCESS DB: Last element success.");
             if (resultSet.next()){
                 lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
             }
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
             throw new DAOException(exc);
         }  finally {
 

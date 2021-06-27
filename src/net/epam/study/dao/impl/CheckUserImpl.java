@@ -22,7 +22,7 @@ public class CheckUserImpl implements CheckUserDAO {
     public static final String COLUMN_ROLE = "role";
     public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =";
     public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES";
-    private static final Logger log = Logger.getLogger(CheckUserImpl.class);
+    private static final Logger LOG = Logger.getLogger(CheckUserImpl.class);
 
     public boolean isUserExists(String login, String password) throws DAOException, ConnectionPoolException {
 
@@ -35,19 +35,19 @@ public class CheckUserImpl implements CheckUserDAO {
         try {
 
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 if (resultSet.getString(COLUMN_LOGIN).equals(login)
                     && BCrypt.checkpw(password, resultSet.getString(COLUMN_PASSWORD))) {
-                    log.info("SUCCESS: Login success.");
+                    LOG.info("SUCCESS: Login success.");
                     result = true;
                     break;
                 }
             }
         } catch (SQLException exc) {
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -68,18 +68,18 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 if (resultSet.getString(COLUMN_LOGIN).equals(login)){
-                    log.info("SUCCESS: Role checked.");
+                    LOG.info("SUCCESS: Role checked.");
                     return resultSet.getString(COLUMN_ROLE);
                 }
             }
 
         } catch (SQLException exc) {
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
 
         } finally {
@@ -99,23 +99,23 @@ public class CheckUserImpl implements CheckUserDAO {
         PreparedStatement statement = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_LOGIN_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()
                     &&resultSet.getString(COLUMN_LOGIN).equals(login)) {
-                log.info("FAIL DB: User already exist.");
+                LOG.info("FAIL DB: User already exist.");
                 result = false;
 
             } else{
                 statement.executeUpdate(INSERT_INTO + "('" + login + "','" + hashPassword + "','" + role + "')");
-                log.info("SUCCESS DB: User created.");
+                LOG.info("SUCCESS DB: User created.");
             }
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 

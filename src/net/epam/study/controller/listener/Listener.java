@@ -9,19 +9,20 @@ import javax.servlet.ServletContextListener;
 
 public class Listener implements ServletContextListener {
 
-    private static final Logger log = Logger.getLogger(Listener.class);
+    private static final Logger LOG = Logger.getLogger(Listener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        log.log(Level.INFO, "ServletContextListener was created!");
+        LOG.log(Level.INFO, "ServletContextListener was created!");
         ConnectionPool.connectionPool = new ConnectionPool();
+        //SendEmail.sendEmail = new SendEmail();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
-        log.log(Level.INFO, "ServletContextListener was destroyed!");
+        LOG.log(Level.INFO, "ServletContextListener was destroyed!");
         ConnectionPool.connectionPool.dispose();
     }
 }

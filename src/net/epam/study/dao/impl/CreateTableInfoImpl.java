@@ -22,7 +22,7 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
     public static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES";
     public static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES";
 
-    private static final Logger log = Logger.getLogger(CreateTableInfoImpl.class);
+    private static final Logger LOG = Logger.getLogger(CreateTableInfoImpl.class);
 
     public void createOrder(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws DAOException, ConnectionPoolException {
 
@@ -32,13 +32,13 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
 
         try {
             statement = connection.prepareStatement(INSERT_INTO_ORDERS + "('" +  fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "','" + status + "')");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Order created.");
+            LOG.info("SUCCESS DB: Order created.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -60,13 +60,13 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(INSERT_INTO_PAYMENT + "('" + status + "','" + doubleTotal + "','" + lastId + "','" + userId + "')");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Payment created.");
+            LOG.info("SUCCESS DB: Payment created.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         }  finally {
 
@@ -84,13 +84,13 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
 
         try {
             statement = connection.prepareStatement(INSERT_INTO_MENU + "('" +  itemName + "','" + price + "','" + waitTime + "','" + category + "')");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Menu item created.");
+            LOG.info("SUCCESS DB: Menu item created.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -110,16 +110,16 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(GET_LAST_ID);
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
-            log.info("SUCCESS DB: Last element success.");
+            LOG.info("SUCCESS DB: Last element success.");
             if (resultSet.next()){
                 lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
             }
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
             throw new DAOException(exc);
         }  finally {
 
@@ -140,16 +140,16 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(GET_USER_ID + "'" + login +"'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
-            log.info("SUCCESS DB: User id success.");
+            LOG.info("SUCCESS DB: User id success.");
             if (resultSet.next()){
                 userId = Integer.parseInt(resultSet.getString(COLUMN_ID_USER));
             }
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get user id.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get user id.", exc);
             throw new DAOException(exc);
         }  finally {
 

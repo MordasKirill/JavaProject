@@ -4,6 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.impl.ChangeOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
@@ -25,6 +26,9 @@ public class GoToMainPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+
+        ChangeOrderImpl.ORDER.clear();
+        ChangeOrderImpl.TOTAL.clear();
 
         HttpSession session = request.getSession(true);
 

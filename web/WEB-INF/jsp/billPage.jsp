@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
-<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:setBundle basename="resources.local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.bill.thankyou1" var="thankyou1"/>
 <fmt:message bundle="${loc}" key="local.bill.thankyou2" var="thankyou2"/>
 <fmt:message bundle="${loc}" key="local.menu.back" var="main"/>
@@ -13,7 +13,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>${bill}</title>
-    <link rel="stylesheet" href="css/styleBillPage.css">
+    <link rel="stylesheet" href="css/styleBill.css">
 </head>
 <body>
 <header class="site-header">

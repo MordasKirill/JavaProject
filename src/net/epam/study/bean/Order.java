@@ -14,7 +14,6 @@ public class Order implements Serializable {
         private String paymentStatus;
 
         public Order() {
-            super();
         }
 
         public Order(String fullName, String address, String email, String phone, String details) {

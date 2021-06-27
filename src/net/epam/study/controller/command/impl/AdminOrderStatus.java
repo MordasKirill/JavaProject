@@ -2,7 +2,10 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.*;
+import net.epam.study.service.ChangeTableInfoService;
+import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -21,8 +24,9 @@ public class AdminOrderStatus implements Command {
     public static final String PARAM_STATUS = "status";
     public static final String ATTR_ERROR = "error";
     public static final String MSG_ERROR = "Change status error!";
+    public static final String MSG_EMAIL = "Send email error!";
 
-    private static final Logger log = Logger.getLogger(AdminOrderStatus.class);
+    private static final Logger LOG = Logger.getLogger(AdminOrderStatus.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,9 +47,11 @@ public class AdminOrderStatus implements Command {
 
                 try {
                     changeTableInfoService.changeStatus(id, status);
+                    //SendEmail.sendEmail.send("Food bar online", "test", "kirill.mordas@gmail.com");
+
                 } catch (ServiceException e){
 
-                    log.log(Level.ERROR,"AdminOrderStatus error.", e);
+                    LOG.log(Level.ERROR,"AdminOrderStatus error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_ERROR);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);

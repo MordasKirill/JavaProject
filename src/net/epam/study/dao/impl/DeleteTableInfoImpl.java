@@ -19,7 +19,7 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
     public static final String DELETE_FROM_MENU = "delete from menu where itemName =";
     public static final String SELECT_FROM_MENU = "select * from menu where itemName=";
 
-    private static final Logger log = Logger.getLogger(DeleteTableInfoImpl.class);
+    private static final Logger LOG = Logger.getLogger(DeleteTableInfoImpl.class);
 
     public void deleteOrder(String id) throws DAOException, ConnectionPoolException {
 
@@ -29,13 +29,13 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(DELETE_FROM_ORDERS + "'" + id + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Order deleted.");
+            LOG.info("SUCCESS DB: Order deleted.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -54,13 +54,13 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(DELETE_FROM_USERS + "'" + id + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: User deleted.");
+            LOG.info("SUCCESS DB: User deleted.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -80,20 +80,20 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(SELECT_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
 
             if (resultSet.next()){
                 if (resultSet.getString(COLUMN_NAME).equals(itemName)) {
                     result = true;
-                    log.info("SUCCESS DB: Menu item checked.");
+                    LOG.info("SUCCESS DB: Menu item checked.");
                 }
             }
 
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to check MenuItem.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to check MenuItem.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -112,13 +112,13 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
         try {
 
             statement = connection.prepareStatement(DELETE_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            log.info("SUCCESS DB: Menu item deleted.");
+            LOG.info("SUCCESS DB: Menu item deleted.");
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
         } finally {
 

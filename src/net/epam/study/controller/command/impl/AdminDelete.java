@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 
 public class AdminDelete implements Command {
+
     public static final String ATTR_AUTH = "auth";
     public static final String ATTR_ROLE = "role";
 
@@ -33,7 +34,7 @@ public class AdminDelete implements Command {
     /**
      * Logger to get error log
      */
-    private static final Logger log = Logger.getLogger(AdminDelete.class);
+    private static final Logger LOG = Logger.getLogger(AdminDelete.class);
     /**
      *
      * @param request stores information about the request
@@ -67,7 +68,7 @@ public class AdminDelete implements Command {
                     deleteTableInfoService.deleteOrder(idOrder);
                 } catch (ServiceException e){
 
-                    log.log(Level.ERROR,"deleteOrder error.", e);
+                    LOG.log(Level.ERROR,"deleteOrder error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_ERROR);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
@@ -81,7 +82,7 @@ public class AdminDelete implements Command {
                     deleteTableInfoService.deleteUser(idUser);
                 } catch (ServiceException e){
 
-                    log.log(Level.ERROR,"deleteUser error.", e);
+                    LOG.log(Level.ERROR,"deleteUser error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_ERROR);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);

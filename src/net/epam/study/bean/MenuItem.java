@@ -11,7 +11,6 @@ public class MenuItem implements Serializable {
 
 
     public MenuItem(){
-        super();
     }
     public MenuItem(String name, String price, String filingTime){
         this.name = name;

@@ -44,7 +44,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
     public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id=";
     public static final String COLUMN_USER_ID_PAYMENT = "user_id";
-    private static final Logger log = Logger.getLogger(TablesListImpl.class);
+    private static final Logger LOG = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
 
@@ -54,7 +54,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
@@ -74,7 +74,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to show orders.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to show orders.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -94,7 +94,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_ALL_ORDERS);
             resultSet = statement.executeQuery();
 
@@ -107,7 +107,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -127,7 +127,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_FROM_MENU);
             resultSet = statement.executeQuery();
 
@@ -143,7 +143,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to show menu.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to show menu.", exc);
             throw new DAOException(exc);
         }finally {
 
@@ -165,7 +165,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_FROM_USERS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
@@ -180,7 +180,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to show users.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to show users.", exc);
             throw new DAOException(exc);
         }finally {
 
@@ -200,7 +200,7 @@ public class TablesListImpl implements TablesListDAO {
         ResultSet resultSet = null;
 
         try {
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_ALL_USERS);
             resultSet = statement.executeQuery();
 
@@ -213,7 +213,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
             throw new DAOException(exc);
         } finally {
 
@@ -241,11 +241,11 @@ public class TablesListImpl implements TablesListDAO {
             try {
                 id = createTableInfoService.getUserId(login);
             } catch (ServiceException e) {
-                log.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
+                LOG.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
                 throw new DAOException(e);
             }
 
-            log.info("SUCCESS DB: Connected.");
+            LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_FROM_PAYMENTS +  "'" + id + "'" +("and paymentStatus='done'"));
             resultSet = statement.executeQuery();
 
@@ -257,7 +257,7 @@ public class TablesListImpl implements TablesListDAO {
 
         } catch (SQLException exc) {
 
-            log.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
+            LOG.log(Level.ERROR,"FAIL DB: Fail to get all orders.", exc);
             throw new DAOException(exc);
         } finally {
 

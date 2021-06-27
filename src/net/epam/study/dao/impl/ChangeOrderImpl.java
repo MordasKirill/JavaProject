@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class ChangeOrderImpl implements ChangeOrderDAO {
 
 
-    private static final Logger log = Logger.getLogger(ChangeOrderImpl.class);
+    private static final Logger LOG = Logger.getLogger(ChangeOrderImpl.class);
 
     /**
      * Method to delete an item from order
@@ -38,7 +38,7 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
             try {
                 getTotal(login);
             } catch (DAOException | ConnectionPoolException e) {
-                log.log(Level.ERROR,"Get orders fail", e);
+                LOG.log(Level.ERROR,"Get orders fail", e);
                 throw new DAOException("Get orders fail", e);
             }
         }
@@ -96,7 +96,7 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
                 }
 
             } catch (ServiceException e){
-                log.log(Level.ERROR,"Get total fail", e);
+                LOG.log(Level.ERROR,"Get total fail", e);
                 throw new DAOException("Get total fail", e);
             }
         }

@@ -32,7 +32,7 @@ public class AdminDeleteMenuItem implements Command {
     public static final String NOTFOUND_MSG = "local.error.notfound";
     public static final String SUCCESS_MSG = "local.error.sucess";
 
-    private static final Logger log = Logger.getLogger(AdminDeleteMenuItem.class);
+    private static final Logger LOG = Logger.getLogger(AdminDeleteMenuItem.class);
     /**
      *
      * @param request stores information about the request
@@ -78,7 +78,7 @@ public class AdminDeleteMenuItem implements Command {
             }
         } catch (ServiceException e){
 
-            log.log(Level.ERROR,"AdminDeleteMenuItem error.", e);
+            LOG.log(Level.ERROR,"AdminDeleteMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

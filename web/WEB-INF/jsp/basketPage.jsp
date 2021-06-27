@@ -3,7 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
-<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:setBundle basename="resources.local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.basket.logo" var="basket"/>
 <fmt:message bundle="${loc}" key="local.basket.total" var="total_sum"/>
 <fmt:message bundle="${loc}" key="local.basket.delete" var="delete"/>

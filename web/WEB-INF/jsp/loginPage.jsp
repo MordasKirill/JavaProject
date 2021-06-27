@@ -10,7 +10,7 @@
 --%>
 <%@ page pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.local}"/>
-<fmt:setBundle basename="net.epam.study.resources.local" var="loc"/>
+<fmt:setBundle basename="resources.local" var="loc"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
 <fmt:message bundle="${loc}" key="local.login.login" var="loginLabel"/>
