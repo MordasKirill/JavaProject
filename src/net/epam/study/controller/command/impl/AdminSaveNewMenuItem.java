@@ -52,7 +52,8 @@ public class AdminSaveNewMenuItem implements Command {
         try {
 
             if (validationService.priceErrorMsg(price) == null
-                    && validationService.timeErrorMsg(waitTime) == null){
+                    && validationService.timeErrorMsg(waitTime) == null
+                    && !deleteTableInfoService.isMenuItemExists(itemName, category)){
 
 
 
@@ -70,7 +71,7 @@ public class AdminSaveNewMenuItem implements Command {
 
             }else {
 
-                if(!deleteTableInfoService.isMenuItemExists(itemName, category)){
+                if(deleteTableInfoService.isMenuItemExists(itemName, category)){
 
                     session.setAttribute(ITEM_ERROR_ERR_MSG_ITEM_EXIST, ITEM_ERROR);
                 }

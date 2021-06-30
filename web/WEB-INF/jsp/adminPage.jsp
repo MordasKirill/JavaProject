@@ -197,7 +197,7 @@
             </c:if>
             <div class="field">
                 <label>${nameadd}:</label>
-                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderName}" name="itemName" value="${login}" maxlength="70" inputmode="text" required/>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" pattern="\D [^0-9]" placeholder="${placeholderName}" name="itemName" value="${login}" maxlength="70" inputmode="text" required>
             </div>
             <div class="field">
                 <label>${priceadd}:</label>
@@ -205,7 +205,7 @@
                     <fmt:message bundle="${loc}" key="${errMsgPrice}" var="err"/>
                     <span style="color:red; font-size: 15px" >${err}</span>
                 </c:if>
-                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderPrice}" name="itemPrice" value="${login}" maxlength="60" inputmode="decimal" required/>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="number" step="0.01" min="0.1" placeholder="${placeholderPrice}" name="itemPrice" value="${login}" maxlength="60" inputmode="decimal" required/>
             </div>
             <div class="field">
                 <label>${waittimeadd}:</label>
@@ -213,7 +213,7 @@
                     <fmt:message bundle="${loc}" key="${errMsgWaitTime}" var="err"/>
                     <span style="color:red; font-size: 15px" >${err}</span>
                 </c:if>
-                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderWaittime}" name="itemWaitTime" value="${login}" maxlength="60" inputmode="numeric" required/>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="number" min="1" max="999"  placeholder="${placeholderWaittime}" name="itemWaitTime" value="${login}" maxlength="60" inputmode="numeric" required/>
             </div>
             <div class="field">
                 <label>${categoryadd}:</label>
@@ -248,7 +248,7 @@
         </c:if>
         <div class="field">
             <label>${nameadd}:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderName}" name="itemNameDelete" value="${login}" maxlength="70" inputmode="text" required/>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderName}" name="itemNameDelete" value="${login}" maxlength="70" inputmode="text" pattern="\D [^0-9]" required/>
         </div>
         <div class="field">
             <label>${categoryadd}:</label>
