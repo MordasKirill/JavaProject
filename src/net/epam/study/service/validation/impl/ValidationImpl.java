@@ -12,6 +12,9 @@ public class ValidationImpl implements ValidationService {
     public static String userLocale;
 
     public boolean isValidEmailAddress(String email) {
+        if(email == null){
+            return false;
+        }
         String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         pattern = Pattern.compile(ePattern);
         matcher = pattern.matcher(email);
@@ -19,6 +22,9 @@ public class ValidationImpl implements ValidationService {
     }
 
     public boolean isValidFullName(String fullName){
+        if(fullName == null){
+            return false;
+        }
         String ePattern = "^([А-ЯA-Z]|[А-ЯA-Z][\\x27а-яa-z]{1,}|[А-ЯA-Z][\\x27а-яa-z]{1,}-([А-ЯA-Z][\\x27а-яa-z]{1,}|(оглы)|(кызы)))\\040[А-ЯA-Z][\\x27а-яa-z]{1,}(\\040[А-ЯA-Z][\\x27а-яa-z]{1,})?$";
         pattern = Pattern.compile(ePattern);
         matcher = pattern.matcher(fullName);
@@ -26,6 +32,9 @@ public class ValidationImpl implements ValidationService {
     }
 
     public boolean isValidPhoneNumber(String phone){
+        if(phone == null){
+            return false;
+        }
         String ePattern = "^\\+375(17|29|33|44)[0-9]{3}[0-9]{2}[0-9]{2}$";
         pattern = Pattern.compile(ePattern);
         matcher = pattern.matcher(phone);
@@ -34,6 +43,9 @@ public class ValidationImpl implements ValidationService {
 
 
     public boolean isValidPrice(String price){
+        if(price == null){
+            return false;
+        }
         String ePattern = "\\d{1,4}\\.\\d{1,3}";
         pattern = Pattern.compile(ePattern);
         matcher = pattern.matcher(price);
@@ -41,6 +53,9 @@ public class ValidationImpl implements ValidationService {
     }
 
     public boolean isValidTime(String time){
+        if(time == null){
+            return false;
+        }
         String ePattern = "\\d{1,4}";
         pattern = Pattern.compile(ePattern);
         matcher = pattern.matcher(time);
@@ -48,6 +63,9 @@ public class ValidationImpl implements ValidationService {
     }
 
     public boolean isValidCity(String city){
+        if(city == null){
+            return false;
+        }
         //todo use pattern
         boolean result = false;
         if (city.equals("Minsk")
@@ -61,6 +79,7 @@ public class ValidationImpl implements ValidationService {
     }
 
     public String emailErrorMsg(String email){
+
         if (!isValidEmailAddress(email)){
             return "local.error.orderErrorEmail";
         }

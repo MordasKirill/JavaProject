@@ -63,7 +63,7 @@ public class AdminDeleteMenuItem implements Command {
 
                 session.setAttribute(SUCCESS_ATR, SUCCESS_MSG);
 
-                session.removeAttribute(NOTFOUND_MSG);
+                session.removeAttribute(NOTFOUND_ATTR);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
@@ -75,6 +75,7 @@ public class AdminDeleteMenuItem implements Command {
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
+
             }
         } catch (ServiceException e){
 

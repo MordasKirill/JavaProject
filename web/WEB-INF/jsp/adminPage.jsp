@@ -197,7 +197,7 @@
             </c:if>
             <div class="field">
                 <label>${nameadd}:</label>
-                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" pattern="\D [^0-9]" placeholder="${placeholderName}" name="itemName" value="${login}" maxlength="70" inputmode="text" required>
+                <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" pattern="[A-Za-zА-Яа-яЁё]+" placeholder="${placeholderName}" name="itemName" value="${login}" maxlength="70" inputmode="text" required>
             </div>
             <div class="field">
                 <label>${priceadd}:</label>
@@ -248,7 +248,7 @@
         </c:if>
         <div class="field">
             <label>${nameadd}:</label>
-            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderName}" name="itemNameDelete" value="${login}" maxlength="70" inputmode="text" pattern="\D [^0-9]" required/>
+            <input style="border-radius:7px; width: 160px; height: 25px; border: darkgreen" type="text" placeholder="${placeholderName}" name="itemNameDelete" value="${login}" maxlength="70" inputmode="text" pattern="[A-Za-zА-Яа-яЁё]+" required/>
         </div>
         <div class="field">
             <label>${categoryadd}:</label>
