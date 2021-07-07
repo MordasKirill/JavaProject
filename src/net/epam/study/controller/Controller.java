@@ -16,6 +16,7 @@ public class Controller extends HttpServlet {
     public Controller() {
         super();
     }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(response, request);
     }
@@ -23,11 +24,15 @@ public class Controller extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(response, request);
     }
+
     private void process(HttpServletResponse response, HttpServletRequest request) throws  IOException, ServletException{
         String name;
         Command command;
         name = request.getParameter("command");
-        command = provider.takeCommand(name);
-        command.execute(request, response);
+
+        if (provider.isContains(name)){
+            command = provider.takeCommand(name);
+            command.execute(request, response);
+        }
     }
 }

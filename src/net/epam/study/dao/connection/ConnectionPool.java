@@ -50,10 +50,9 @@ public final class ConnectionPool {
     }
 
     public Connection retrieve() throws ConnectionPoolException {
-        Connection newConn;
-        if (availableConnections.size() == 0) {
-            newConn = getConnection();
-        } else {
+        Connection newConn = getConnection();
+
+        if (availableConnections.size() != 0) {
             try {
                 newConn = availableConnections.take();
                 availableConnections.remove(newConn);

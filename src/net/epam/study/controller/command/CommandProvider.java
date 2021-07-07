@@ -38,4 +38,14 @@ public class CommandProvider {
 		return commands.get(commandName);
 	}
 
+	public boolean isContains(String key){
+		if (key == null){
+			return false;
+		}
+
+		CommandName commandName;
+		commandName = CommandName.valueOf(key.toUpperCase());
+		return commands.containsKey(commandName);
+	}
+
 }

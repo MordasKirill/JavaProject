@@ -35,6 +35,7 @@ public class CheckUserImpl implements CheckUserDAO {
         try {
 
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
+            // statement.setInt(1, );
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
