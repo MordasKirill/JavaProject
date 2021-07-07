@@ -67,10 +67,10 @@ public class AdminDelete implements Command {
 
             try {
 
-                if (validationService.isIdNull(idOrder)) {
+                if (validationService.isParamNotNull(idOrder)) {
                     deleteTableInfoService.deleteOrder(idOrder);
                 }
-                if (validationService.isIdNull(idUser)){
+                if (validationService.isParamNotNull(idUser)){
                     deleteTableInfoService.deleteUser(idUser);
                 }
 

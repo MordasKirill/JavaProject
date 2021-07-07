@@ -51,7 +51,7 @@ public class AdminOrderStatus implements Command {
             String status = request.getParameter(PARAM_STATUS);
             String email = request.getParameter(PARAM_EMAIL);
 
-            if (validationService.isIdNull(id)) {
+            if (validationService.isParamNotNull(id)) {
 
                 try {
                     changeTableInfoService.changeStatus(id, status);

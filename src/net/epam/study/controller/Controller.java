@@ -2,7 +2,9 @@ package net.epam.study.controller;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.CommandProvider;
+import net.epam.study.controller.command.PagePath;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +35,9 @@ public class Controller extends HttpServlet {
         if (provider.isContains(name)){
             command = provider.takeCommand(name);
             command.execute(request, response);
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
+            requestDispatcher.forward(request, response);
         }
     }
 }

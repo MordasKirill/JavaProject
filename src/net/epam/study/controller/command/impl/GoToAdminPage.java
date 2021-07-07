@@ -7,6 +7,7 @@ import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
 import net.epam.study.service.impl.TablesListImpl;
+import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -54,6 +55,7 @@ public class GoToAdminPage implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
         TablesListService tablesListService = serviceProvider.getTablesListService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
@@ -76,25 +78,25 @@ public class GoToAdminPage implements Command {
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 int limitUsers = (int) session.getAttribute(LIMIT_USERS);
 
-                if (request.getParameter(LOAD_ORDERS) != null) {
+                if (validationService.isParamNotNull(request.getParameter(LOAD_ORDERS))) {
                     session.setAttribute(LIMIT_ORDERS, tablesListService.getActualLimit(limitOrders));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter(BACK_ORDERS) != null) {
+                if (validationService.isParamNotNull(request.getParameter(BACK_ORDERS))) {
                     session.setAttribute(LIMIT_ORDERS, tablesListService.getPreviousLimit(limitOrders));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter(LOAD_USERS) != null) {
+                if (validationService.isParamNotNull(request.getParameter(LOAD_USERS))) {
                     session.setAttribute(LIMIT_USERS, tablesListService.getActualLimit(limitUsers));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                if (request.getParameter(BACK_USERS) != null) {
+                if (validationService.isParamNotNull(request.getParameter(BACK_USERS))) {
                     session.setAttribute(LIMIT_USERS, tablesListService.getPreviousLimit(limitUsers));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;

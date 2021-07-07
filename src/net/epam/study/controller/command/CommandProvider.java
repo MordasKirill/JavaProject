@@ -39,12 +39,20 @@ public class CommandProvider {
 	}
 
 	public boolean isContains(String key){
+
 		if (key == null){
 			return false;
 		}
-
 		CommandName commandName;
-		commandName = CommandName.valueOf(key.toUpperCase());
+
+		try {
+			commandName = CommandName.valueOf(key.toUpperCase());
+
+		} catch (IllegalArgumentException e){
+
+			return false;
+		}
+
 		return commands.containsKey(commandName);
 	}
 

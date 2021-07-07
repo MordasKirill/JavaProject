@@ -47,7 +47,7 @@ public class AdminUserRole implements Command {
             String id = request.getParameter(PARAM_ID);
             String role = request.getParameter(PARAM_ROLE);
 
-            if (validationService.isIdNull(id)) {
+            if (validationService.isParamNotNull(id)) {
 
                 try {
                     changeTableInfoService.changeRole(id, role);
