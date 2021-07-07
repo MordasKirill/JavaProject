@@ -8,4 +8,5 @@ public interface ValidationService {
     String priceErrorMsg(String price);
     String timeErrorMsg(String time);
     boolean isAdmin (String role);
+    boolean isIdNull(String id);
 }

@@ -6,6 +6,7 @@ import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.DeleteTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -51,43 +52,34 @@ public class AdminDelete implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         DeleteTableInfoService deleteTableInfoService = serviceProvider.getDeleteTableInfoService();
         CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
         if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
                 || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
+
         } else {
 
             String idOrder = request.getParameter(ID_ORDER);
             String idUser = request.getParameter(ID_USER);
 
-            if (idOrder != null) {
+            try {
 
-                try {
+                if (validationService.isIdNull(idOrder)) {
                     deleteTableInfoService.deleteOrder(idOrder);
-                } catch (ServiceException e){
-
-                    LOG.log(Level.ERROR,"deleteOrder error.", e);
-                    session.setAttribute(ATTR_ERROR, MSG_ERROR);
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
-                    requestDispatcher.forward(request, response);
                 }
-
-            }
-
-            if (idUser != null) {
-
-                try {
+                if (validationService.isIdNull(idUser)){
                     deleteTableInfoService.deleteUser(idUser);
-                } catch (ServiceException e){
-
-                    LOG.log(Level.ERROR,"deleteUser error.", e);
-                    session.setAttribute(ATTR_ERROR, MSG_ERROR);
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
-                    requestDispatcher.forward(request, response);
                 }
 
+            } catch (ServiceException e){
+
+                LOG.log(Level.ERROR,"Admin delete action error.", e);
+                session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
+                requestDispatcher.forward(request, response);
             }
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);

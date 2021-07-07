@@ -6,6 +6,7 @@ import net.epam.study.service.ChangeTableInfoService;
 import net.epam.study.service.CheckSessionService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -34,6 +35,7 @@ public class AdminUserRole implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ChangeTableInfoService changeTableInfoService = serviceProvider.getChangeTableInfoService();
         CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
@@ -44,7 +46,8 @@ public class AdminUserRole implements Command {
 
             String id = request.getParameter(PARAM_ID);
             String role = request.getParameter(PARAM_ROLE);
-            if (id != null) {
+
+            if (validationService.isIdNull(id)) {
 
                 try {
                     changeTableInfoService.changeRole(id, role);
