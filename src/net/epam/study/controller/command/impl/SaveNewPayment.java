@@ -2,6 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
+import net.epam.study.controller.command.Status;
 import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.ChangeTableInfoService;
 import net.epam.study.service.ServiceException;
@@ -26,7 +27,6 @@ public class SaveNewPayment implements Command {
     public static final String ATTR_CARD_NUMBER = "cardnumber";
     public static final String ATTR_LOGIN = "login";
 
-    public static final String STATUS_DONE = "done";
     public static final String ATTR_TOTAL = "total";
 
     public static final String ATTR_NUMBER_PAYMENT = "numberPayment";
@@ -56,7 +56,7 @@ public class SaveNewPayment implements Command {
 
             try {
 
-                changeTableInfoService.changePaymentStatus(STATUS_DONE, login);
+                changeTableInfoService.changePaymentStatus(Status.DONE.toString().toLowerCase(), login);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                 requestDispatcher.forward(request, response);

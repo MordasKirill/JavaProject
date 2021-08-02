@@ -28,7 +28,7 @@ public class CreateTableInfoImpl implements CreateTableInfoService {
         CreateTableInfoDAO createTableInfoDAO = daoProvider.getCreateTableInfoDAO();
 
         try {
-            createTableInfoDAO.payment(login, total, status);
+            createTableInfoDAO.doPayment(login, total, status);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Payment create fail", e);
         }

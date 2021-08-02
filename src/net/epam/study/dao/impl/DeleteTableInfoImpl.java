@@ -16,8 +16,8 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
     public static final String COLUMN_NAME = "itemName";
     public static final String DELETE_FROM_ORDERS = "delete from orders where order_id =";
     public static final String DELETE_FROM_USERS = "delete from users where id =";
-    public static final String DELETE_FROM_MENU = "delete from menu where itemName =";
-    public static final String SELECT_FROM_MENU = "select * from menu where itemName=";
+    public static final String DELETE_FROM_MENU = "delete from menu where itemName= ? and category= ?";
+    public static final String SELECT_FROM_MENU = "select * from menu where itemName= ? and category= ?";
 
     private static final Logger LOG = Logger.getLogger(DeleteTableInfoImpl.class);
 
@@ -28,7 +28,9 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(DELETE_FROM_ORDERS + "'" + id + "'");
+            statement = connection.prepareStatement(DELETE_FROM_ORDERS);
+            statement.setString(1, id);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Order deleted.");
@@ -53,7 +55,9 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(DELETE_FROM_USERS + "'" + id + "'");
+            statement = connection.prepareStatement(DELETE_FROM_USERS);
+            statement.setString(1, id);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: User deleted.");
@@ -79,7 +83,10 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(SELECT_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
+            statement = connection.prepareStatement(SELECT_FROM_MENU);
+            statement.setString(1, itemName);
+            statement.setString(2, category);
+
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
 
@@ -111,7 +118,10 @@ public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(DELETE_FROM_MENU + "'" + itemName + "'" +(" and category=") + "'" + category + "'");
+            statement = connection.prepareStatement(DELETE_FROM_MENU);
+            statement.setString(1, itemName);
+            statement.setString(2, category);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Menu item deleted.");

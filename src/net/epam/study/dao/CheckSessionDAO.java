@@ -1,7 +1,7 @@
 package net.epam.study.dao;
 
 public interface CheckSessionDAO {
-    boolean checkSession(Boolean auth, String role);
-    boolean checkAdmin(String role);
-    boolean checkUser(String role);
+    boolean isSession(Boolean auth, String role);
+    boolean isAdmin(String role);
+    boolean isUser(String role);
 }

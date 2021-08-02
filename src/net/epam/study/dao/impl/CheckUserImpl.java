@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class CheckUserImpl implements CheckUserDAO {
 
 
-    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login =";
+    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login = ?";
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
@@ -34,8 +34,9 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
 
-            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
-            // statement.setInt(1, );
+            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
+            statement.setString(1, login);
+
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -68,7 +69,9 @@ public class CheckUserImpl implements CheckUserDAO {
         ResultSet resultSet = null;
 
         try {
-            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
+            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
+            statement.setString(1, login);
+
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -101,7 +104,10 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
             LOG.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_LOGIN_FROM_USERS_WHERE_LOGIN + "'" + login + "'");
+
+            statement = connection.prepareStatement(SELECT_LOGIN_FROM_USERS_WHERE_LOGIN);
+            statement.setString(1, login);
+
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()

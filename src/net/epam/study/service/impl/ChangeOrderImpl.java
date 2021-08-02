@@ -16,7 +16,7 @@ public class ChangeOrderImpl implements ChangeOrderService {
     public static final List<MenuItem> ORDER = new ArrayList<>();
     public static final List<String> TOTAL = new ArrayList<>();
 
-    public void deleteOrderItem(String item, String login)throws ServiceException{
+    public void deleteOrderItem(String item, String login) throws ServiceException{
         DAOProvider daoProvider = DAOProvider.getInstance();
         ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
 

@@ -4,7 +4,7 @@ import net.epam.study.controller.command.Role;
 import net.epam.study.dao.CheckSessionDAO;
 
 public class CheckSessionImpl implements CheckSessionDAO {
-    public boolean checkSession(Boolean auth, String role) {
+    public boolean isSession(Boolean auth, String role) {
 
         if (auth == null || !auth || role == null) {
             return false;
@@ -12,7 +12,7 @@ public class CheckSessionImpl implements CheckSessionDAO {
         return true;
     }
 
-    public boolean checkAdmin(String role) {
+    public boolean isAdmin(String role) {
         String upperCase = role.toUpperCase();
 
         if (upperCase.equals(Role.ADMIN.toString()) || upperCase.equals(Role.OWNER.toString())) {
@@ -21,7 +21,7 @@ public class CheckSessionImpl implements CheckSessionDAO {
         return true;
     }
 
-    public boolean checkUser(String role) {
+    public boolean isUser(String role) {
         String upperCase = role.toUpperCase();
 
         if (upperCase.equals(Role.USER.toString())) {

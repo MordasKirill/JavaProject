@@ -12,7 +12,7 @@ public class CheckSessionImpl implements CheckSessionService {
         CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
 
         boolean result;
-        result = checkSessionDAO.checkSession(auth, role);
+        result = checkSessionDAO.isSession(auth, role);
         return result;
     }
 
@@ -22,7 +22,7 @@ public class CheckSessionImpl implements CheckSessionService {
         CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
 
         boolean result;
-        result = checkSessionDAO.checkAdmin(role);
+        result = checkSessionDAO.isAdmin(role);
         return result;
     }
 
@@ -32,7 +32,7 @@ public class CheckSessionImpl implements CheckSessionService {
         CheckSessionDAO checkSessionDAO = provider.getCheckSessionDAO();
 
         boolean result;
-        result = checkSessionDAO.checkUser(role);
+        result = checkSessionDAO.isUser(role);
         return result;
     }
 }

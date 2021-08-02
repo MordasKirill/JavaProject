@@ -2,6 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
+import net.epam.study.controller.command.Status;
 import net.epam.study.service.*;
 import net.epam.study.service.impl.ChangeOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
@@ -57,7 +58,7 @@ public class GoToBasketPage implements Command {
 
                 try {
 
-                    changeTableInfoService.changePaymentStatus(PARAM_REJECTED, login);
+                    changeTableInfoService.changePaymentStatus(Status.REJECTED.toString().toLowerCase(), login);
 
                 } catch (ServiceException e){
 

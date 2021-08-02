@@ -17,15 +17,11 @@ import java.sql.SQLException;
 
 public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
 
-    public static final String UPDATE_ACCEPT = "update orders set status =";
-    public static final String WHERE_ORDER_ID = "where order_id =";
-    public static final String UPDATE_ROLE = "update users set role =";
-    public static final String WHERE_ID_USERS = "where id =";
-    public static final String UPDATE_PAYMENT = "update payment set paymentStatus =";
+    public static final String UPDATE_ACCEPT = "update orders set status = ? where order_id = ?";
+    public static final String UPDATE_ROLE = "update users set role = ? where id = ?";
+    public static final String UPDATE_PAYMENT = "update payment set paymentStatus = ? where order_id = ?";
     public static final String COLUMN_ID_ORDER = "order_id";
-    public static final String GET_LAST = "SELECT order_id, user_id FROM payment WHERE user_id=";
-    public static final String ORDER = " ORDER BY order_id DESC LIMIT 1";
-    public static final String WHERE_ID_PAYMENT = "where order_id =";
+    public static final String GET_LAST = "SELECT order_id, user_id FROM payment WHERE user_id= ? ORDER BY order_id DESC LIMIT 1";
     private static final Logger LOG = Logger.getLogger(ChangeTableInfoImpl.class);
 
     @Override
@@ -35,7 +31,10 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(UPDATE_ACCEPT + "'" + status + "'" + WHERE_ORDER_ID + "'" + id + "'");
+            statement = connection.prepareStatement(UPDATE_ACCEPT);
+            statement.setString(1, status);
+            statement.setString(2, id);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Order status changed.");
@@ -61,7 +60,10 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(UPDATE_ROLE + "'" + role + "'" + WHERE_ID_USERS + "'" + id + "'");
+            statement = connection.prepareStatement(UPDATE_ROLE);
+            statement.setString(1, role);
+            statement.setString(2, id);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: User role changed.");
@@ -87,8 +89,11 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
         try {
 
             int id = getLastId(login);
-            System.out.println(id);
-            statement = connection.prepareStatement(UPDATE_PAYMENT + "'" + status + "'" + WHERE_ID_PAYMENT + "'" + id + "'");
+
+            statement = connection.prepareStatement(UPDATE_PAYMENT);
+            statement.setString(1, status);
+            statement.setInt(2, id);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Payment status changed.");
@@ -125,10 +130,13 @@ public class ChangeTableInfoImpl implements ChangeTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(GET_LAST+ "'" + userId + "'" + ORDER);
+            statement = connection.prepareStatement(GET_LAST);
+            statement.setInt(1, userId);
+
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             LOG.info("SUCCESS DB: Last element success.");
+
             if (resultSet.next()){
                 lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
             }

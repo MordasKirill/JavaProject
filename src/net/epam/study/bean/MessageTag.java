@@ -17,11 +17,9 @@ public class MessageTag extends SimpleTagSupport {
 
             throws JspException, IOException {
         if (message != null) {
-            // Use message from attribute
             JspWriter out = getJspContext().getOut();
             out.println( message );
         } else {
-            // Use message from the body
             getJspBody().invoke(sw);
             getJspContext().getOut().println(sw.toString());
         }

@@ -48,7 +48,7 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         }
     }
 
-    public void payment(String login, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
+    public void doPayment(String login, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;

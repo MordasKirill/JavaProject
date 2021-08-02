@@ -29,7 +29,7 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_DETAILS = "details";
     public static final String SELECT_ALL_ORDERS = "select order_id from payment where order_id>0";
-    public static final String SELECT_FROM_ORDERS_PAYMENTS = "select * from orders, payment where Orders.order_id = Payment.order_id LIMIT ";
+    public static final String SELECT_FROM_ORDERS_PAYMENTS = "select * from orders, payment where Orders.order_id = Payment.order_id LIMIT ?,?";
     public static final String COLUMN_ITEM_NAME = "itemName";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_WAIT_TIME = "waitTime";
@@ -41,8 +41,8 @@ public class TablesListImpl implements TablesListDAO {
     public static final String COLUMN_ROLE = "role";
     public static final String COLUMN_ID_USER = "id";
     public static final String SELECT_ALL_USERS = "select id from users where id>0";
-    public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ";
-    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id=";
+    public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ?,?";
+    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id= ? and paymentStatus='done'";
     public static final String COLUMN_USER_ID_PAYMENT = "user_id";
     private static final Logger LOG = Logger.getLogger(TablesListImpl.class);
 
@@ -55,7 +55,9 @@ public class TablesListImpl implements TablesListDAO {
 
         try {
             LOG.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS);
+            statement.setInt(1, limit);
+            statement.setInt(2, net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
@@ -166,7 +168,10 @@ public class TablesListImpl implements TablesListDAO {
 
         try {
             LOG.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_USERS + limit+"," + net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
+
+            statement = connection.prepareStatement(SELECT_FROM_USERS);
+            statement.setInt(1, limit);
+            statement.setInt(2, net.epam.study.service.impl.TablesListImpl.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
@@ -246,7 +251,8 @@ public class TablesListImpl implements TablesListDAO {
             }
 
             LOG.info("SUCCESS DB: Connected.");
-            statement = connection.prepareStatement(SELECT_FROM_PAYMENTS +  "'" + id + "'" +("and paymentStatus='done'"));
+            statement = connection.prepareStatement(SELECT_FROM_PAYMENTS);
+            statement.setInt(1, id);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){
