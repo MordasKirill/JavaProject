@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.ManageOrderImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,8 +47,8 @@ public class Logout implements Command {
             session.removeAttribute("errMsgPrice");
             session.removeAttribute("errMsgWaitTime");
 
-            ChangeOrderImpl.ORDER.clear();
-            ChangeOrderImpl.TOTAL.clear();
+            ManageOrderImpl.ORDER.clear();
+            ManageOrderImpl.TOTAL.clear();
 
         }
 

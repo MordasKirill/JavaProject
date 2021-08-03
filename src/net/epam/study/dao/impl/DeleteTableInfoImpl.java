@@ -14,8 +14,8 @@ import java.sql.SQLException;
 
 public class DeleteTableInfoImpl implements DeleteTableInfoDAO {
     public static final String COLUMN_NAME = "itemName";
-    public static final String DELETE_FROM_ORDERS = "delete from orders where order_id =";
-    public static final String DELETE_FROM_USERS = "delete from users where id =";
+    public static final String DELETE_FROM_ORDERS = "delete from orders where order_id = ?";
+    public static final String DELETE_FROM_USERS = "delete from users where id = ?";
     public static final String DELETE_FROM_MENU = "delete from menu where itemName= ? and category= ?";
     public static final String SELECT_FROM_MENU = "select * from menu where itemName= ? and category= ?";
 

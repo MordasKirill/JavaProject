@@ -3,7 +3,7 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ChangeOrderService;
-import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.impl.ValidationImpl;
@@ -35,13 +35,13 @@ public class GoToPaymentPage implements Command {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
 
         HttpSession session = request.getSession(true);
         String login = (String) session.getAttribute(ATTR_LOGIN);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {

@@ -2,11 +2,11 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.TablesListService;
-import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -37,12 +37,12 @@ public class GoToMenuPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         TablesListService tablesListService = serviceProvider.getTablesListService();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
@@ -52,7 +52,7 @@ public class GoToMenuPage implements Command {
                         &&request.getParameter(ATTR_CATEGORY)!=session.getAttribute(ATTR_CATEGORY)){
                     session.setAttribute(ATTR_CATEGORY, request.getParameter(ATTR_CATEGORY));
                 }
-                request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
+                request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
                 request.setAttribute(ATTR_MENU_ITEMS, tablesListService.getMenu());
 
                 if (request.getParameter(ATTR_LOCALE) != null) {

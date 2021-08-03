@@ -6,7 +6,7 @@ import net.epam.study.service.ChangeOrderService;
 import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -78,12 +78,12 @@ public class SaveNewOrder implements Command {
                     && validationService.phoneErrorMsg(phone)==null
                     && validationService.cityErrorMsg(city)==null){
 
-                if (ChangeOrderImpl.ORDER.size() == 0) {
+                if (ManageOrderImpl.ORDER.size() == 0) {
 
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
-                    request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
+                    request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
                     request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
-                    request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
+                    request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
@@ -94,12 +94,12 @@ public class SaveNewOrder implements Command {
 
 
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)){
-                        createTableInfoService.payment(login, changeOrderService.getTotal(login), STATUS_PROCESSING);
+                        createTableInfoService.doPayment(login, changeOrderService.getTotal(login), STATUS_PROCESSING);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
                     }else {
-                        createTableInfoService.payment(login, changeOrderService.getTotal(login), STATUS_UPON_RECEIPT);
+                        createTableInfoService.doPayment(login, changeOrderService.getTotal(login), STATUS_UPON_RECEIPT);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
@@ -118,9 +118,9 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
-                request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
+                request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
                 request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
-                request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
+                request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
 
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);

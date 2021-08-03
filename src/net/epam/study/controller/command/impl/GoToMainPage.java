@@ -2,9 +2,9 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
 
 import javax.servlet.RequestDispatcher;
@@ -25,10 +25,10 @@ public class GoToMainPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
 
-        ChangeOrderImpl.ORDER.clear();
-        ChangeOrderImpl.TOTAL.clear();
+        ManageOrderImpl.ORDER.clear();
+        ManageOrderImpl.TOTAL.clear();
 
         HttpSession session = request.getSession(true);
 
@@ -36,8 +36,8 @@ public class GoToMainPage implements Command {
             session.setAttribute(ATTR_LOGIN, ATTR_LOGIN_STRANGER);
         }
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {

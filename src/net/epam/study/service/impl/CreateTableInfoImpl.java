@@ -1,5 +1,6 @@
 package net.epam.study.service.impl;
 
+import net.epam.study.bean.Order;
 import net.epam.study.dao.CreateTableInfoDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
@@ -10,6 +11,9 @@ import net.epam.study.dao.connection.ConnectionPoolException;
 import java.math.BigDecimal;
 
 public class CreateTableInfoImpl implements CreateTableInfoService {
+
+    public static Order order;
+
     @Override
     public void create(String fullName, String address, String email, String phone, StringBuilder stringBuilder) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
@@ -23,7 +27,7 @@ public class CreateTableInfoImpl implements CreateTableInfoService {
     }
 
     @Override
-    public void payment(String login, BigDecimal total, String status) throws ServiceException {
+    public void doPayment(String login, BigDecimal total, String status) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         CreateTableInfoDAO createTableInfoDAO = daoProvider.getCreateTableInfoDAO();
 

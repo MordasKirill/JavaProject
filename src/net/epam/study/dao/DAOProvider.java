@@ -10,9 +10,9 @@ public final class DAOProvider {
     private final DeleteTableInfoDAO deleteTableInfoDAO = new DeleteTableInfoImpl();
     private final CreateTableInfoDAO createTableInfoDAO = new CreateTableInfoImpl();
     private final TablesListDAO tablesListDAO = new TablesListImpl();
-    private final CheckSessionDAO checkSessionDAO = new CheckSessionImpl();
+    private final RetrieveUserDAO retrieveUserDAO = new RetrieveUserImpl();
     private final HashPasswordDAO hashPasswordDAO = new HashPasswordImpl();
-    private final ChangeTableInfoDAO changeTableInfoDAO = new ChangeTableInfoImpl();
+    private final ChangeTableInfoDAO changeTableInfoDAO = new ChangeDBTableFieldsImpl();
     private final ChangeOrderDAO changeOrderDAO = new ChangeOrderImpl();
 
     private DAOProvider(){}
@@ -32,8 +32,8 @@ public final class DAOProvider {
     public TablesListDAO getTablesListDAO(){
         return tablesListDAO;
     }
-    public CheckSessionDAO  getCheckSessionDAO(){
-        return checkSessionDAO;
+    public RetrieveUserDAO getRetrieveUserDAO(){
+        return retrieveUserDAO;
     }
     public HashPasswordDAO getHashPasswordDAO(){
         return hashPasswordDAO;

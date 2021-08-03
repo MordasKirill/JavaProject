@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.DeleteTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -51,13 +51,13 @@ public class AdminDelete implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         DeleteTableInfoService deleteTableInfoService = serviceProvider.getDeleteTableInfoService();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !retrieveUserService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
 
         } else {

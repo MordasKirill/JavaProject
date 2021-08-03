@@ -4,8 +4,8 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.dao.email.EmailException;
 import net.epam.study.dao.email.SendEmail;
-import net.epam.study.service.ChangeTableInfoService;
-import net.epam.study.service.CheckSessionService;
+import net.epam.study.service.ChangeDBTableFieldsService;
+import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
@@ -36,14 +36,14 @@ public class AdminOrderStatus implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeTableInfoService changeTableInfoService = serviceProvider.getChangeTableInfoService();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
+        ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
-                || !checkSessionService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
+                || !retrieveUserService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
@@ -54,7 +54,7 @@ public class AdminOrderStatus implements Command {
             if (validationService.isParamNotNull(id)) {
 
                 try {
-                    changeTableInfoService.changeStatus(id, status);
+                    changeDBTableFieldsService.changeStatus(id, status);
                     SendEmail.sendEmail.send(status, email);
 
                 } catch (ServiceException e){

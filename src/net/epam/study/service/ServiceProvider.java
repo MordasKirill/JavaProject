@@ -9,14 +9,14 @@ public final class ServiceProvider {
     private static final ServiceProvider instance = new ServiceProvider();
 
     private final ValidationService validationService = new ValidationImpl();
-    private final ChangeOrderService changeOrderService = new ChangeOrderImpl();
+    private final ChangeOrderService changeOrderService = new ManageOrderImpl();
     private final CheckUserService checkUserService = new CheckUserImpl();
     private final TablesListService tablesListService = new TablesListImpl();
     private final CreateTableInfoService createTableInfoService = new CreateTableInfoImpl();
     private final DeleteTableInfoService deleteTableInfoService = new DeleteTableInfoImpl();
     private final HashPasswordService hashPasswordService = new HashPasswordImpl();
-    private final CheckSessionService checkSessionService = new CheckSessionImpl();
-    private final ChangeTableInfoService changeTableInfoService = new ChangeTableInfoImpl();
+    private final RetrieveUserService retrieveUserService = new RetrieveUserImpl();
+    private final ChangeDBTableFieldsService changeDBTableFieldsService = new ChangeDBTableFieldsImpl();
 
     private ServiceProvider(){}
 
@@ -44,10 +44,10 @@ public final class ServiceProvider {
     public HashPasswordService getHashPasswordService(){
         return hashPasswordService;
     }
-    public CheckSessionService getCheckSessionService(){
-        return checkSessionService;
+    public RetrieveUserService getRetrieveUserService(){
+        return retrieveUserService;
     }
-    public ChangeTableInfoService getChangeTableInfoService(){
-        return changeTableInfoService;
+    public ChangeDBTableFieldsService getChangeDBTableFieldsService(){
+        return changeDBTableFieldsService;
     }
 }

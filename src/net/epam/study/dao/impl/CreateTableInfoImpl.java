@@ -1,5 +1,6 @@
 package net.epam.study.dao.impl;
 
+import net.epam.study.bean.Order;
 import net.epam.study.dao.CreateTableInfoDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
@@ -8,19 +9,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CreateTableInfoImpl implements CreateTableInfoDAO {
     public static final String COLUMN_ID_ORDER = "order_id";
     public static final String COLUMN_ID_USER = "id";
-    public static final String INSERT_INTO_ORDERS = "INSERT INTO orders (fullName,address,email,phone,details,status) VALUES";
-    public static final String GET_LAST_ID = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1";
-    public static final String GET_USER_ID = "SELECT id FROM users WHERE login=";
-    public static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES";
-    public static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES";
+    public static final String INSERT_INTO_ORDERS = "INSERT INTO orders (fullName,address,email,phone,details,status) VALUES (?,?,?,?,?,?)";
+    public static final String GET_USER_ID = "SELECT id FROM users WHERE login= ?";
+    public static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES (?,?,?,?)";
+    public static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES (?,?,?,?)";
 
     private static final Logger LOG = Logger.getLogger(CreateTableInfoImpl.class);
 
@@ -31,10 +28,24 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         String status = "processing";
 
         try {
-            statement = connection.prepareStatement(INSERT_INTO_ORDERS + "('" +  fullName + "','" + address + "','" + email + "','" + phone + "','" + stringBuilder + "','" + status + "')");
+            statement = connection.prepareStatement(INSERT_INTO_ORDERS, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, fullName);
+            statement.setString(2, address);
+            statement.setString(3, email);
+            statement.setString(4, phone);
+            statement.setString(5, stringBuilder.toString());
+            statement.setString(6, status);
+
             LOG.info("SUCCESS DB: Connected.");
-            statement.executeUpdate();
+            statement.execute();
             LOG.info("SUCCESS DB: Order created.");
+            ResultSet resultSet = statement.getGeneratedKeys();
+            int orderId;
+            if (resultSet.next()){
+                orderId = resultSet.getInt(1);
+                net.epam.study.service.impl.CreateTableInfoImpl.order = new Order();
+                net.epam.study.service.impl.CreateTableInfoImpl.order.setId(String.valueOf(orderId));
+            }
 
         } catch (SQLException exc) {
 
@@ -53,13 +64,18 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
 
-        int lastId = getLastId();
+        int lastId = Integer.parseInt(net.epam.study.service.impl.CreateTableInfoImpl.order.getId());
         int userId = getUserId(login);
         double doubleTotal = total.doubleValue();
 
         try {
 
-            statement = connection.prepareStatement(INSERT_INTO_PAYMENT + "('" + status + "','" + doubleTotal + "','" + lastId + "','" + userId + "')");
+            statement = connection.prepareStatement(INSERT_INTO_PAYMENT);
+            statement.setString(1, status);
+            statement.setDouble(2, doubleTotal);
+            statement.setInt(3, lastId);
+            statement.setInt(4, userId);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Payment created.");
@@ -83,7 +99,12 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         PreparedStatement statement = null;
 
         try {
-            statement = connection.prepareStatement(INSERT_INTO_MENU + "('" +  itemName + "','" + price + "','" + waitTime + "','" + category + "')");
+            statement = connection.prepareStatement(INSERT_INTO_MENU);
+            statement.setString(1, itemName);
+            statement.setString(2, price);
+            statement.setString(3, waitTime);
+            statement.setString(4, category);
+
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Menu item created.");
@@ -100,35 +121,6 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         }
     }
 
-    public int getLastId() throws DAOException, ConnectionPoolException {
-
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        int lastId = 0;
-
-        try {
-
-            statement = connection.prepareStatement(GET_LAST_ID);
-            LOG.info("SUCCESS DB: Connected.");
-            resultSet = statement.executeQuery();
-            LOG.info("SUCCESS DB: Last element success.");
-            if (resultSet.next()){
-                lastId = Integer.parseInt(resultSet.getString(COLUMN_ID_ORDER));
-            }
-
-        } catch (SQLException exc) {
-
-            LOG.log(Level.ERROR,"FAIL DB: Fail to get last element DB.", exc);
-            throw new DAOException(exc);
-        }  finally {
-
-            ConnectionPool.connectionPool.putBack(connection);
-            assert statement != null;
-            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
-        }
-        return lastId;
-    }
 
     public int getUserId(String login) throws DAOException, ConnectionPoolException {
 
@@ -139,7 +131,8 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
 
         try {
 
-            statement = connection.prepareStatement(GET_USER_ID + "'" + login +"'");
+            statement = connection.prepareStatement(GET_USER_ID);
+            statement.setString(1, login);
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             LOG.info("SUCCESS DB: User id success.");

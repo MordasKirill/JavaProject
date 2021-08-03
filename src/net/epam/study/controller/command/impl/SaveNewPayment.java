@@ -4,7 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
 import net.epam.study.service.ChangeOrderService;
-import net.epam.study.service.ChangeTableInfoService;
+import net.epam.study.service.ChangeDBTableFieldsService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
@@ -43,7 +43,7 @@ public class SaveNewPayment implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
-        ChangeTableInfoService changeTableInfoService = serviceProvider.getChangeTableInfoService();
+        ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
 
         HttpSession session = request.getSession(true);
@@ -56,7 +56,7 @@ public class SaveNewPayment implements Command {
 
             try {
 
-                changeTableInfoService.changePaymentStatus(Status.DONE.toString().toLowerCase(), login);
+                changeDBTableFieldsService.changePaymentStatus(Status.DONE.toString().toLowerCase(), login);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                 requestDispatcher.forward(request, response);

@@ -20,8 +20,8 @@ public class CheckUserImpl implements CheckUserDAO {
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
-    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =";
-    public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES";
+    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
+    public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
     private static final Logger LOG = Logger.getLogger(CheckUserImpl.class);
 
     public boolean isUserExists(String login, String password) throws DAOException, ConnectionPoolException {
@@ -116,7 +116,10 @@ public class CheckUserImpl implements CheckUserDAO {
                 result = false;
 
             } else{
-                statement.executeUpdate(INSERT_INTO + "('" + login + "','" + hashPassword + "','" + role + "')");
+                statement.executeUpdate(INSERT_INTO);
+                statement.setString(1, login);
+                statement.setString(2, hashPassword);
+                statement.setString(3, role);
                 LOG.info("SUCCESS DB: User created.");
             }
 

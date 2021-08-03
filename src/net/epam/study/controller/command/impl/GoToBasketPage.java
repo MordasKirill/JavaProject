@@ -4,7 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
 import net.epam.study.service.*;
-import net.epam.study.service.impl.ChangeOrderImpl;
+import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -41,15 +41,15 @@ public class GoToBasketPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
-        CheckSessionService checkSessionService = serviceProvider.getCheckSessionService();
-        ChangeTableInfoService changeTableInfoService = serviceProvider.getChangeTableInfoService();
+        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
+        ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
         TablesListService tablesListService = serviceProvider.getTablesListService();
 
         HttpSession session = request.getSession(true);
         String login = (String) session.getAttribute(ATTR_LOGIN);
 
-        if (!checkSessionService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !checkSessionService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
@@ -58,7 +58,7 @@ public class GoToBasketPage implements Command {
 
                 try {
 
-                    changeTableInfoService.changePaymentStatus(Status.REJECTED.toString().toLowerCase(), login);
+                    changeDBTableFieldsService.changePaymentStatus(Status.REJECTED.toString().toLowerCase(), login);
 
                 } catch (ServiceException e){
 
@@ -68,7 +68,7 @@ public class GoToBasketPage implements Command {
                 }
             }
 
-            request.setAttribute(ATTR_ORDER, ChangeOrderImpl.ORDER);
+            request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
 
             try {
                 request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
@@ -91,7 +91,7 @@ public class GoToBasketPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-            request.setAttribute(ATTR_SIZE, ChangeOrderImpl.ORDER.size());
+            request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
 
             request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
