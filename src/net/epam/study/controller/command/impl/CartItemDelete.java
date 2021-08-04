@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
@@ -28,7 +28,7 @@ public class CartItemDelete implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
 
         HttpSession session = request.getSession(true);
         String login = (String) session.getAttribute(PARAM_LOGIN);
@@ -36,7 +36,7 @@ public class CartItemDelete implements Command {
         String deleteValue = request.getParameter(PARAM_ITEM);
 
         try {
-            changeOrderService.deleteOrderItem(deleteValue, login);
+            manageOrderService.deleteOrderItem(deleteValue, login);
 
         } catch (ServiceException e){
 

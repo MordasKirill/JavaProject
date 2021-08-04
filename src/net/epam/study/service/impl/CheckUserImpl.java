@@ -10,12 +10,12 @@ import net.epam.study.service.ServiceException;
 public class CheckUserImpl implements CheckUserService {
 
     @Override
-    public boolean isUser(String login, String password) throws ServiceException{
+    public boolean isUserExists(int userId, String password) throws ServiceException{
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
 
         try {
-            return checkUserDAO.isUserExists(login, password);
+            return checkUserDAO.isUserExists(userId, password);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to check if user exist", e);
         }
@@ -24,12 +24,12 @@ public class CheckUserImpl implements CheckUserService {
 
 
     @Override
-    public String getUserRole(String login) throws ServiceException{
+    public String getUserRole(int userId) throws ServiceException{
         DAOProvider provider = DAOProvider.getInstance();
         CheckUserDAO checkUserDAO = provider.getCheckUserDAO();
 
         try {
-            return checkUserDAO.getUserRole(login);
+            return checkUserDAO.getUserRole(userId);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to check role", e);
         }

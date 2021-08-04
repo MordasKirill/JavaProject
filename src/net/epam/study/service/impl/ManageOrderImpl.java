@@ -5,14 +5,14 @@ import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.bean.MenuItem;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.ServiceException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageOrderImpl implements ChangeOrderService {
+public class ManageOrderImpl implements ManageOrderService {
     public static final List<MenuItem> ORDER = new ArrayList<>();
     public static final List<String> TOTAL = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class ManageOrderImpl implements ChangeOrderService {
         changeOrder.addToOrder(menuItem);
     }
 
-    public BigDecimal getTotal(String login) throws ServiceException{
+    public BigDecimal getTotal(int userId) throws ServiceException{
         DAOProvider daoProvider = DAOProvider.getInstance();
         ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
 
@@ -44,13 +44,29 @@ public class ManageOrderImpl implements ChangeOrderService {
 
 
         try {
-            total = changeOrder.getTotal(login);
+            total = changeOrder.getTotal(userId);
 
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Get orders fail", e);
         }
 
         return total;
+    }
+
+    @Override
+    public int getDiscount(int userId) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        ChangeOrderDAO changeOrder = daoProvider.getChangeOrderDAO();
+
+        int discount = 0;
+
+        try {
+            discount = changeOrder.getDiscount(userId);
+        } catch (DAOException | ConnectionPoolException e){
+            throw new ServiceException("Get orders fail", e);
+        }
+
+        return discount;
     }
 
     public StringBuilder getOrder(){

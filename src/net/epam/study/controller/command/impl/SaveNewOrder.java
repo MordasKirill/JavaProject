@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -27,7 +27,7 @@ public class SaveNewOrder implements Command {
     public static final String ATTR_CITY = "city";
     public static final String ATTR_METHOD = "method";
     public static final String ATTR_METHOD_ONLINE = "online";
-    public static final String ATTR_LOGIN = "login";
+    public static final String ATTR_USER_ID = "id";
 
     public static final String ATTR_EMAIL_SESSION = "emailSession";
     public static final String ATTR_FULL_NAME_SESSION = "fullNameSession";
@@ -57,7 +57,7 @@ public class SaveNewOrder implements Command {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
         CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
         String email = request.getParameter(ATTR_EMAIL).trim();
@@ -68,7 +68,7 @@ public class SaveNewOrder implements Command {
         String paymentMethod = request.getParameter(ATTR_METHOD);
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute(ATTR_LOGIN);
+        int userId = (int) session.getAttribute(ATTR_USER_ID);
 
 
         try {
@@ -82,7 +82,7 @@ public class SaveNewOrder implements Command {
 
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                     request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
-                    request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                    request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
                     request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
@@ -90,16 +90,16 @@ public class SaveNewOrder implements Command {
 
                 } else {
 
-                    createTableInfoService.create(fullName, address, email, phone, changeOrderService.getOrder());
+                    createTableInfoService.create(fullName, address, email, phone, manageOrderService.getOrder());
 
 
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)){
-                        createTableInfoService.doPayment(login, changeOrderService.getTotal(login), STATUS_PROCESSING);
+                        createTableInfoService.doPayment(userId, manageOrderService.getTotal(userId), STATUS_PROCESSING);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
                     }else {
-                        createTableInfoService.doPayment(login, changeOrderService.getTotal(login), STATUS_UPON_RECEIPT);
+                        createTableInfoService.doPayment(userId, manageOrderService.getTotal(userId), STATUS_UPON_RECEIPT);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
@@ -119,7 +119,7 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
                 request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
-                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
                 request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
 
 

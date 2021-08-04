@@ -27,12 +27,12 @@ public class CreateTableInfoImpl implements CreateTableInfoService {
     }
 
     @Override
-    public void doPayment(String login, BigDecimal total, String status) throws ServiceException {
+    public void doPayment(int userId, BigDecimal total, String status) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         CreateTableInfoDAO createTableInfoDAO = daoProvider.getCreateTableInfoDAO();
 
         try {
-            createTableInfoDAO.doPayment(login, total, status);
+            createTableInfoDAO.doPayment(userId, total, status);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Payment create fail", e);
         }

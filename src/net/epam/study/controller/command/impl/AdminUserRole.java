@@ -39,7 +39,7 @@ public class AdminUserRole implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
+        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
                 || !retrieveUserService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {

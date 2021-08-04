@@ -1,15 +1,12 @@
 package net.epam.study.dao.impl;
 
+import net.epam.study.bean.MenuItem;
+import net.epam.study.bean.Order;
+import net.epam.study.bean.User;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.TablesListDAO;
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.bean.MenuItem;
-import net.epam.study.bean.Order;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.bean.User;
-import net.epam.study.service.CreateTableInfoService;
-import net.epam.study.service.ServiceException;
-import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -43,7 +40,6 @@ public class TablesListImpl implements TablesListDAO {
     public static final String SELECT_ALL_USERS = "select id from users where id>0";
     public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ?,?";
     public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id= ? and paymentStatus='done'";
-    public static final String COLUMN_USER_ID_PAYMENT = "user_id";
     private static final Logger LOG = Logger.getLogger(TablesListImpl.class);
 
     public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
@@ -230,29 +226,18 @@ public class TablesListImpl implements TablesListDAO {
         return users;
     }
 
-    public int getDonePayments(String login) throws DAOException, ConnectionPoolException {
+    public int getDonePayments(int userId) throws DAOException, ConnectionPoolException {
 
         int result = 0;
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
-        int id = 0;
-
         try {
-
-            try {
-                id = createTableInfoService.getUserId(login);
-            } catch (ServiceException e) {
-                LOG.log(Level.ERROR,"FAIL DB: Fail to get user id.", e);
-                throw new DAOException(e);
-            }
 
             LOG.info("SUCCESS DB: Connected.");
             statement = connection.prepareStatement(SELECT_FROM_PAYMENTS);
-            statement.setInt(1, id);
+            statement.setInt(1, userId);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()){

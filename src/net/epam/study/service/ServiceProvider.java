@@ -9,7 +9,7 @@ public final class ServiceProvider {
     private static final ServiceProvider instance = new ServiceProvider();
 
     private final ValidationService validationService = new ValidationImpl();
-    private final ChangeOrderService changeOrderService = new ManageOrderImpl();
+    private final ManageOrderService manageOrderService = new ManageOrderImpl();
     private final CheckUserService checkUserService = new CheckUserImpl();
     private final TablesListService tablesListService = new TablesListImpl();
     private final CreateTableInfoService createTableInfoService = new CreateTableInfoImpl();
@@ -26,8 +26,8 @@ public final class ServiceProvider {
     public ValidationService getValidationService(){
         return validationService;
     }
-    public ChangeOrderService getChangeOrderService(){
-        return changeOrderService;
+    public ManageOrderService getManageOrderService(){
+        return manageOrderService;
     }
     public CheckUserService getCheckUserService(){
         return checkUserService;

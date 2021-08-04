@@ -51,48 +51,59 @@ public class ChangeOrderImpl implements ChangeOrderDAO {
 
     /**
      * Method to get order total
-     * @param login user login
+     * @param userId user login
      * @return returns BigDecimal total of order
      * @throws DAOException exception in dao
      * throws in case something goes wrong
      * @throws ConnectionPoolException in case problems
      * with open/retrieve connection
      */
-    public BigDecimal getTotal(String login) throws DAOException, ConnectionPoolException{
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        TablesListService tablesListService = serviceProvider.getTablesListService();
-
+    public BigDecimal getTotal(int userId) throws DAOException, ConnectionPoolException{
 
         BigDecimal result = new BigDecimal(0);
         BigDecimal sum = new BigDecimal(0);
+        int discount = 0;
 
         for (int i = 0; i< ManageOrderImpl.TOTAL.size(); i++){
             BigDecimal total = new BigDecimal(ManageOrderImpl.TOTAL.get(i));
             sum = sum.add(total);
 
-            try {
-                if (tablesListService.getDonePayments(login) >= 3){
-                    BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(3))));
-                    amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
-                    result = sum.subtract(amount);
-                }
+            discount = getDiscount(userId);
+            if (discount >= 3){
+                BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(discount))));
+                amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
+                result = sum.subtract(amount);
+            }
 
-                if (tablesListService.getDonePayments(login) >= 10){
-                    BigDecimal amount =  new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(10))));
-                    amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
-                    result = sum.subtract(amount);
-                }
-
-                if (tablesListService.getDonePayments(login) < 3){
-                    result = sum;
-                }
-
-            } catch (ServiceException e){
-                LOG.log(Level.ERROR,"Get total fail", e);
-                throw new DAOException("Get total fail", e);
+            if (discount < 3){
+                result = sum;
             }
         }
         return result;
+    }
+
+    public int getDiscount(int userId) throws DAOException, ConnectionPoolException{
+        ServiceProvider serviceProvider = ServiceProvider.getInstance();
+        TablesListService tablesListService = serviceProvider.getTablesListService();
+
+        int total = 0;
+
+        try {
+            total = tablesListService.getDonePayments(userId);
+        }
+        catch (ServiceException e){
+            LOG.log(Level.ERROR,"Get total fail", e);
+            throw new DAOException("Get total fail", e);
+        }
+
+        if (total == 3) {
+            return 3;
+
+        } else if (total >= 10) {
+            return 10;
+        }
+
+        return 0;
     }
 
     /**

@@ -1,6 +1,6 @@
 package net.epam.study.service.impl;
 
-import net.epam.study.dao.ChangeTableInfoDAO;
+import net.epam.study.dao.ChangeDBTableFieldsDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.connection.ConnectionPoolException;
@@ -10,13 +10,13 @@ import net.epam.study.service.ServiceException;
 public class ChangeDBTableFieldsImpl implements ChangeDBTableFieldsService {
 
     @Override
-    public void changeStatus(String id, String status) throws ServiceException {
+    public void changeOrderStatus(String id, String status) throws ServiceException {
 
         DAOProvider daoProvider = DAOProvider.getInstance();
-        ChangeTableInfoDAO changeTableInfoDAO = daoProvider.getChangeTableInfoDAO();
+        ChangeDBTableFieldsDAO changeDBTableFieldsDAO = daoProvider.getChangeDBTableFieldsDAO();
 
         try {
-            changeTableInfoDAO.changeOrderStatus(id, status);
+            changeDBTableFieldsDAO.changeOrderStatus(id, status);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to change status", e);
         }
@@ -27,10 +27,10 @@ public class ChangeDBTableFieldsImpl implements ChangeDBTableFieldsService {
     public void changeRole(String id, String role) throws ServiceException {
 
         DAOProvider daoProvider = DAOProvider.getInstance();
-        ChangeTableInfoDAO changeTableInfoDAO = daoProvider.getChangeTableInfoDAO();
+        ChangeDBTableFieldsDAO changeDBTableFieldsDAO = daoProvider.getChangeDBTableFieldsDAO();
 
         try {
-            changeTableInfoDAO.changeRole(id, role);
+            changeDBTableFieldsDAO.changeRole(id, role);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to change role", e);
         }
@@ -38,12 +38,12 @@ public class ChangeDBTableFieldsImpl implements ChangeDBTableFieldsService {
     }
 
     @Override
-    public void changePaymentStatus(String status, String login) throws ServiceException {
+    public void changePaymentStatus(String status, int userId) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
-        ChangeTableInfoDAO changeTableInfoDAO = daoProvider.getChangeTableInfoDAO();
+        ChangeDBTableFieldsDAO changeDBTableFieldsDAO = daoProvider.getChangeDBTableFieldsDAO();
 
         try {
-            changeTableInfoDAO.changePaymentStatus(status, login);
+            changeDBTableFieldsDAO.changePaymentStatus(status, userId);
         } catch (DAOException | ConnectionPoolException e){
             throw new ServiceException("Fail to change role", e);
         }

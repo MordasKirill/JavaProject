@@ -7,7 +7,7 @@ import net.epam.study.service.RetrieveUserService;
 public class RetrieveUserImpl implements RetrieveUserService {
 
     @Override
-    public boolean checkSession(Boolean auth, String role) {
+    public boolean isAuthenticated(Boolean auth, String role) {
         DAOProvider provider = DAOProvider.getInstance();
         RetrieveUserDAO retrieveUserDAO = provider.getRetrieveUserDAO();
 

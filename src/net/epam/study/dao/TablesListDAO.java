@@ -13,7 +13,7 @@ public interface TablesListDAO {
     List<MenuItem> getMenu() throws DAOException, ConnectionPoolException;
     List<User> getUsers(int limit) throws DAOException, ConnectionPoolException;
     List<User> getAllUsers() throws DAOException, ConnectionPoolException;
-    int getDonePayments(String login) throws DAOException, ConnectionPoolException;
+    int getDonePayments(int userId) throws DAOException, ConnectionPoolException;
     int getActualLimit(int limit);
     int getPreviousLimit(int limit);
 }

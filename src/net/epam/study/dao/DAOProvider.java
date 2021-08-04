@@ -12,7 +12,7 @@ public final class DAOProvider {
     private final TablesListDAO tablesListDAO = new TablesListImpl();
     private final RetrieveUserDAO retrieveUserDAO = new RetrieveUserImpl();
     private final HashPasswordDAO hashPasswordDAO = new HashPasswordImpl();
-    private final ChangeTableInfoDAO changeTableInfoDAO = new ChangeDBTableFieldsImpl();
+    private final ChangeDBTableFieldsDAO changeDBTableFieldsDAO = new ChangeDBTableFieldsImpl();
     private final ChangeOrderDAO changeOrderDAO = new ChangeOrderImpl();
 
     private DAOProvider(){}
@@ -38,8 +38,8 @@ public final class DAOProvider {
     public HashPasswordDAO getHashPasswordDAO(){
         return hashPasswordDAO;
     }
-    public ChangeTableInfoDAO getChangeTableInfoDAO(){
-        return changeTableInfoDAO;
+    public ChangeDBTableFieldsDAO getChangeDBTableFieldsDAO(){
+        return changeDBTableFieldsDAO;
     }
     public ChangeOrderDAO getChangeOrderDAO(){
         return changeOrderDAO;

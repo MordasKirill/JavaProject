@@ -108,7 +108,7 @@ public class TablesListImpl implements TablesListService {
     }
 
     @Override
-    public int getDonePayments(String login) throws ServiceException {
+    public int getDonePayments(int userId) throws ServiceException {
 
         DAOProvider daoProvider = DAOProvider.getInstance();
         TablesListDAO showTables = daoProvider.getTablesListDAO();
@@ -116,7 +116,7 @@ public class TablesListImpl implements TablesListService {
         int result;
 
         try {
-            result = showTables.getDonePayments(login);
+            result = showTables.getDonePayments(userId);
             return result;
 
         } catch (DAOException | ConnectionPoolException e){

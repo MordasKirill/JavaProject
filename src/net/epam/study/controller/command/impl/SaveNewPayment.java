@@ -3,7 +3,7 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.ChangeDBTableFieldsService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -25,7 +25,7 @@ public class SaveNewPayment implements Command {
     public static final String ATTR_ROLE = "role";
 
     public static final String ATTR_CARD_NUMBER = "cardnumber";
-    public static final String ATTR_LOGIN = "login";
+    public static final String ATTR_USER_ID = "id";
 
     public static final String ATTR_TOTAL = "total";
 
@@ -44,11 +44,12 @@ public class SaveNewPayment implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
         ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
 
         HttpSession session = request.getSession(true);
 
-        String login = (String) session.getAttribute(ATTR_LOGIN);
+        int userId = (int) session.getAttribute(ATTR_USER_ID);
+        int orderId = Integer.parseInt(net.epam.study.service.impl.CreateTableInfoImpl.order.getId());
         String fullName = request.getParameter(ATTR_NAME);
         String number = request.getParameter(ATTR_CARD_NUMBER);
 
@@ -56,7 +57,7 @@ public class SaveNewPayment implements Command {
 
             try {
 
-                changeDBTableFieldsService.changePaymentStatus(Status.DONE.toString().toLowerCase(), login);
+                changeDBTableFieldsService.changePaymentStatus(Status.DONE.toString().toLowerCase(), orderId);
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                 requestDispatcher.forward(request, response);
@@ -74,7 +75,7 @@ public class SaveNewPayment implements Command {
             request.setAttribute(ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
 
             try {
-                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
 
             } catch (ServiceException e){
 

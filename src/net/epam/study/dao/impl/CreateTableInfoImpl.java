@@ -59,13 +59,12 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
         }
     }
 
-    public void doPayment(String login, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
+    public void doPayment(int userId, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
 
-        int lastId = Integer.parseInt(net.epam.study.service.impl.CreateTableInfoImpl.order.getId());
-        int userId = getUserId(login);
+        int orderId = Integer.parseInt(net.epam.study.service.impl.CreateTableInfoImpl.order.getId());
         double doubleTotal = total.doubleValue();
 
         try {
@@ -73,7 +72,7 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
             statement = connection.prepareStatement(INSERT_INTO_PAYMENT);
             statement.setString(1, status);
             statement.setDouble(2, doubleTotal);
-            statement.setInt(3, lastId);
+            statement.setInt(3, orderId);
             statement.setInt(4, userId);
 
             LOG.info("SUCCESS DB: Connected.");

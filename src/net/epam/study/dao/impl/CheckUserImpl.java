@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class CheckUserImpl implements CheckUserDAO {
 
 
-    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login = ?";
+    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select id, password, role from users where id = ?";
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
@@ -24,7 +24,7 @@ public class CheckUserImpl implements CheckUserDAO {
     public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
     private static final Logger LOG = Logger.getLogger(CheckUserImpl.class);
 
-    public boolean isUserExists(String login, String password) throws DAOException, ConnectionPoolException {
+    public boolean isUserExists(int userId, String password) throws DAOException, ConnectionPoolException {
 
         boolean result = false;
 
@@ -35,14 +35,13 @@ public class CheckUserImpl implements CheckUserDAO {
         try {
 
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
-            statement.setString(1, login);
+            statement.setInt(1, userId);
 
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
-                if (resultSet.getString(COLUMN_LOGIN).equals(login)
-                    && BCrypt.checkpw(password, resultSet.getString(COLUMN_PASSWORD))) {
+                if (BCrypt.checkpw(password, resultSet.getString(COLUMN_PASSWORD))) {
                     LOG.info("SUCCESS: Login success.");
                     result = true;
                     break;
@@ -62,7 +61,7 @@ public class CheckUserImpl implements CheckUserDAO {
     }
 
 
-    public String getUserRole(String login) throws DAOException, ConnectionPoolException {
+    public String getUserRole(int userId) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -70,16 +69,14 @@ public class CheckUserImpl implements CheckUserDAO {
 
         try {
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
-            statement.setString(1, login);
+            statement.setInt(1, userId);
 
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
+                LOG.info("SUCCESS: Role checked.");
+                return resultSet.getString(COLUMN_ROLE);
 
-                if (resultSet.getString(COLUMN_LOGIN).equals(login)){
-                    LOG.info("SUCCESS: Role checked.");
-                    return resultSet.getString(COLUMN_ROLE);
-                }
             }
 
         } catch (SQLException exc) {
@@ -116,10 +113,11 @@ public class CheckUserImpl implements CheckUserDAO {
                 result = false;
 
             } else{
-                statement.executeUpdate(INSERT_INTO);
+                statement = connection.prepareStatement(INSERT_INTO);
                 statement.setString(1, login);
                 statement.setString(2, hashPassword);
                 statement.setString(3, role);
+                statement.executeUpdate();
                 LOG.info("SUCCESS DB: User created.");
             }
 

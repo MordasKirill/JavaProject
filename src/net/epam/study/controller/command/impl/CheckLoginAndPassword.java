@@ -3,6 +3,7 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.CheckUserService;
+import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
@@ -25,6 +26,7 @@ public class CheckLoginAndPassword implements Command {
     public static final String ATTR_ROLE = "role";
 
     public static final String PARAM_LOGIN = "login";
+    public static final String ATTR_USER_ID = "id";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_LOCALE = "locale";
 
@@ -39,23 +41,27 @@ public class CheckLoginAndPassword implements Command {
         ServiceProvider provider = ServiceProvider.getInstance();
         CheckUserService checkUserService = provider.getCheckUserService();
         ValidationService validationService = provider.getValidationService();
+        CreateTableInfoService createTableInfo = provider.getCreateTableInfoService();
 
         String login = request.getParameter(PARAM_LOGIN).trim();
         String password = request.getParameter(PARAM_PASSWORD);
         String role;
+        int userId;
 
         HttpSession session = request.getSession(true);
 
 
         try {
-            role = checkUserService.getUserRole(login);
+            userId = createTableInfo.getUserId(login);
+            role = checkUserService.getUserRole(userId);
 
-            if(checkUserService.isUser(login, password)) {
+            if(checkUserService.isUserExists(userId, password)) {
 
                 if (validationService.isAdmin(role)) {
                     session.setAttribute(ATTR_AUTH, true);
                     request.setAttribute(ATTR_ERROR, "");
                     session.setAttribute(ATTR_ROLE, role);
+                    session.setAttribute(ATTR_USER_ID, userId);
 
                     ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
@@ -63,6 +69,7 @@ public class CheckLoginAndPassword implements Command {
                 } else {
                     session.setAttribute(ATTR_AUTH, true);
                     session.setAttribute(PARAM_LOGIN, login);
+                    session.setAttribute(ATTR_USER_ID, userId);
                     request.setAttribute(ATTR_ERROR, "");
                     session.setAttribute(ATTR_ROLE, role);
 

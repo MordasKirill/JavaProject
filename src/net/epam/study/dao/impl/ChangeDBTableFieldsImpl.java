@@ -1,10 +1,9 @@
 package net.epam.study.dao.impl;
 
-import net.epam.study.dao.ChangeTableInfoDAO;
+import net.epam.study.dao.ChangeDBTableFieldsDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.dao.connection.ConnectionPoolException;
-import net.epam.study.service.impl.CreateTableInfoImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -12,13 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class ChangeDBTableFieldsImpl implements ChangeTableInfoDAO {
+public class ChangeDBTableFieldsImpl implements ChangeDBTableFieldsDAO {
 
     public static final String UPDATE_ACCEPT = "update orders set status = ? where order_id = ?";
     public static final String UPDATE_ROLE = "update users set role = ? where id = ?";
     public static final String UPDATE_PAYMENT = "update payment set paymentStatus = ? where order_id = ?";
     public static final String COLUMN_ID_ORDER = "order_id";
-    public static final String GET_LAST = "SELECT order_id, user_id FROM payment WHERE user_id= ? ORDER BY order_id DESC LIMIT 1";
     private static final Logger LOG = Logger.getLogger(ChangeDBTableFieldsImpl.class);
 
     @Override
@@ -78,18 +76,16 @@ public class ChangeDBTableFieldsImpl implements ChangeTableInfoDAO {
     }
 
     @Override
-    public void changePaymentStatus(String status, String login) throws DAOException, ConnectionPoolException {
+    public void changePaymentStatus(String status, int orderId) throws DAOException, ConnectionPoolException {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
 
         try {
 
-            int id = Integer.parseInt(CreateTableInfoImpl.order.getId());
-
             statement = connection.prepareStatement(UPDATE_PAYMENT);
             statement.setString(1, status);
-            statement.setInt(2, id);
+            statement.setInt(2, orderId);
 
             LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();

@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceProvider;
 
@@ -41,12 +41,12 @@ public class AddToCart implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
         RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
                 || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
@@ -56,7 +56,7 @@ public class AddToCart implements Command {
             String time = request.getParameter(PARAM_TIME);
 
             session.setAttribute(PARAM_CATEGORY, request.getParameter(PARAM_CATEGORY));
-            changeOrderService.addToOrder(name, price, time);
+            manageOrderService.addToOrder(name, price, time);
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
             requestDispatcher.forward(request, response);

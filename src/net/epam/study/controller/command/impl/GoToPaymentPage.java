@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ChangeOrderService;
+import net.epam.study.service.ManageOrderService;
 import net.epam.study.service.RetrieveUserService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
@@ -21,7 +21,8 @@ public class GoToPaymentPage implements Command {
 
     public static final String ATTR_AUTH = "auth";
     public static final String ATTR_ROLE = "role";
-    public static final String ATTR_LOGIN = "login";
+    public static final String ATTR_USER_ID = "id";
+
     public static final String ATTR_TOTAL = "total";
     public static final String ATTR_LOCAL = "local";
 
@@ -34,20 +35,20 @@ public class GoToPaymentPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
         RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute(ATTR_LOGIN);
+        int userId = (int) session.getAttribute(ATTR_USER_ID);
 
-        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
                 || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
             try {
-                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
+                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
 
             } catch (ServiceException e){
 

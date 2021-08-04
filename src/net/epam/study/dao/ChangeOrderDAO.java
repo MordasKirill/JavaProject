@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public interface ChangeOrderDAO {
     void deleteOrderItem(String item, String login)throws DAOException;
     void addToOrder(MenuItem menuItem);
-    BigDecimal getTotal(String login) throws DAOException, ConnectionPoolException;
+    BigDecimal getTotal(int userId) throws DAOException, ConnectionPoolException;
+    int getDiscount(int userId) throws DAOException, ConnectionPoolException;
     StringBuilder getOrder();
 }

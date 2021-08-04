@@ -4,6 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
 import net.epam.study.service.*;
+import net.epam.study.service.impl.CreateTableInfoImpl;
 import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
@@ -27,9 +28,10 @@ public class GoToBasketPage implements Command {
     public static final String ATTR_ORDERS_AMOUNT = "ordersAmount";
     public static final String ATTR_SIZE = "size";
     public static final String ATTR_LOCAL = "local";
+    public static final String ATTR_USER_ID = "id";
 
     public static final String PARAM_PAYMENT = "payment";
-    public static final String PARAM_REJECTED = "rejected";
+
 
     public static final String PARAM_ERROR = "error";
     public static final String ERROR_MSG = "Get total fail!";
@@ -40,15 +42,18 @@ public class GoToBasketPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeOrderService changeOrderService = serviceProvider.getChangeOrderService();
+        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
         RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
         ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
         TablesListService tablesListService = serviceProvider.getTablesListService();
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute(ATTR_LOGIN);
-
-        if (!retrieveUserService.checkSession((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+        int userId = (int) session.getAttribute(ATTR_USER_ID);
+        int orderId = 0;
+        if (CreateTableInfoImpl.order != null) {
+            orderId = Integer.parseInt(CreateTableInfoImpl.order.getId());
+        }
+        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
                 || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
@@ -58,7 +63,7 @@ public class GoToBasketPage implements Command {
 
                 try {
 
-                    changeDBTableFieldsService.changePaymentStatus(Status.REJECTED.toString().toLowerCase(), login);
+                    changeDBTableFieldsService.changePaymentStatus(Status.REJECTED.toString().toLowerCase(), orderId);
 
                 } catch (ServiceException e){
 
@@ -71,17 +76,10 @@ public class GoToBasketPage implements Command {
             request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
 
             try {
-                request.setAttribute(ATTR_TOTAL, changeOrderService.getTotal(login));
-                session.setAttribute(ATTR_ORDERS_AMOUNT, tablesListService.getDonePayments(login));
+                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
+                session.setAttribute(ATTR_ORDERS_AMOUNT, tablesListService.getDonePayments(userId));
 
-                if (tablesListService.getDonePayments(login) >= 3){
-                    session.setAttribute(ATTR_DISCOUNT, 3);
-                }  else{
-                    session.setAttribute(ATTR_DISCOUNT, 0);
-                }
-                if (tablesListService.getDonePayments(login) >= 10){
-                    session.setAttribute(ATTR_DISCOUNT, 10);
-                }
+                session.setAttribute(ATTR_DISCOUNT, manageOrderService.getDiscount(userId));
 
 
             } catch (ServiceException e){
