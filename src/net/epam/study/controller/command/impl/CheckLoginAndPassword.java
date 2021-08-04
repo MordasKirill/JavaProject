@@ -55,7 +55,7 @@ public class CheckLoginAndPassword implements Command {
             userId = createTableInfo.getUserId(login);
             role = checkUserService.getUserRole(userId);
 
-            if(checkUserService.isUserExists(userId, password)) {
+            if(checkUserService.isUserDataCorrect(userId, password)) {
 
                 if (validationService.isAdmin(role)) {
                     session.setAttribute(ATTR_AUTH, true);

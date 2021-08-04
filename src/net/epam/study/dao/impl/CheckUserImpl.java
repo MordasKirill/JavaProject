@@ -20,11 +20,11 @@ public class CheckUserImpl implements CheckUserDAO {
     public static final String COLUMN_LOGIN = "login";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_ROLE = "role";
-    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
+    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select id from users where id =?";
     public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
     private static final Logger LOG = Logger.getLogger(CheckUserImpl.class);
 
-    public boolean isUserExists(int userId, String password) throws DAOException, ConnectionPoolException {
+    public boolean isUserDataCorrect(int userId, String password) throws DAOException, ConnectionPoolException {
 
         boolean result = false;
 
@@ -93,7 +93,7 @@ public class CheckUserImpl implements CheckUserDAO {
     }
 
 
-    public boolean isUserNew (String login, String hashPassword, String role) throws DAOException, ConnectionPoolException {
+    public boolean isUserUniq(int userId, String login, String hashPassword, String role) throws DAOException, ConnectionPoolException {
 
         boolean result = true;
         Connection connection = ConnectionPool.connectionPool.retrieve();
@@ -103,12 +103,11 @@ public class CheckUserImpl implements CheckUserDAO {
             LOG.info("SUCCESS DB: Connected.");
 
             statement = connection.prepareStatement(SELECT_LOGIN_FROM_USERS_WHERE_LOGIN);
-            statement.setString(1, login);
+            statement.setInt(1, userId);
 
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()
-                    &&resultSet.getString(COLUMN_LOGIN).equals(login)) {
+            if (resultSet.next()) {
                 LOG.info("FAIL DB: User already exist.");
                 result = false;
 

@@ -1,6 +1,7 @@
 package net.epam.study.dao.impl;
 
 import net.epam.study.bean.Order;
+import net.epam.study.controller.command.Status;
 import net.epam.study.dao.CreateTableInfoDAO;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.connection.ConnectionPool;
@@ -14,8 +15,9 @@ import java.sql.*;
 public class CreateTableInfoImpl implements CreateTableInfoDAO {
     public static final String COLUMN_ID_ORDER = "order_id";
     public static final String COLUMN_ID_USER = "id";
+    public static final String COLUMN_USER_LOGIN = "login";
     public static final String INSERT_INTO_ORDERS = "INSERT INTO orders (fullName,address,email,phone,details,status) VALUES (?,?,?,?,?,?)";
-    public static final String GET_USER_ID = "SELECT id FROM users WHERE login= ?";
+    public static final String GET_USER_ID = "SELECT id, login FROM users WHERE login= ?";
     public static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES (?,?,?,?)";
     public static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES (?,?,?,?)";
 
@@ -25,7 +27,7 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
 
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
-        String status = "processing";
+        String status = Status.PROCESSING.toString().toLowerCase();
 
         try {
             statement = connection.prepareStatement(INSERT_INTO_ORDERS, Statement.RETURN_GENERATED_KEYS);
@@ -135,8 +137,10 @@ public class CreateTableInfoImpl implements CreateTableInfoDAO {
             LOG.info("SUCCESS DB: Connected.");
             resultSet = statement.executeQuery();
             LOG.info("SUCCESS DB: User id success.");
-            if (resultSet.next()){
-                userId = Integer.parseInt(resultSet.getString(COLUMN_ID_USER));
+            while (resultSet.next()){
+                if (login.equals(resultSet.getString(COLUMN_USER_LOGIN))){
+                    userId = Integer.parseInt(resultSet.getString(COLUMN_ID_USER));
+                }
             }
 
         } catch (SQLException exc) {

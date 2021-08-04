@@ -3,10 +3,7 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
-import net.epam.study.service.CheckUserService;
-import net.epam.study.service.HashPasswordService;
-import net.epam.study.service.ServiceException;
-import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.*;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -38,15 +35,18 @@ public class SaveNewUser implements Command {
         String login = request.getParameter(ATTR_LOGIN).trim();
         String password = request.getParameter(ATTR_PASSWORD);
         String role = String.valueOf(Role.USER);
+        int userId;
 
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
         CheckUserService checkUserService = serviceProvider.getCheckUserService();
+        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
 
         try {
+            userId = createTableInfoService.getUserId(login);
 
-            if(checkUserService.isUserNew(login, hashPasswordService.hashPassword(password), role)) {
+            if(checkUserService.isUserUniq(userId, login, hashPasswordService.hashPassword(password), role)) {
                 session.setAttribute(ATTR_AUTH, true);
                 session.setAttribute(ATTR_ROLE, role);
                 session.setAttribute(ATTR_LOGIN, login);
