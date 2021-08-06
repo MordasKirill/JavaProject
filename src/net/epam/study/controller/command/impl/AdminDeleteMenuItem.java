@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.DeleteTableInfoService;
+import net.epam.study.service.MenuService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
@@ -33,21 +33,21 @@ public class AdminDeleteMenuItem implements Command {
     public static final String SUCCESS_MSG = "local.error.sucess";
 
     private static final Logger LOG = Logger.getLogger(AdminDeleteMenuItem.class);
+
     /**
-     *
-     * @param request stores information about the request
+     * @param request  stores information about the request
      * @param response manages the response to the request
      * @throws ServletException servlet exceptions
-     * @throws IOException exceptions produced by failed or
-     * interrupted I/O operations.
-     *
-     * In case incorrect role user will be redirected to loginPage
-     * to prevent security breach.
+     * @throws IOException      exceptions produced by failed or
+     *                          interrupted I/O operations.
+     *                          <p>
+     *                          In case incorrect role user will be redirected to loginPage
+     *                          to prevent security breach.
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        DeleteTableInfoService deleteTableInfoService = serviceProvider.getDeleteTableInfoService();
+        MenuService menuService = serviceProvider.getMenuService();
 
         String itemName = request.getParameter(PARAM_NAME);
         String category = request.getParameter(PARAM_CATEGORY);
@@ -57,9 +57,9 @@ public class AdminDeleteMenuItem implements Command {
 
         try {
 
-            if (deleteTableInfoService.isMenuItemExists(itemName, category)){
+            if (menuService.isMenuItemExists(itemName, category)) {
 
-                deleteTableInfoService.deleteMenuItem(itemName, category);
+                menuService.deleteMenuItem(itemName, category);
 
                 session.setAttribute(SUCCESS_ATR, SUCCESS_MSG);
 
@@ -68,7 +68,7 @@ public class AdminDeleteMenuItem implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
 
-            }else {
+            } else {
                 session.removeAttribute(SUCCESS_ATR);
 
                 session.setAttribute(NOTFOUND_ATTR, NOTFOUND_MSG);
@@ -77,9 +77,9 @@ public class AdminDeleteMenuItem implements Command {
                 requestDispatcher.forward(request, response);
 
             }
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
 
-            LOG.log(Level.ERROR,"AdminDeleteMenuItem error.", e);
+            LOG.log(Level.ERROR, "AdminDeleteMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

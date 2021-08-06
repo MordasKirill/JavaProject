@@ -1,12 +1,13 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
+import net.epam.study.bean.Order;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ManageOrderService;
-import net.epam.study.service.CreateTableInfoService;
+import net.epam.study.service.OrderService;
+import net.epam.study.service.PaymentService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.impl.ManageOrderImpl;
 import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -28,6 +29,7 @@ public class SaveNewOrder implements Command {
     public static final String ATTR_METHOD = "method";
     public static final String ATTR_METHOD_ONLINE = "online";
     public static final String ATTR_USER_ID = "id";
+    public static final String ATTR_ORDER_ID = "orderID";
 
     public static final String ATTR_EMAIL_SESSION = "emailSession";
     public static final String ATTR_FULL_NAME_SESSION = "fullNameSession";
@@ -57,8 +59,8 @@ public class SaveNewOrder implements Command {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
-        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
-        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
+        OrderService orderService = serviceProvider.getOrderService();
+        PaymentService paymentService = serviceProvider.getPaymentService();
 
         String email = request.getParameter(ATTR_EMAIL).trim();
         String fullName = request.getParameter(ATTR_FULL_NAME).trim();
@@ -69,44 +71,45 @@ public class SaveNewOrder implements Command {
 
         HttpSession session = request.getSession(true);
         int userId = (int) session.getAttribute(ATTR_USER_ID);
-
+        int orderId = 0;
 
         try {
 
-            if (validationService.emailErrorMsg(email)==null
-                    && validationService.fullNameErrorMsg(fullName)==null
-                    && validationService.phoneErrorMsg(phone)==null
-                    && validationService.cityErrorMsg(city)==null){
+            if (validationService.emailErrorMsg(email) == null
+                    && validationService.fullNameErrorMsg(fullName) == null
+                    && validationService.phoneErrorMsg(phone) == null
+                    && validationService.cityErrorMsg(city) == null) {
 
-                if (ManageOrderImpl.ORDER.size() == 0) {
+                if (Constants.ORDER.size() == 0) {
 
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
-                    request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
-                    request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
-                    request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
+                    request.setAttribute(ATTR_ORDER, Constants.ORDER);
+                    request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
+                    request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
 
                 } else {
 
-                    createTableInfoService.create(fullName, address, email, phone, manageOrderService.getOrder());
 
+                    orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.getOrder().toString()));
+                    session.setAttribute(ATTR_ORDER_ID, orderId);
 
-                    if (paymentMethod.equals(ATTR_METHOD_ONLINE)){
-                        createTableInfoService.doPayment(userId, manageOrderService.getTotal(userId), STATUS_PROCESSING);
+                    if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {
+                        paymentService.doPayment(userId, orderId, orderService.getTotal(userId), STATUS_PROCESSING);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
-                    }else {
-                        createTableInfoService.doPayment(userId, manageOrderService.getTotal(userId), STATUS_UPON_RECEIPT);
+                    } else {
+                        paymentService.doPayment(userId, orderId, orderService.getTotal(userId), STATUS_UPON_RECEIPT);
 
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
                     }
                 }
 
-            } else{
+            } else {
 
                 session.setAttribute(ATTR_EMAIL_SESSION, email);
                 session.setAttribute(ATTR_FULL_NAME_SESSION, fullName);
@@ -118,18 +121,18 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
-                request.setAttribute(ATTR_ORDER, ManageOrderImpl.ORDER);
-                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
-                request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
+                request.setAttribute(ATTR_ORDER, Constants.ORDER);
+                request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
+                request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
 
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                 requestDispatcher.forward(request, response);
             }
 
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
 
-            log.log(Level.ERROR,"SaveNewOrder error.", e);
+            log.log(Level.ERROR, "SaveNewOrder error.", e);
             session.setAttribute(ATTR_ERROR, ATTR_ERROR_ORDER_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

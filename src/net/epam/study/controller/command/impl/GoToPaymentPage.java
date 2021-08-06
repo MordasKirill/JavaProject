@@ -2,10 +2,10 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ManageOrderService;
-import net.epam.study.service.RetrieveUserService;
+import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -35,24 +35,24 @@ public class GoToPaymentPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
-        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
+        OrderService orderService = serviceProvider.getOrderService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
         int userId = (int) session.getAttribute(ATTR_USER_ID);
 
-        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
             try {
-                request.setAttribute(ATTR_TOTAL, manageOrderService.getTotal(userId));
+                request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
 
-            } catch (ServiceException e){
+            } catch (ServiceException e) {
 
-                log.log(Level.ERROR,"GoToPaymentPage error.", e);
+                log.log(Level.ERROR, "GoToPaymentPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

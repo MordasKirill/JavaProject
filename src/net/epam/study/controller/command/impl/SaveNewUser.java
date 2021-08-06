@@ -3,8 +3,11 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
-import net.epam.study.service.*;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.UserService;
 import net.epam.study.service.validation.impl.ValidationImpl;
+import net.epam.study.utils.PasswordUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -19,10 +22,10 @@ public class SaveNewUser implements Command {
 
     public static final String ATTR_PASSWORD = "password";
     public static final String ATTR_LOGIN = "login";
-
     public static final String ATTR_AUTH = "auth";
     public static final String ATTR_ROLE = "role";
     public static final String ATTR_LOCALE = "locale";
+    public static final String ATTR_USER_ID = "id";
 
     public static final String ERR_MSG = "errMsg";
     public static final String ATTR_ERR_REG = "local.error.regerr";
@@ -39,34 +42,30 @@ public class SaveNewUser implements Command {
 
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        HashPasswordService hashPasswordService = serviceProvider.getHashPasswordService();
-        CheckUserService checkUserService = serviceProvider.getCheckUserService();
-        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
+        UserService userService = serviceProvider.getUserService();
 
         try {
-            userId = createTableInfoService.getUserId(login);
 
-            if(checkUserService.isUserUniq(userId, login, hashPasswordService.hashPassword(password), role)) {
+            if (userService.isUserUnique(login)) {
+                userId = userService.createNewUser(login, PasswordUtils.hashPassword(password), role);
                 session.setAttribute(ATTR_AUTH, true);
                 session.setAttribute(ATTR_ROLE, role);
                 session.setAttribute(ATTR_LOGIN, login);
+                session.setAttribute(ATTR_USER_ID, userId);
                 request.setAttribute(ERR_MSG, "");
-
                 ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                 requestDispatcher.forward(request, response);
 
-            }else{
-
+            } else {
                 request.setAttribute(ERR_MSG, ATTR_ERR_REG);
                 ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_REGISTRATION);
                 requestDispatcher.forward(request, response);
             }
 
-        } catch (ServiceException e){
-
-            log.log(Level.ERROR,"SaveNewUser error.", e);
+        } catch (ServiceException e) {
+            log.log(Level.ERROR, "SaveNewUser error.", e);
             session.setAttribute(ERR_MSG, ATTR_ERR_USER);
             session.setAttribute(ATTR_LOGIN, login);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);

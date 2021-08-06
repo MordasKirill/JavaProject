@@ -10,45 +10,48 @@ public class MenuItem implements Serializable {
     private String category;
 
 
-    public MenuItem(){
+    public MenuItem() {
     }
-    public MenuItem(String name, String price, String filingTime){
+
+    public MenuItem(String name, String price, String filingTime) {
         this.name = name;
         this.price = price;
         this.filingTime = filingTime;
     }
-    public MenuItem(String name, String price, String filingTime, String category){
+
+    public MenuItem(String name, String price, String filingTime, String category) {
         this.name = name;
         this.price = price;
         this.filingTime = filingTime;
         this.category = category;
     }
+
     public String getCategory() {
         return category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public String getFilingTime() {
-        return filingTime;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getFilingTime() {
+        return filingTime;
     }
 
     public void setFilingTime(String filingTime) {
@@ -57,8 +60,8 @@ public class MenuItem implements Serializable {
 
     @Override
     public String toString() {
-        return  name +
-                ", price: $" + price +".";
+        return name +
+                ", price: $" + price + ".";
     }
 
     @Override

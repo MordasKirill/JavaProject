@@ -27,12 +27,12 @@ public class Controller extends HttpServlet {
         process(response, request);
     }
 
-    private void process(HttpServletResponse response, HttpServletRequest request) throws  IOException, ServletException{
+    private void process(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletException {
         String name;
         Command command;
         name = request.getParameter("command");
 
-        if (provider.isContains(name)){
+        if (provider.isContains(name)) {
             command = provider.takeCommand(name);
             command.execute(request, response);
         } else {

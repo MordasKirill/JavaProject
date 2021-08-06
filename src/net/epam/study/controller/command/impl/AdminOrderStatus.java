@@ -4,8 +4,7 @@ import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.dao.email.EmailException;
 import net.epam.study.dao.email.SendEmail;
-import net.epam.study.service.ChangeDBTableFieldsService;
-import net.epam.study.service.RetrieveUserService;
+import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
@@ -36,36 +35,35 @@ public class AdminOrderStatus implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ChangeDBTableFieldsService changeDBTableFieldsService = serviceProvider.getChangeDBTableFieldsService();
-        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
+        OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
-                || !retrieveUserService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
+                || !validationService.isUser((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            String id = request.getParameter(PARAM_ID);
+            int id = Integer.parseInt(request.getParameter(PARAM_ID));
             String status = request.getParameter(PARAM_STATUS);
             String email = request.getParameter(PARAM_EMAIL);
 
             if (validationService.isParamNotNull(id)) {
 
                 try {
-                    changeDBTableFieldsService.changeOrderStatus(id, status);
+                    orderService.changeOrderStatus(status, id);
                     SendEmail.sendEmail.send(status, email);
 
-                } catch (ServiceException e){
+                } catch (ServiceException e) {
 
-                    LOG.log(Level.ERROR,"AdminOrderStatus error.", e);
+                    LOG.log(Level.ERROR, "AdminOrderStatus error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_ERROR);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);
                 } catch (EmailException e) {
 
-                    LOG.log(Level.ERROR,"SendEmail error.", e);
+                    LOG.log(Level.ERROR, "SendEmail error.", e);
                     session.setAttribute(ATTR_ERROR, MSG_EMAIL);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                     requestDispatcher.forward(request, response);

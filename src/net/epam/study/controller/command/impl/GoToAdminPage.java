@@ -1,12 +1,9 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.RetrieveUserService;
-import net.epam.study.service.ServiceException;
-import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.TablesListService;
-import net.epam.study.service.impl.TablesListImpl;
+import net.epam.study.service.*;
 import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
@@ -53,22 +50,23 @@ public class GoToAdminPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
-        TablesListService tablesListService = serviceProvider.getTablesListService();
+        OrderService orderService = serviceProvider.getOrderService();
+        PaginationService paginationService = serviceProvider.getPaginationService();
+        UserService userService = serviceProvider.getUserService();
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-        || !retrieveUserService.checkUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !validationService.isUser((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-            
+
             try {
 
                 if (session.getAttribute(LIMIT_ORDERS) == null &&
-                        session.getAttribute(LIMIT_USERS) == null){
+                        session.getAttribute(LIMIT_USERS) == null) {
 
                     session.setAttribute(LIMIT_ORDERS, 0);
                     session.setAttribute(LIMIT_USERS, 0);
@@ -79,35 +77,35 @@ public class GoToAdminPage implements Command {
                 int limitUsers = (int) session.getAttribute(LIMIT_USERS);
 
                 if (validationService.isParamNotNull(request.getParameter(LOAD_ORDERS))) {
-                    session.setAttribute(LIMIT_ORDERS, tablesListService.getActualLimit(limitOrders));
+                    session.setAttribute(LIMIT_ORDERS, paginationService.getActualLimit(limitOrders));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
                 if (validationService.isParamNotNull(request.getParameter(BACK_ORDERS))) {
-                    session.setAttribute(LIMIT_ORDERS, tablesListService.getPreviousLimit(limitOrders));
+                    session.setAttribute(LIMIT_ORDERS, paginationService.getPreviousLimit(limitOrders));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
                 if (validationService.isParamNotNull(request.getParameter(LOAD_USERS))) {
-                    session.setAttribute(LIMIT_USERS, tablesListService.getActualLimit(limitUsers));
+                    session.setAttribute(LIMIT_USERS, paginationService.getActualLimit(limitUsers));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
                 if (validationService.isParamNotNull(request.getParameter(BACK_USERS))) {
-                    session.setAttribute(LIMIT_USERS, tablesListService.getPreviousLimit(limitUsers));
+                    session.setAttribute(LIMIT_USERS, paginationService.getPreviousLimit(limitUsers));
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
 
-                int ordersSize = tablesListService.getAllOrders().size();
-                int usersSize = tablesListService.getAllUsers().size();
+                int ordersSize = orderService.getAllOrders().size();
+                int usersSize = userService.getAllUsers().size();
 
-                boolean resultOrdersNext =  ordersSize > limitOrders + TablesListImpl.DEFAULT_LIMIT;
+                boolean resultOrdersNext = ordersSize > limitOrders + Constants.DEFAULT_LIMIT;
                 boolean resultOrdersBack = limitOrders != 0;
-                boolean resultUsersNext = usersSize > limitUsers + TablesListImpl.DEFAULT_LIMIT;
+                boolean resultUsersNext = usersSize > limitUsers + Constants.DEFAULT_LIMIT;
                 boolean resultUsersBack = limitUsers != 0;
 
                 request.setAttribute(PARAM_NEXT_ORDERS, resultOrdersNext);
@@ -115,8 +113,8 @@ public class GoToAdminPage implements Command {
                 request.setAttribute(PARAM_NEXT_USERS, resultUsersNext);
                 request.setAttribute(PARAM_BACK_USERS, resultUsersBack);
 
-                request.setAttribute(PARAM_ORDERS, tablesListService.getOrders(limitOrders));
-                request.setAttribute(PARAM_USERS, tablesListService.getUsers(limitUsers));
+                request.setAttribute(PARAM_ORDERS, orderService.getOrders(limitOrders));
+                request.setAttribute(PARAM_USERS, userService.getUsers(limitUsers));
 
                 if (request.getParameter(PARAM_LOCALE) != null) {
                     ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
@@ -126,9 +124,9 @@ public class GoToAdminPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN);
                 requestDispatcher.forward(request, response);
 
-            } catch (ServiceException e){
+            } catch (ServiceException e) {
 
-                log.log(Level.ERROR,"GoToAdminPage error.", e);
+                log.log(Level.ERROR, "GoToAdminPage error.", e);
                 session.setAttribute(PARAM_ERROR, ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

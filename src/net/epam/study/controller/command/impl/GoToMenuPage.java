@@ -1,12 +1,12 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.RetrieveUserService;
+import net.epam.study.service.MenuService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.TablesListService;
-import net.epam.study.service.impl.ManageOrderImpl;
+import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -36,24 +36,24 @@ public class GoToMenuPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        TablesListService tablesListService = serviceProvider.getTablesListService();
-        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
+        MenuService menuService = serviceProvider.getMenuService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
 
-                if (request.getParameter(ATTR_CATEGORY)!=null
-                        &&request.getParameter(ATTR_CATEGORY)!=session.getAttribute(ATTR_CATEGORY)){
+                if (request.getParameter(ATTR_CATEGORY) != null
+                        && request.getParameter(ATTR_CATEGORY) != session.getAttribute(ATTR_CATEGORY)) {
                     session.setAttribute(ATTR_CATEGORY, request.getParameter(ATTR_CATEGORY));
                 }
-                request.setAttribute(ATTR_SIZE, ManageOrderImpl.ORDER.size());
-                request.setAttribute(ATTR_MENU_ITEMS, tablesListService.getMenu());
+                request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
+                request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
 
                 if (request.getParameter(ATTR_LOCALE) != null) {
                     ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
@@ -63,9 +63,9 @@ public class GoToMenuPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU);
                 requestDispatcher.forward(request, response);
 
-            } catch (ServiceException e){
+            } catch (ServiceException e) {
 
-                log.log(Level.ERROR,"GoToMenuPage error.", e);
+                log.log(Level.ERROR, "GoToMenuPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);

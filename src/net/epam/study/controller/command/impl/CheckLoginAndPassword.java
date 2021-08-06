@@ -2,10 +2,9 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.CheckUserService;
-import net.epam.study.service.CreateTableInfoService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.UserService;
 import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
@@ -39,9 +38,8 @@ public class CheckLoginAndPassword implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider provider = ServiceProvider.getInstance();
-        CheckUserService checkUserService = provider.getCheckUserService();
+        UserService userService = provider.getUserService();
         ValidationService validationService = provider.getValidationService();
-        CreateTableInfoService createTableInfo = provider.getCreateTableInfoService();
 
         String login = request.getParameter(PARAM_LOGIN).trim();
         String password = request.getParameter(PARAM_PASSWORD);
@@ -52,10 +50,10 @@ public class CheckLoginAndPassword implements Command {
 
 
         try {
-            userId = createTableInfo.getUserId(login);
-            role = checkUserService.getUserRole(userId);
+            userId = userService.getUserId(login);
+            role = userService.getUserRole(userId);
 
-            if(checkUserService.isUserDataCorrect(userId, password)) {
+            if (userService.isUserDataCorrect(userId, password)) {
 
                 if (validationService.isAdmin(role)) {
                     session.setAttribute(ATTR_AUTH, true);
@@ -77,7 +75,7 @@ public class CheckLoginAndPassword implements Command {
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                     requestDispatcher.forward(request, response);
                 }
-            }else{
+            } else {
 
                 request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 session.setAttribute(PARAM_LOGIN, login);
@@ -87,9 +85,9 @@ public class CheckLoginAndPassword implements Command {
                 requestDispatcher.forward(request, response);
             }
 
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
 
-            log.log(Level.ERROR,"CheckLoginAndPassword error.", e);
+            log.log(Level.ERROR, "CheckLoginAndPassword error.", e);
             session.setAttribute(PARAM_ERROR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

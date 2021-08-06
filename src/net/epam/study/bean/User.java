@@ -10,14 +10,15 @@ public class User implements Serializable {
     private String role;
     private String id;
 
-    public User(){
+    public User() {
     }
 
-    public User (String login, String password, String role){
+    public User(String login, String password, String role) {
         this.login = login;
         this.password = password;
         this.role = role;
     }
+
     public String getLogin() {
         return login;
     }
@@ -57,7 +58,7 @@ public class User implements Serializable {
         User user = (User) o;
         return getLogin().equals(user.getLogin()) &&
                 getPassword().equals(user.getPassword()) &&
-                getRole().equals(user.getRole())&&
+                getRole().equals(user.getRole()) &&
                 getId().equals(user.getId());
     }
 
@@ -72,7 +73,7 @@ public class User implements Serializable {
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
-                ", id='" + id + '\''+
+                ", id='" + id + '\'' +
                 ']';
     }
 }

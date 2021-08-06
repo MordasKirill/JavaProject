@@ -1,8 +1,8 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.impl.ManageOrderImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,11 +17,13 @@ public class Logout implements Command {
 
         HttpSession session = request.getSession();
 
-        if (session != null){
+        if (session != null) {
 
             session.removeAttribute("auth");
             session.removeAttribute("role");
             session.removeAttribute("login");
+            session.removeAttribute("id");
+            session.removeAttribute("orderID");
 
             session.removeAttribute("limit_orders");
             session.removeAttribute("limit_users");
@@ -47,8 +49,8 @@ public class Logout implements Command {
             session.removeAttribute("errMsgPrice");
             session.removeAttribute("errMsgWaitTime");
 
-            ManageOrderImpl.ORDER.clear();
-            ManageOrderImpl.TOTAL.clear();
+            Constants.ORDER.clear();
+            Constants.TOTAL.clear();
 
         }
 

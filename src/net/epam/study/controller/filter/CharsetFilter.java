@@ -6,6 +6,7 @@ import java.io.IOException;
 public class CharsetFilter implements Filter {
     private String encoding;
     private ServletContext context;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         encoding = filterConfig.getInitParameter("characterEncoding");

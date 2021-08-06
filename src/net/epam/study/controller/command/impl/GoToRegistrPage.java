@@ -19,7 +19,7 @@ public class GoToRegistrPage implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getParameter(ATTR_LOCALE)!=null) {
+        if (request.getParameter(ATTR_LOCALE) != null) {
             ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
         }
         request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);

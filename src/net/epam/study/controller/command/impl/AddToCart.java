@@ -1,10 +1,11 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ManageOrderService;
-import net.epam.study.service.RetrieveUserService;
+import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.validation.ValidationService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,26 +29,27 @@ public class AddToCart implements Command {
     /**
      * execute method produces all necessary actions to
      * add item to cart
-     * @param request stores information about the request
+     *
+     * @param request  stores information about the request
      * @param response manages the response to the request
      * @throws ServletException servlet exceptions
-     * @throws IOException exceptions produced by failed or
-     * interrupted I/O operations.
-     *
-     * In case incorrect role user will be redirected to loginPage
-     * to prevent security breach.
+     * @throws IOException      exceptions produced by failed or
+     *                          interrupted I/O operations.
+     *                          <p>
+     *                          In case incorrect role user will be redirected to loginPage
+     *                          to prevent security breach.
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
-        RetrieveUserService retrieveUserService = serviceProvider.getRetrieveUserService();
+        OrderService orderService = serviceProvider.getOrderService();
+        ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
 
-        if (!retrieveUserService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !retrieveUserService.checkAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
@@ -56,7 +58,7 @@ public class AddToCart implements Command {
             String time = request.getParameter(PARAM_TIME);
 
             session.setAttribute(PARAM_CATEGORY, request.getParameter(PARAM_CATEGORY));
-            manageOrderService.addToOrder(name, price, time);
+            orderService.addToOrder(new MenuItem(name, price, time));
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
             requestDispatcher.forward(request, response);

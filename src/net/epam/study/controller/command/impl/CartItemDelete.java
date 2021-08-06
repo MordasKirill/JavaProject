@@ -2,7 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.ManageOrderService;
+import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import org.apache.log4j.Level;
@@ -17,7 +17,6 @@ import java.io.IOException;
 
 public class CartItemDelete implements Command {
 
-    public static final String PARAM_LOGIN = "login";
     public static final String PARAM_ITEM = "item";
 
     public static final String PARAM_ERROR = "error";
@@ -28,19 +27,18 @@ public class CartItemDelete implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ManageOrderService manageOrderService = serviceProvider.getManageOrderService();
+        OrderService orderService = serviceProvider.getOrderService();
 
         HttpSession session = request.getSession(true);
-        String login = (String) session.getAttribute(PARAM_LOGIN);
 
         String deleteValue = request.getParameter(PARAM_ITEM);
 
         try {
-            manageOrderService.deleteOrderItem(deleteValue, login);
+            orderService.deleteOrderItem(deleteValue);
 
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
 
-            log.log(Level.ERROR,"CartItemDelete error.", e);
+            log.log(Level.ERROR, "CartItemDelete error.", e);
             session.setAttribute(PARAM_ERROR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

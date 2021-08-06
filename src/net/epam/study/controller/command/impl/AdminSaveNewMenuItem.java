@@ -2,8 +2,7 @@ package net.epam.study.controller.command.impl;
 
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.CreateTableInfoService;
-import net.epam.study.service.DeleteTableInfoService;
+import net.epam.study.service.MenuService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
@@ -39,8 +38,8 @@ public class AdminSaveNewMenuItem implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
-        CreateTableInfoService createTableInfoService = serviceProvider.getCreateTableInfoService();
-        DeleteTableInfoService deleteTableInfoService = serviceProvider.getDeleteTableInfoService();
+        MenuService menuService = serviceProvider.getMenuService();
+
 
         String itemName = request.getParameter(PARAM_ITEM_NAME);
         String price = request.getParameter(PARAM_PRICE);
@@ -53,11 +52,10 @@ public class AdminSaveNewMenuItem implements Command {
 
             if (validationService.priceErrorMsg(price) == null
                     && validationService.timeErrorMsg(waitTime) == null
-                    && !deleteTableInfoService.isMenuItemExists(itemName, category)){
+                    && !menuService.isMenuItemExists(itemName, category)) {
 
 
-
-                createTableInfoService.createMenuItem(itemName, price, waitTime, category);
+                menuService.createMenuItem(itemName, price, waitTime, category);
 
 
                 session.setAttribute(SUCCESS_ATTR, SUCCESS_MSG);
@@ -69,9 +67,9 @@ public class AdminSaveNewMenuItem implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
 
-            }else {
+            } else {
 
-                if(deleteTableInfoService.isMenuItemExists(itemName, category)){
+                if (menuService.isMenuItemExists(itemName, category)) {
 
                     session.setAttribute(ITEM_ERROR_ERR_MSG_ITEM_EXIST, ITEM_ERROR);
                 }
@@ -85,9 +83,9 @@ public class AdminSaveNewMenuItem implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
             }
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
 
-            log.log(Level.ERROR,"AdminSaveNewMenuItem error.", e);
+            log.log(Level.ERROR, "AdminSaveNewMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);

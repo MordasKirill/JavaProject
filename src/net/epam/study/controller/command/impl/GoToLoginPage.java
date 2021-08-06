@@ -18,7 +18,7 @@ public class GoToLoginPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getParameter(PARAM_LOCALE)!=null) {
+        if (request.getParameter(PARAM_LOCALE) != null) {
             ValidationImpl.userLocale = request.getParameter(PARAM_LOCALE);
         }
         request.getSession(true).setAttribute(LOCAL_ATTR, ValidationImpl.userLocale);
