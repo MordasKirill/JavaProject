@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
@@ -19,12 +20,7 @@ import java.io.IOException;
 
 public class GoToPaymentPage implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_USER_ID = "id";
-
     public static final String ATTR_TOTAL = "total";
-    public static final String ATTR_LOCAL = "local";
 
     public static final String ATTR_ERROR = "error";
     public static final String ATTR_ERROR_MSG = "Get total fail!";
@@ -39,10 +35,10 @@ public class GoToPaymentPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
-        int userId = (int) session.getAttribute(ATTR_USER_ID);
+        int userId = (int) session.getAttribute(Constants.PARAM_ID);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
@@ -59,7 +55,7 @@ public class GoToPaymentPage implements Command {
             }
 
 
-            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+            request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);
             requestDispatcher.forward(request, response);
         }

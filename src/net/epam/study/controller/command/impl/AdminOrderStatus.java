@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.dao.email.EmailException;
@@ -19,16 +20,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AdminOrderStatus implements Command {
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-
-    public static final String PARAM_ID = "id";
-    public static final String PARAM_STATUS = "status";
-    public static final String PARAM_EMAIL = "email";
-
-    public static final String ATTR_ERROR = "error";
-    public static final String MSG_ERROR = "Change status error!";
-    public static final String MSG_EMAIL = "Send email error!";
+    private static final String ATTR_ERROR = "error";
+    private static final String MSG_ERROR = "Change status error!";
+    private static final String MSG_EMAIL = "Send email error!";
 
     private static final Logger LOG = Logger.getLogger(AdminOrderStatus.class);
 
@@ -40,14 +34,14 @@ public class AdminOrderStatus implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
-                || !validationService.isUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute("role"))
+                || !validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            int id = Integer.parseInt(request.getParameter(PARAM_ID));
-            String status = request.getParameter(PARAM_STATUS);
-            String email = request.getParameter(PARAM_EMAIL);
+            int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
+            String status = request.getParameter(Constants.PARAM_STATUS);
+            String email = request.getParameter(Constants.PARAM_EMAIL);
 
             if (validationService.isParamNotNull(id)) {
 

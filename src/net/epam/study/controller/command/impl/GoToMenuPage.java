@@ -20,16 +20,11 @@ import java.io.IOException;
 
 public class GoToMenuPage implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_CATEGORY = "category";
-    public static final String ATTR_SIZE = "size";
-    public static final String ATTR_MENU_ITEMS = "menuItems";
-    public static final String ATTR_LOCAL = "local";
-    public static final String ATTR_LOCALE = "locale";
+    private static final String ATTR_SIZE = "size";
+    private static final String ATTR_MENU_ITEMS = "menuItems";
 
-    public static final String ATTR_ERROR = "error";
-    public static final String ATTR_ERROR_MSG = "Show menu fail!";
+    private static final String ATTR_ERROR = "error";
+    private static final String ATTR_ERROR_MSG = "Show menu fail!";
 
     private static final Logger log = Logger.getLogger(GoToMenuPage.class);
 
@@ -41,25 +36,25 @@ public class GoToMenuPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
 
-                if (request.getParameter(ATTR_CATEGORY) != null
-                        && request.getParameter(ATTR_CATEGORY) != session.getAttribute(ATTR_CATEGORY)) {
-                    session.setAttribute(ATTR_CATEGORY, request.getParameter(ATTR_CATEGORY));
+                if (request.getParameter(Constants.PARAM_CATEGORY) != null
+                        && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {
+                    session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
                 }
                 request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
                 request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
 
-                if (request.getParameter(ATTR_LOCALE) != null) {
-                    ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
+                if (request.getParameter(Constants.PARAM_LOCALE) != null) {
+                    ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                 }
 
-                request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+                request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU);
                 requestDispatcher.forward(request, response);
 

@@ -17,15 +17,15 @@ import java.util.List;
 
 public class MenuDAOImpl implements MenuDAO {
 
-    public static final String COLUMN_NAME = "itemName";
-    public static final String COLUMN_ITEM_NAME = "itemName";
-    public static final String COLUMN_PRICE = "price";
-    public static final String COLUMN_WAIT_TIME = "waitTime";
-    public static final String COLUMN_CATEGORY = "category";
-    public static final String SELECT_ALL_FROM_MENU = "select * from menu where itemName= ? and category= ?";
-    public static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
-    public static final String DELETE_FROM_MENU = "delete from menu where itemName= ? and category= ?";
-    public static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES (?,?,?,?)";
+    private static final String COLUMN_NAME = "itemName";
+    private static final String COLUMN_ITEM_NAME = "itemName";
+    private static final String COLUMN_PRICE = "price";
+    private static final String COLUMN_WAIT_TIME = "waitTime";
+    private static final String COLUMN_CATEGORY = "category";
+    private static final String SELECT_ALL_FROM_MENU = "select * from menu where itemName= ? and category= ?";
+    private static final String SELECT_FROM_MENU = "select itemName, price, waitTime, category from menu";
+    private static final String DELETE_FROM_MENU = "delete from menu where itemName= ? and category= ?";
+    private static final String INSERT_INTO_MENU = "INSERT INTO menu (itemName,price,waitTime,category) VALUES (?,?,?,?)";
 
     private static final Logger LOG = Logger.getLogger(MenuDAOImpl.class);
 

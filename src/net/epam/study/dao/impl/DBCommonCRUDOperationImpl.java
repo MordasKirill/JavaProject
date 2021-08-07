@@ -15,7 +15,6 @@ public class DBCommonCRUDOperationImpl implements DBCommonCRUDOperationDAO {
 
     private static final Logger LOG = Logger.getLogger(DBCommonCRUDOperationImpl.class);
 
-
     public void executeUpdate(String firstStatementString, int id, String sqlUpdateStatement) throws DAOException, ConnectionPoolException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;

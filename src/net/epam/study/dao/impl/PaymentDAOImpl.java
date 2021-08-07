@@ -16,9 +16,9 @@ import java.sql.SQLException;
 
 public class PaymentDAOImpl implements PaymentDAO {
 
-    public static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id= ? and paymentStatus='done'";
-    public static final String UPDATE_PAYMENT_STATUS = "update payment set paymentStatus = ? where order_id = ?";
-    public static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES (?,?,?,?)";
+    private static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id= ? and paymentStatus='done'";
+    private static final String UPDATE_PAYMENT_STATUS = "update payment set paymentStatus = ? where order_id = ?";
+    private static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES (?,?,?,?)";
     private static final Logger LOG = Logger.getLogger(PaymentDAOImpl.class);
 
     public void doPayment(int userId, int orderId, BigDecimal total, String status) throws DAOException, ConnectionPoolException {

@@ -17,20 +17,20 @@ import java.util.List;
 
 public class UserIDAOImpl implements UsersDAO {
 
-    public static final String COLUMN_LOGIN = "login";
-    public static final String COLUMN_PASSWORD = "password";
-    public static final String COLUMN_ROLE = "role";
-    public static final String COLUMN_USER_LOGIN = "login";
-    public static final String COLUMN_ID_USER = "id";
+    private static final String COLUMN_LOGIN = "login";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_ROLE = "role";
+    private static final String COLUMN_USER_LOGIN = "login";
+    private static final String COLUMN_ID_USER = "id";
 
-    public static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select id, password, role from users where id = ?";
-    public static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
-    public static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
-    public static final String SELECT_ALL_USERS = "select id from users where id>0";
-    public static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ?,?";
-    public static final String DELETE_FROM_USERS = "delete from users where id = ?";
-    public static final String GET_USER_ID = "SELECT id, login FROM users WHERE login= ?";
-    public static final String UPDATE_USER_ROLE = "update users set role = ? where id = ?";
+    private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select id, password, role from users where id = ?";
+    private static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
+    private static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
+    private static final String SELECT_ALL_USERS = "select id from users where id>0";
+    private static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ?,?";
+    private static final String DELETE_FROM_USERS = "delete from users where id = ?";
+    private static final String GET_USER_ID = "SELECT id, login FROM users WHERE login= ?";
+    private static final String UPDATE_USER_ROLE = "update users set role = ? where id = ?";
 
     private static final Logger LOG = Logger.getLogger(UserIDAOImpl.class);
 

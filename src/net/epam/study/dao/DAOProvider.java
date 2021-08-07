@@ -1,6 +1,9 @@
 package net.epam.study.dao;
 
-import net.epam.study.dao.impl.*;
+import net.epam.study.dao.impl.DBCommonCRUDOperationImpl;
+import net.epam.study.dao.impl.MenuDAOImpl;
+import net.epam.study.dao.impl.OrderDAOImpl;
+import net.epam.study.dao.impl.UserIDAOImpl;
 
 public final class DAOProvider {
 

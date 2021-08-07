@@ -1,8 +1,12 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.*;
+import net.epam.study.service.OrderService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.UserService;
 import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -21,15 +25,8 @@ import java.io.IOException;
  */
 
 public class AdminDelete implements Command {
-
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-
-    public static final String ID_ORDER = "idOrder";
-    public static final String ID_USER = "idUser";
-    public static final String ATTR_ERROR = "error";
-    public static final String MSG_ERROR = "Delete order error!";
-
+    private static final String ATTR_ERROR = "error";
+    private static final String MSG_ERROR = "Delete order error!";
     /**
      * Logger to get error log
      */
@@ -54,14 +51,14 @@ public class AdminDelete implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
 
         } else {
 
-            String idOrder = request.getParameter(ID_ORDER);
-            String idUser = request.getParameter(ID_USER);
+            String idOrder = request.getParameter(Constants.ID_ORDER);
+            String idUser = request.getParameter(Constants.ID_USER);
 
             try {
 

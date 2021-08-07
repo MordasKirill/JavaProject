@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
@@ -20,13 +21,6 @@ import java.io.IOException;
 
 public class SaveNewUser implements Command {
 
-    public static final String ATTR_PASSWORD = "password";
-    public static final String ATTR_LOGIN = "login";
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_LOCALE = "locale";
-    public static final String ATTR_USER_ID = "id";
-
     public static final String ERR_MSG = "errMsg";
     public static final String ATTR_ERR_REG = "local.error.regerr";
     public static final String ATTR_ERR_USER = "Save user fail!";
@@ -35,8 +29,8 @@ public class SaveNewUser implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter(ATTR_LOGIN).trim();
-        String password = request.getParameter(ATTR_PASSWORD);
+        String login = request.getParameter(Constants.PARAM_LOGIN).trim();
+        String password = request.getParameter(Constants.PARAM_PASSWORD);
         String role = String.valueOf(Role.USER);
         int userId;
 
@@ -48,18 +42,18 @@ public class SaveNewUser implements Command {
 
             if (userService.isUserUnique(login)) {
                 userId = userService.createNewUser(login, PasswordUtils.hashPassword(password), role);
-                session.setAttribute(ATTR_AUTH, true);
-                session.setAttribute(ATTR_ROLE, role);
-                session.setAttribute(ATTR_LOGIN, login);
-                session.setAttribute(ATTR_USER_ID, userId);
+                session.setAttribute(Constants.ATTR_AUTH, true);
+                session.setAttribute(Constants.ATTR_ROLE, role);
+                session.setAttribute(Constants.PARAM_LOGIN, login);
+                session.setAttribute(Constants.PARAM_ID, userId);
                 request.setAttribute(ERR_MSG, "");
-                ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
+                ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                 requestDispatcher.forward(request, response);
 
             } else {
                 request.setAttribute(ERR_MSG, ATTR_ERR_REG);
-                ValidationImpl.userLocale = request.getParameter(ATTR_LOCALE);
+                ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_REGISTRATION);
                 requestDispatcher.forward(request, response);
             }
@@ -67,7 +61,7 @@ public class SaveNewUser implements Command {
         } catch (ServiceException e) {
             log.log(Level.ERROR, "SaveNewUser error.", e);
             session.setAttribute(ERR_MSG, ATTR_ERR_USER);
-            session.setAttribute(ATTR_LOGIN, login);
+            session.setAttribute(Constants.PARAM_LOGIN, login);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }

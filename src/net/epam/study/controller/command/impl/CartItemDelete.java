@@ -17,10 +17,10 @@ import java.io.IOException;
 
 public class CartItemDelete implements Command {
 
-    public static final String PARAM_ITEM = "item";
+    private static final String PARAM_ITEM = "item";
 
-    public static final String PARAM_ERROR = "error";
-    public static final String ERROR_MSG = "Delete item fail!";
+    private static final String PARAM_ERROR = "error";
+    private static final String ERROR_MSG = "Delete item fail!";
 
     private static final Logger log = Logger.getLogger(CartItemDelete.class);
 

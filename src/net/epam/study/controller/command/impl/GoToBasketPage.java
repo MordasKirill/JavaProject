@@ -4,7 +4,10 @@ import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
-import net.epam.study.service.*;
+import net.epam.study.service.OrderService;
+import net.epam.study.service.PaymentService;
+import net.epam.study.service.ServiceException;
+import net.epam.study.service.ServiceProvider;
 import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
@@ -19,22 +22,18 @@ import java.io.IOException;
 
 public class GoToBasketPage implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_DISCOUNT = "discount";
-    public static final String ATTR_ORDER = "order";
-    public static final String ATTR_TOTAL = "total";
-    public static final String ATTR_ORDERS_AMOUNT = "ordersAmount";
-    public static final String ATTR_SIZE = "size";
-    public static final String ATTR_LOCAL = "local";
-    public static final String ATTR_USER_ID = "id";
-    public static final String ATTR_ORDER_ID = "orderID";
+    private static final String ATTR_DISCOUNT = "discount";
+    private static final String ATTR_ORDER = "order";
+    private static final String ATTR_TOTAL = "total";
+    private static final String ATTR_ORDERS_AMOUNT = "ordersAmount";
+    private static final String ATTR_SIZE = "size";
+    private static final String ATTR_ORDER_ID = "orderID";
 
-    public static final String PARAM_PAYMENT = "payment";
+    private static final String PARAM_PAYMENT = "payment";
 
-    public static final String PARAM_ERROR = "error";
-    public static final String ERROR_MSG = "Get total fail!";
-    public static final String ERROR_MSG_PAYMENT = "Payment status change fail!";
+    private static final String PARAM_ERROR = "error";
+    private static final String ERROR_MSG = "Get total fail!";
+    private static final String ERROR_MSG_PAYMENT = "Payment status change fail!";
 
     private static final Logger log = Logger.getLogger(GoToBasketPage.class);
 
@@ -46,15 +45,15 @@ public class GoToBasketPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         int userId = 0;
-        if (session.getAttribute(ATTR_USER_ID) != null) {
-            userId = (int) session.getAttribute(ATTR_USER_ID);
+        if (session.getAttribute(Constants.PARAM_ID) != null) {
+            userId = (int) session.getAttribute(Constants.PARAM_ID);
         }
         int orderId = 0;
         if (session.getAttribute(ATTR_ORDER_ID) != null) {
             orderId = (int) session.getAttribute(ATTR_ORDER_ID);
         }
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
@@ -81,7 +80,7 @@ public class GoToBasketPage implements Command {
                 requestDispatcher.forward(request, response);
             }
             request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
-            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+            request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
             requestDispatcher.forward(request, response);
         }

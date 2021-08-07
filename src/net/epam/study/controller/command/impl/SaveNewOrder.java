@@ -21,36 +21,36 @@ import java.io.IOException;
 
 public class SaveNewOrder implements Command {
 
-    public static final String ATTR_EMAIL = "email";
-    public static final String ATTR_FULL_NAME = "fullName";
-    public static final String ATTR_ADDRESS = "address";
-    public static final String ATTR_PHONE = "phone";
-    public static final String ATTR_CITY = "city";
-    public static final String ATTR_METHOD = "method";
-    public static final String ATTR_METHOD_ONLINE = "online";
-    public static final String ATTR_USER_ID = "id";
-    public static final String ATTR_ORDER_ID = "orderID";
+    private static final String ATTR_EMAIL = "email";
+    private static final String ATTR_FULL_NAME = "fullName";
+    private static final String ATTR_ADDRESS = "address";
+    private static final String ATTR_PHONE = "phone";
+    private static final String ATTR_CITY = "city";
+    private static final String ATTR_METHOD = "method";
+    private static final String ATTR_METHOD_ONLINE = "online";
+    private static final String ATTR_USER_ID = "id";
+    private static final String ATTR_ORDER_ID = "orderID";
 
-    public static final String ATTR_EMAIL_SESSION = "emailSession";
-    public static final String ATTR_FULL_NAME_SESSION = "fullNameSession";
-    public static final String ATTR_ADDRESS_SESSION = "addressSession";
-    public static final String ATTR_PHONE_SESSION = "phoneSession";
-    public static final String ATTR_CITY_SESSION = "citySession";
-    public static final String ATTR_ERR_MSG_EMAIL = "errMsgEmail";
-    public static final String ATTR_ERR_MSG_FULL_NAME = "errMsgFullName";
-    public static final String ATTR_ERR_MSG_PHONE = "errMsgPhone";
-    public static final String ATTR_ERR_MSG_CITY = "errMsgCity";
+    private static final String ATTR_EMAIL_SESSION = "emailSession";
+    private static final String ATTR_FULL_NAME_SESSION = "fullNameSession";
+    private static final String ATTR_ADDRESS_SESSION = "addressSession";
+    private static final String ATTR_PHONE_SESSION = "phoneSession";
+    private static final String ATTR_CITY_SESSION = "citySession";
+    private static final String ATTR_ERR_MSG_EMAIL = "errMsgEmail";
+    private static final String ATTR_ERR_MSG_FULL_NAME = "errMsgFullName";
+    private static final String ATTR_ERR_MSG_PHONE = "errMsgPhone";
+    private static final String ATTR_ERR_MSG_CITY = "errMsgCity";
 
-    public static final String ATTR_ORDER = "order";
-    public static final String ATTR_TOTAL = "total";
-    public static final String ATTR_SIZE = "size";
+    private static final String ATTR_ORDER = "order";
+    private static final String ATTR_TOTAL = "total";
+    private static final String ATTR_SIZE = "size";
 
-    public static final String STATUS_PROCESSING = "processing";
-    public static final String STATUS_UPON_RECEIPT = "uponReceipt";
+    private static final String STATUS_PROCESSING = "processing";
+    private static final String STATUS_UPON_RECEIPT = "uponReceipt";
 
-    public static final String ATTR_ERROR = "error";
-    public static final String ATTR_ERROR_MSG = "local.error.orderEmpty";
-    public static final String ATTR_ERROR_ORDER_MSG = "Save order fail!";
+    private static final String ATTR_ERROR = "error";
+    private static final String ATTR_ERROR_MSG = "local.error.orderEmpty";
+    private static final String ATTR_ERROR_ORDER_MSG = "Save order fail!";
 
     private static final Logger log = Logger.getLogger(SaveNewOrder.class);
 

@@ -18,19 +18,19 @@ import java.io.IOException;
 
 public class AdminSaveNewMenuItem implements Command {
 
-    public static final String PARAM_ITEM_NAME = "itemName";
-    public static final String PARAM_PRICE = "itemPrice";
-    public static final String PARAM_CATEGORY = "category";
-    public static final String PARAM_WAIT_TIME = "itemWaitTime";
+    private static final String PARAM_ITEM_NAME = "itemName";
+    private static final String PARAM_PRICE = "itemPrice";
+    private static final String PARAM_CATEGORY = "category";
+    private static final String PARAM_WAIT_TIME = "itemWaitTime";
 
-    public static final String SUCCESS_MSG = "local.error.sucess";
-    public static final String SUCCESS_ATTR = "success";
-    public static final String ITEM_ERROR = "local.error.adminErrorExist";
-    public static final String PRICE_ERROR = "errMsgPrice";
-    public static final String WAIT_TIME_ERROR = "errMsgWaitTime";
-    public static final String ITEM_ERROR_ERR_MSG_ITEM_EXIST = "errMsgItemExist";
-    public static final String ERROR_MSG = "Add menu item fail!";
-    public static final String ERROR_ATTR = "error";
+    private static final String SUCCESS_MSG = "local.error.sucess";
+    private static final String SUCCESS_ATTR = "success";
+    private static final String ITEM_ERROR = "local.error.adminErrorExist";
+    private static final String PRICE_ERROR = "errMsgPrice";
+    private static final String WAIT_TIME_ERROR = "errMsgWaitTime";
+    private static final String ITEM_ERROR_ERR_MSG_ITEM_EXIST = "errMsgItemExist";
+    private static final String ERROR_MSG = "Add menu item fail!";
+    private static final String ERROR_ATTR = "error";
 
     private static final Logger log = Logger.getLogger(AdminSaveNewMenuItem.class);
 

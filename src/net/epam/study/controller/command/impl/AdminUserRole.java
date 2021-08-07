@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ServiceException;
@@ -18,14 +19,8 @@ import java.io.IOException;
 
 public class AdminUserRole implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-
-    public static final String PARAM_ID = "id";
-    public static final String PARAM_ROLE = "role";
-
-    public static final String PARAM_ERROR = "error";
-    public static final String ERROR_MSG = "Change role error!";
+    private static final String PARAM_ERROR = "error";
+    private static final String ERROR_MSG = "Change role error!";
 
     private static final Logger log = Logger.getLogger(AdminUserRole.class);
 
@@ -37,13 +32,13 @@ public class AdminUserRole implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute("role"))
-                || !validationService.isUser((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            int id = Integer.parseInt(request.getParameter(PARAM_ID));
-            String role = request.getParameter(PARAM_ROLE);
+            int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
+            String role = request.getParameter(Constants.ATTR_ROLE);
 
             if (validationService.isParamNotNull(id)) {
 

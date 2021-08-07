@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
@@ -20,23 +21,17 @@ import java.io.IOException;
 
 public class SaveNewPayment implements Command {
 
-    public static final String ATTR_NAME = "name";
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
+    private static final String ATTR_CARD_NUMBER = "cardnumber";
+    private static final String ATTR_ORDER_ID = "orderID";
+    private static final String ATTR_TOTAL = "total";
 
-    public static final String ATTR_CARD_NUMBER = "cardnumber";
-    public static final String ATTR_USER_ID = "id";
-    public static final String ATTR_ORDER_ID = "orderID";
+    private static final String ATTR_NUMBER_PAYMENT = "numberPayment";
+    private static final String ATTR_FULL_NAME_PAYMENT = "fullNamePayment";
 
-    public static final String ATTR_TOTAL = "total";
-
-    public static final String ATTR_NUMBER_PAYMENT = "numberPayment";
-    public static final String ATTR_FULL_NAME_PAYMENT = "fullNamePayment";
-
-    public static final String ERR_MSG = "errMsg";
-    public static final String ATTR_ERR_PAYMENT = "Payment fail!";
-    public static final String ATTR_ERR_TOTAL = "Get total fail!";
-    public static final String ERR_MSG_FULL_NAME = "errMsgFullName";
+    private static final String ERR_MSG = "errMsg";
+    private static final String ATTR_ERR_PAYMENT = "Payment fail!";
+    private static final String ATTR_ERR_TOTAL = "Get total fail!";
+    private static final String ERR_MSG_FULL_NAME = "errMsgFullName";
 
     private static final Logger log = Logger.getLogger(SaveNewPayment.class);
 
@@ -49,9 +44,9 @@ public class SaveNewPayment implements Command {
 
         HttpSession session = request.getSession(true);
 
-        int userId = (int) session.getAttribute(ATTR_USER_ID);
+        int userId = (int) session.getAttribute(Constants.PARAM_ID);
         int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
-        String fullName = request.getParameter(ATTR_NAME);
+        String fullName = request.getParameter(Constants.PARAM_NAME);
         String number = request.getParameter(ATTR_CARD_NUMBER);
 
         if (validationService.fullNameErrorMsg(fullName) == null) {

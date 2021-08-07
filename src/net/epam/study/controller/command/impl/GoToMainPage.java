@@ -16,11 +16,7 @@ import java.io.IOException;
 
 public class GoToMainPage implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_LOGIN = "login";
-    public static final String ATTR_LOGIN_STRANGER = "stranger";
-    public static final String ATTR_LOCAL = "local";
+    private static final String ATTR_LOGIN_STRANGER = "stranger";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,16 +28,16 @@ public class GoToMainPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (session.getAttribute(ATTR_LOGIN) == null) {
-            session.setAttribute(ATTR_LOGIN, ATTR_LOGIN_STRANGER);
+        if (session.getAttribute(Constants.PARAM_LOGIN) == null) {
+            session.setAttribute(Constants.PARAM_LOGIN, ATTR_LOGIN_STRANGER);
         }
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+            request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN);
             requestDispatcher.forward(request, response);

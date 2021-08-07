@@ -8,6 +8,7 @@ public class EmailParameter {
     public static final String ENABLE = "mail.smtp.starttls.enable";
     public static final String TRUST = "mail.smtp.ssl.trust";
     public static final String PORT = "mail.smtp.port";
+
     private EmailParameter() {
     }
 

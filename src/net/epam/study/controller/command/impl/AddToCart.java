@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
@@ -18,13 +19,6 @@ import java.io.IOException;
  * Class represents an addToCart command
  */
 public class AddToCart implements Command {
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-
-    public static final String PARAM_NAME = "name";
-    public static final String PARAM_PRICE = "price";
-    public static final String PARAM_TIME = "time";
-    public static final String PARAM_CATEGORY = "category";
 
     /**
      * execute method produces all necessary actions to
@@ -48,16 +42,16 @@ public class AddToCart implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
 
-            String name = request.getParameter(PARAM_NAME);
-            String price = request.getParameter(PARAM_PRICE);
-            String time = request.getParameter(PARAM_TIME);
+            String name = request.getParameter(Constants.PARAM_NAME);
+            String price = request.getParameter(Constants.PARAM_PRICE);
+            String time = request.getParameter(Constants.PARAM_TIME);
 
-            session.setAttribute(PARAM_CATEGORY, request.getParameter(PARAM_CATEGORY));
+            session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
             orderService.addToOrder(new MenuItem(name, price, time));
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);

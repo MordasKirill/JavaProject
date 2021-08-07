@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.MenuService;
@@ -22,15 +23,12 @@ import java.io.IOException;
  */
 
 public class AdminDeleteMenuItem implements Command {
-    public static final String PARAM_NAME = "itemNameDelete";
-    public static final String PARAM_CATEGORY = "categoryDelete";
-
-    public static final String SUCCESS_ATR = "successDelete";
-    public static final String NOTFOUND_ATTR = "notFound";
-    public static final String ERROR_ATTR = "error";
-    public static final String ERROR_MSG = "Remove menu item fail!";
-    public static final String NOTFOUND_MSG = "local.error.notfound";
-    public static final String SUCCESS_MSG = "local.error.sucess";
+    private static final String SUCCESS_ATR = "successDelete";
+    private static final String NOTFOUND_ATTR = "notFound";
+    private static final String ERROR_ATTR = "error";
+    private static final String ERROR_MSG = "Remove menu item fail!";
+    private static final String NOTFOUND_MSG = "local.error.notfound";
+    private static final String SUCCESS_MSG = "local.error.sucess";
 
     private static final Logger LOG = Logger.getLogger(AdminDeleteMenuItem.class);
 
@@ -49,8 +47,8 @@ public class AdminDeleteMenuItem implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         MenuService menuService = serviceProvider.getMenuService();
 
-        String itemName = request.getParameter(PARAM_NAME);
-        String category = request.getParameter(PARAM_CATEGORY);
+        String itemName = request.getParameter(Constants.ITEM_NAME_DELETE);
+        String category = request.getParameter(Constants.CATEGORY_DELETE);
 
 
         HttpSession session = request.getSession(true);

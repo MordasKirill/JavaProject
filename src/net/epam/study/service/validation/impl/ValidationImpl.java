@@ -68,11 +68,7 @@ public class ValidationImpl implements ValidationService {
         }
 
         boolean result = false;
-        if (city.equals("Minsk")
-                || city.equals("minsk")
-                || city.equals("минск")
-                || city.equals("Минск")) {
-
+        if (city.equalsIgnoreCase("Minsk")) {
             result = true;
         }
         return result;
@@ -126,11 +122,11 @@ public class ValidationImpl implements ValidationService {
     }
 
     public boolean isAdmin(String role) {
-        return !Role.ADMIN.name().equalsIgnoreCase(role) && !Role.OWNER.name().equalsIgnoreCase(role);
+        return !Role.ADMIN.toString().equalsIgnoreCase(role) && !Role.OWNER.toString().equalsIgnoreCase(role);
     }
 
     public boolean isUser(String role) {
-        return !Role.USER.name().equalsIgnoreCase(role);
+        return !Role.USER.toString().equalsIgnoreCase(role);
     }
 
     public boolean isParamNotNull(String param) {

@@ -16,10 +16,6 @@ import java.io.IOException;
 
 public class GoToBillPage implements Command {
 
-    public static final String ATTR_AUTH = "auth";
-    public static final String ATTR_ROLE = "role";
-    public static final String ATTR_LOCAL = "local";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -29,12 +25,12 @@ public class GoToBillPage implements Command {
 
         HttpSession session = request.getSession(true);
 
-        if (!validationService.isAuthenticated((Boolean) session.getAttribute(ATTR_AUTH), (String) session.getAttribute(ATTR_ROLE))
-                || !validationService.isAdmin((String) session.getAttribute(ATTR_ROLE))) {
+        if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
+                || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-            request.getSession(true).setAttribute(ATTR_LOCAL, ValidationImpl.userLocale);
+            request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL);
             requestDispatcher.forward(request, response);

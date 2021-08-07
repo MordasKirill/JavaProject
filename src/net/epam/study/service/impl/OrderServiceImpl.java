@@ -59,7 +59,6 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal result = new BigDecimal(0);
         BigDecimal sum = new BigDecimal(0);
         int discount = 0;
-
         for (int i = 0; i < Constants.TOTAL.size(); i++) {
             BigDecimal total = new BigDecimal(Constants.TOTAL.get(i));
             sum = sum.add(total);
