@@ -20,7 +20,7 @@ public interface UsersDAO {
 
     void deleteUser(String id) throws DAOException, ConnectionPoolException;
 
-    void changeUserRole(String status, int id) throws DAOException;
+    void changeUserRole(String status, int id) throws DAOException, ConnectionPoolException;
 
-    int createNewUser(String login, String hashPassword, String role) throws DAOException, ConnectionPoolException;
+    int createNewUser(User user) throws DAOException, ConnectionPoolException;
 }

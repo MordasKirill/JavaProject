@@ -44,6 +44,7 @@ public class GoToAdminPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
+        PaymentService paymentService = serviceProvider.getPaymentService();
         PaginationService paginationService = serviceProvider.getPaginationService();
         UserService userService = serviceProvider.getUserService();
         ValidationService validationService = serviceProvider.getValidationService();
@@ -93,7 +94,7 @@ public class GoToAdminPage implements Command {
                     return;
                 }
 
-                int ordersSize = orderService.getAllOrders().size();
+                int ordersSize = paymentService.getAllOrders().size();
                 int usersSize = userService.getAllUsers().size();
 
                 boolean resultOrdersNext = ordersSize > limitOrders + Constants.DEFAULT_LIMIT;

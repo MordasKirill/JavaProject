@@ -1,7 +1,6 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
-import net.epam.study.bean.Order;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
@@ -93,7 +92,7 @@ public class SaveNewOrder implements Command {
                 } else {
 
 
-                    orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.getOrder().toString()));
+                    orderId = orderService.createOrder(fullName, address, email, phone, orderService.getOrder().toString());
                     session.setAttribute(ATTR_ORDER_ID, orderId);
 
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {

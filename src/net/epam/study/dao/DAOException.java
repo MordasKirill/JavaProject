@@ -1,6 +1,6 @@
 package net.epam.study.dao;
 
-public class DAOException extends RuntimeException {
+public class DAOException extends Exception {
     public DAOException() {
         super();
     }

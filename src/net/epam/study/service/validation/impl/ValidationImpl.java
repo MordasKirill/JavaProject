@@ -68,7 +68,8 @@ public class ValidationImpl implements ValidationService {
         }
 
         boolean result = false;
-        if (city.equalsIgnoreCase("Minsk")) {
+        if (city.equalsIgnoreCase("Minsk") ||
+                city.equalsIgnoreCase("Минск")) {
             result = true;
         }
         return result;

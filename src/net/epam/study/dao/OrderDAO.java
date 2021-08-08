@@ -9,11 +9,9 @@ public interface OrderDAO {
 
     List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException;
 
-    List<Order> getAllOrders() throws DAOException, ConnectionPoolException;
-
     void deleteOrder(String id) throws DAOException, ConnectionPoolException;
 
     int createOrder(Order order) throws DAOException, ConnectionPoolException;
 
-    void changeOrderStatus(String status, int id) throws DAOException;
+    void changeOrderStatus(String status, int id) throws DAOException, ConnectionPoolException;
 }

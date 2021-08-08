@@ -22,9 +22,8 @@ public class DBCommonCRUDOperationImpl implements DBCommonCRUDOperationDAO {
             statement = connection.prepareStatement(sqlUpdateStatement);
             statement.setString(1, firstStatementString);
             statement.setInt(2, id);
-            LOG.info("SUCCESS DB: Connected.");
             statement.executeUpdate();
-            LOG.info("SUCCESS DB: Payment status changed.");
+            LOG.info("SUCCESS DB: Update DB executed.");
         } catch (SQLException exc) {
             LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);
@@ -34,5 +33,4 @@ public class DBCommonCRUDOperationImpl implements DBCommonCRUDOperationDAO {
             ConnectionPool.connectionPool.closeConnection(statement);
         }
     }
-
 }

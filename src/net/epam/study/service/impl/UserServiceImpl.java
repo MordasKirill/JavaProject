@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Fail to check if user exist", e);
         }
-
     }
 
 
@@ -53,16 +52,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsers(int limit) throws ServiceException {
-
         DAOProvider daoProvider = DAOProvider.getInstance();
         UsersDAO usersDAO = daoProvider.getUsersDAO();
-
-        List<User> users;
-
         try {
-            users = usersDAO.getUsers(limit);
-            return users;
-
+            return usersDAO.getUsers(limit);
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Get orders fail", e);
         }
@@ -115,10 +108,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void changeUserRole(String role, int id) {
+    public void changeUserRole(String role, int id) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         UsersDAO usersDAO = daoProvider.getUsersDAO();
-        usersDAO.changeUserRole(role, id);
+        try {
+            usersDAO.changeUserRole(role, id);
+        } catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Change user role fail", e);
+        }
     }
 
     @Override
@@ -127,7 +124,7 @@ public class UserServiceImpl implements UserService {
         UsersDAO usersDAO = daoProvider.getUsersDAO();
         int userId = 0;
         try {
-            userId = usersDAO.createNewUser(login, hashPassword, role);
+            userId = usersDAO.createNewUser(new User(login, hashPassword, role));
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Fail to get user id", e);
         }

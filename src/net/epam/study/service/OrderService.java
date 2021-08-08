@@ -21,9 +21,7 @@ public interface OrderService {
 
     List<Order> getOrders(int limit) throws ServiceException;
 
-    List<Order> getAllOrders() throws ServiceException;
-
-    int createOrder(Order order) throws ServiceException;
+    int createOrder(String fullName, String address, String email, String phone, String details) throws ServiceException;
 
     void changeOrderStatus(String status, int id) throws ServiceException;
 }

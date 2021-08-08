@@ -54,22 +54,19 @@ public class OrderServiceImpl implements OrderService {
      * @throws ConnectionPoolException in case problems
      *                                 with open/retrieve connection
      */
-    public BigDecimal getTotal(int userId) {
-
+    public BigDecimal getTotal(int userId) throws ServiceException {
         BigDecimal result = new BigDecimal(0);
         BigDecimal sum = new BigDecimal(0);
         int discount = 0;
         for (int i = 0; i < Constants.TOTAL.size(); i++) {
             BigDecimal total = new BigDecimal(Constants.TOTAL.get(i));
             sum = sum.add(total);
-
             discount = getDiscount(userId);
             if (discount >= 3) {
                 BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(discount))));
                 amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
                 result = sum.subtract(amount);
             }
-
             if (discount < 3) {
                 result = sum;
             }
@@ -77,11 +74,15 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
-    public int getDiscount(int userId) {
+    public int getDiscount(int userId) throws ServiceException{
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         int total = 0;
-        total = paymentDAO.getDonePayments(userId);
+        try {
+            total = paymentDAO.getDonePayments(userId);
+        } catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Get discount fail", e);
+        }
         if (total == 3) {
             return 3;
         } else if (total >= 10) {
@@ -108,38 +109,22 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrders(int limit) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
-        List<Order> orders;
         try {
-            orders = changeOrder.getOrders(limit);
-            return orders;
+            return changeOrder.getOrders(limit);
 
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Get orders fail", e);
         }
     }
 
-    @Override
-    public List<Order> getAllOrders() throws ServiceException {
-
-        DAOProvider daoProvider = DAOProvider.getInstance();
-        OrderDAO changeOrder = daoProvider.getOrderDAO();
-        List<Order> orders;
-        try {
-            orders = changeOrder.getAllOrders();
-            return orders;
-
-        } catch (DAOException | ConnectionPoolException e) {
-            throw new ServiceException("Get all orders fail", e);
-        }
-    }
 
     @Override
-    public int createOrder(Order order) throws ServiceException {
+    public int createOrder(String fullName, String address, String email, String phone, String details) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         int orderId = 0;
         try {
-            orderId = changeOrder.createOrder(order);
+            orderId = changeOrder.createOrder(new Order(fullName, address, email, phone, details));
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Order create fail", e);
         }
@@ -147,10 +132,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void changeOrderStatus(String status, int id) {
+    public void changeOrderStatus(String status, int id)throws ServiceException{
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
-        changeOrder.changeOrderStatus(status, id);
+        try {
+            changeOrder.changeOrderStatus(status, id);
+        }catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Fail to change order status", e);
+        }
     }
 
     @Override

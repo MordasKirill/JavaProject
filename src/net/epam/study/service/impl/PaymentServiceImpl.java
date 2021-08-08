@@ -1,5 +1,6 @@
 package net.epam.study.service.impl;
 
+import net.epam.study.bean.Order;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.PaymentDAO;
@@ -8,6 +9,7 @@ import net.epam.study.service.PaymentService;
 import net.epam.study.service.ServiceException;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class PaymentServiceImpl implements PaymentService {
 
@@ -42,9 +44,24 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void changeOrderStatus(String status, int id) {
+    public List<Order> getAllOrders() throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-        paymentDAO.changePaymentStatus(status, id);
+        try {
+            return paymentDAO.getAllOrders();
+        } catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Get all orders fail", e);
+        }
+    }
+
+    @Override
+    public void changeOrderStatus(String status, int id) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
+        try {
+            paymentDAO.changePaymentStatus(status, id);
+        } catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Change order status fail", e);
+        }
     }
 }
