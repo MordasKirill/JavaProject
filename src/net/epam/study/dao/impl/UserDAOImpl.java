@@ -4,7 +4,7 @@ import net.epam.study.Constants;
 import net.epam.study.bean.User;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
-import net.epam.study.dao.UsersDAO;
+import net.epam.study.dao.UserDAO;
 import net.epam.study.dao.connection.ConnectionPool;
 import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
@@ -15,7 +15,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOImpl implements UsersDAO {
+public class UserDAOImpl implements UserDAO {
 
     private static final String COLUMN_LOGIN = "login";
     private static final String COLUMN_PASSWORD = "password";

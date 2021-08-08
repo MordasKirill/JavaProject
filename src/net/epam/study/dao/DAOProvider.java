@@ -9,7 +9,7 @@ public final class DAOProvider {
 
     private static final DAOProvider instance = new DAOProvider();
 
-    private final UsersDAO usersDAO = new UserDAOImpl();
+    private final UserDAO userDAO = new UserDAOImpl();
     private final DBCommonCRUDOperationDAO DBCommonCRUDOperationDAO = new DBCommonCRUDOperationImpl();
     private final OrderDAO orderDAO = new OrderDAOImpl();
     private final MenuDAO menuDAO = new MenuDAOImpl();
@@ -22,8 +22,8 @@ public final class DAOProvider {
         return instance;
     }
 
-    public UsersDAO getUsersDAO() {
-        return usersDAO;
+    public UserDAO getUserDAO() {
+        return userDAO;
     }
 
     public DBCommonCRUDOperationDAO getDBCommonCRUDOperationDAO() {

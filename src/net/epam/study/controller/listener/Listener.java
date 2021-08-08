@@ -17,11 +17,7 @@ public class Listener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
         LOG.log(Level.INFO, "ServletContextListener was created!");
-        try {
-            ConnectionPool.connectionPool = new ConnectionPool();
-        } catch (ConnectionPoolException e) {
-            LOG.log(Level.INFO, "ServletContextListener was not created!");
-        }
+        ConnectionPool.connectionPool = new ConnectionPool();
         SendEmail.sendEmail = new SendEmail();
     }
 
@@ -32,7 +28,6 @@ public class Listener implements ServletContextListener {
         try {
             ConnectionPool.connectionPool.dispose();
         } catch (ConnectionPoolException e) {
-            e.printStackTrace();
             LOG.log(Level.INFO, "ServletContextListener was not destroyed!");
         }
     }

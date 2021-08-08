@@ -21,7 +21,7 @@ public final class ConnectionPool {
     private final String driver;
     private int initConnCnt;
 
-    public ConnectionPool() throws ConnectionPoolException {
+    public ConnectionPool() {
         DBResourceManager dbResourceManager = DBResourceManager.getInstance();
 
         this.driver = dbResourceManager.getValue(DBParameter.DB_DRIVER);
@@ -304,8 +304,7 @@ public final class ConnectionPool {
             connection.setCatalog(catalog);
         }
         @Override
-        public void setClientInfo(String name, String value)
-                throws SQLClientInfoException {
+        public void setClientInfo(String name, String value) throws SQLClientInfoException {
             connection.setClientInfo(name, value);
         }
 
