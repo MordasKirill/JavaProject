@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 
@@ -18,6 +19,11 @@ public class Logout implements Command {
         HttpSession session = request.getSession();
 
         if (session != null) {
+
+            int userId = 0;
+            if (session.getAttribute(Constants.PARAM_ID) != null) {
+                userId = (int) session.getAttribute(Constants.PARAM_ID);
+            }
 
             session.removeAttribute("auth");
             session.removeAttribute("role");
@@ -49,8 +55,7 @@ public class Logout implements Command {
             session.removeAttribute("errMsgPrice");
             session.removeAttribute("errMsgWaitTime");
 
-            Constants.ORDER.clear();
-            Constants.TOTAL.clear();
+            OrderProvider.getInstance().getOrder().get(userId).clear();
 
         }
 

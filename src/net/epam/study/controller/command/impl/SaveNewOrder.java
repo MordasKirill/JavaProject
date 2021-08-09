@@ -1,6 +1,6 @@
 package net.epam.study.controller.command.impl;
 
-import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
@@ -79,12 +79,12 @@ public class SaveNewOrder implements Command {
                     && validationService.phoneErrorMsg(phone) == null
                     && validationService.cityErrorMsg(city) == null) {
 
-                if (Constants.ORDER.size() == 0) {
+                if (OrderProvider.getInstance().getOrder().size() == 0) {
 
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
-                    request.setAttribute(ATTR_ORDER, Constants.ORDER);
+                    request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder());
                     request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
-                    request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
+                    request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
 
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
@@ -92,7 +92,7 @@ public class SaveNewOrder implements Command {
                 } else {
 
 
-                    orderId = orderService.createOrder(fullName, address, email, phone, orderService.getOrder().toString());
+                    orderId = orderService.createOrder(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), userId));
                     session.setAttribute(ATTR_ORDER_ID, orderId);
 
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {
@@ -120,9 +120,9 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
-                request.setAttribute(ATTR_ORDER, Constants.ORDER);
+                request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder());
                 request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
-                request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
+                request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
 
 
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);

@@ -1,6 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Status;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class GoToBasketPage implements Command {
 
@@ -67,7 +70,12 @@ public class GoToBasketPage implements Command {
                     requestDispatcher.forward(request, response);
                 }
             }
-            request.setAttribute(ATTR_ORDER, Constants.ORDER);
+            LinkedList<MenuItem> linkedList = new LinkedList<>();
+            request.setAttribute(ATTR_ORDER, linkedList);
+            if (validationService.isParamNotNull(OrderProvider.getInstance().getOrder())) {
+                linkedList = OrderProvider.getInstance().getOrder().get(userId);
+                request.setAttribute(ATTR_ORDER, linkedList);
+            }
             try {
                 request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
                 session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(userId));
@@ -79,7 +87,8 @@ public class GoToBasketPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-            request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
+
+            request.setAttribute(ATTR_SIZE, linkedList.size());
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
             requestDispatcher.forward(request, response);

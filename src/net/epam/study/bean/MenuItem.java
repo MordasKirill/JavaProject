@@ -13,6 +13,11 @@ public class MenuItem implements Serializable {
     public MenuItem() {
     }
 
+    public MenuItem(String name, String price) {
+        this.name = name;
+        this.price = price;
+    }
+
     public MenuItem(String name, String price, String filingTime) {
         this.name = name;
         this.price = price;

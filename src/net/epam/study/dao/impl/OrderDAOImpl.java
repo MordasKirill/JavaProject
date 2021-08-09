@@ -7,7 +7,6 @@ import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.OrderDAO;
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -35,25 +34,13 @@ public class OrderDAOImpl implements OrderDAO {
 
     private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
 
-    public void deleteOrder(String id) throws DAOException, ConnectionPoolException {
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_FROM_ORDERS);
-            statement.setString(1, id);
-            statement.executeUpdate();
-            LOG.info("SUCCESS DB: Order deleted.");
-        } catch (SQLException exc) {
-            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
-            throw new DAOException(exc);
-        } finally {
-            ConnectionPool.connectionPool.putBack(connection);
-            assert statement != null;
-            ConnectionPool.connectionPool.closeConnection(statement);
-        }
+    public void deleteOrder(String id) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_ORDERS, paramList);
     }
 
-    public List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException {
+    public List<Order> getOrders(int limit) throws DAOException {
         List<Order> orders = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -85,7 +72,7 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
-    public int createOrder(Order order) throws DAOException, ConnectionPoolException {
+    public int createOrder(Order order) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         String status = Status.PROCESSING.toString().toLowerCase();
@@ -114,7 +101,10 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
-    public void changeOrderStatus(String status, int id) throws DAOException, ConnectionPoolException {
-        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(status, id, UPDATE_ORDER_STATUS);
+    public void changeOrderStatus(String status, int id) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(status);
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_ORDER_STATUS, paramList);
     }
 }

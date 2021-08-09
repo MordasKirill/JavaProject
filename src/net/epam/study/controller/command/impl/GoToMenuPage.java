@@ -1,6 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.MenuService;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class GoToMenuPage implements Command {
 
@@ -35,7 +38,10 @@ public class GoToMenuPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
-
+        int userId = 0;
+        if (session.getAttribute(Constants.PARAM_ID) != null) {
+            userId = (int) session.getAttribute(Constants.PARAM_ID);
+        }
         if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
                 || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 
@@ -47,7 +53,11 @@ public class GoToMenuPage implements Command {
                         && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {
                     session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
                 }
-                request.setAttribute(ATTR_SIZE, Constants.ORDER.size());
+                LinkedList<MenuItem> linkedList = new LinkedList<>();
+                if (validationService.isParamNotNull(OrderProvider.getInstance().getOrder())) {
+                    linkedList = OrderProvider.getInstance().getOrder().get(userId);
+                }
+                request.setAttribute(ATTR_SIZE, linkedList.size());
                 request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
 
                 if (request.getParameter(Constants.PARAM_LOCALE) != null) {

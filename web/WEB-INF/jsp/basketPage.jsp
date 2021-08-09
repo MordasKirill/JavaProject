@@ -49,7 +49,7 @@
                         <c:when test="${not empty order}">
                             <c:forEach items="${order}" var="item">
                                 <p><span><c:out value="${item}" /></span></p>
-                                <a href="Controller?command=itemdelete&item=${item}" class="green">${delete}</a>
+                                <a href="Controller?command=itemdelete&item=${item}&itemName=${item.name}&itemPrice=${item.price}" class="green">${delete}</a>
                             </c:forEach>
                         </c:when>
                     <c:otherwise>

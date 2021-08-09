@@ -37,18 +37,13 @@ public class CheckLoginAndPassword implements Command {
 
         String login = request.getParameter(Constants.PARAM_LOGIN).trim();
         String password = request.getParameter(Constants.PARAM_PASSWORD);
+        HttpSession session = request.getSession(true);
         String role;
         int userId;
-
-        HttpSession session = request.getSession(true);
-
-
         try {
-            userId = userService.getUserId(login);
-            role = userService.getUserRole(userId);
-
-            if (userService.isUserDataCorrect(userId, password)) {
-
+            if (userService.isUserDataCorrect(login, password)) {
+                userId = userService.getUserId(login);
+                role = userService.getUserRole(userId);
                 if (!validationService.isAdmin(role)) {
                     session.setAttribute(Constants.ATTR_AUTH, true);
                     request.setAttribute(ATTR_ERROR, "");

@@ -2,9 +2,9 @@ package net.epam.study.dao.impl;
 
 import net.epam.study.bean.MenuItem;
 import net.epam.study.dao.DAOException;
+import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.MenuDAO;
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -27,27 +27,16 @@ public class MenuDAOImpl implements MenuDAO {
 
     private static final Logger LOG = Logger.getLogger(MenuDAOImpl.class);
 
-    public void createMenuItem(String itemName, String price, String waitTime, String category) throws DAOException, ConnectionPoolException {
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(INSERT_INTO_MENU);
-            statement.setString(1, itemName);
-            statement.setString(2, price);
-            statement.setString(3, waitTime);
-            statement.setString(4, category);
-            statement.executeUpdate();
-            LOG.info("SUCCESS DB: Menu item created.");
-        } catch (SQLException exc) {
-            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
-            throw new DAOException(exc);
-        } finally {
-            ConnectionPool.connectionPool.putBack(connection);
-            ConnectionPool.connectionPool.closeConnection(statement);
-        }
+    public void createMenuItem(String itemName, String price, String waitTime, String category) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(itemName);
+        paramList.add(price);
+        paramList.add(waitTime);
+        paramList.add(category);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(INSERT_INTO_MENU, paramList);
     }
 
-    public boolean isMenuItemExists(String itemName, String category) throws DAOException, ConnectionPoolException {
+    public boolean isMenuItemExists(String itemName, String category) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -71,25 +60,14 @@ public class MenuDAOImpl implements MenuDAO {
         return result;
     }
 
-    public void deleteMenuItem(String itemName, String category) throws DAOException, ConnectionPoolException {
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_FROM_MENU);
-            statement.setString(1, itemName);
-            statement.setString(2, category);
-            statement.executeUpdate();
-            LOG.info("SUCCESS DB: Menu item deleted.");
-        } catch (SQLException exc) {
-            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
-            throw new DAOException(exc);
-        } finally {
-            ConnectionPool.connectionPool.putBack(connection);
-            ConnectionPool.connectionPool.closeConnection(statement);
-        }
+    public void deleteMenuItem(String itemName, String category) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(itemName);
+        paramList.add(category);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_MENU, paramList);
     }
 
-    public List<MenuItem> getMenu() throws DAOException, ConnectionPoolException {
+    public List<MenuItem> getMenu() throws DAOException {
         List<MenuItem> menuItems = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;

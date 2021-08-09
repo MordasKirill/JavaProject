@@ -4,7 +4,6 @@ import net.epam.study.bean.MenuItem;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.MenuDAO;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.service.MenuService;
 import net.epam.study.service.ServiceException;
 
@@ -17,7 +16,7 @@ public class MenuServiceImpl implements MenuService {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
         try {
             menuDAO.deleteMenuItem(itemName, category);
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Fail to delete user", e);
         }
     }
@@ -28,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
         boolean result;
         try {
             result = menuDAO.isMenuItemExists(itemName, category);
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Fail to delete user", e);
         }
         return result;
@@ -41,7 +40,7 @@ public class MenuServiceImpl implements MenuService {
         try {
             menuItems = menuDAO.getMenu();
             return menuItems;
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);
         }
     }
@@ -51,7 +50,7 @@ public class MenuServiceImpl implements MenuService {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
         try {
             menuDAO.createMenuItem(itemName, price, waitTime, category);
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Menu item create fail", e);
         }
     }

@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
@@ -18,6 +19,8 @@ import java.io.IOException;
 public class CartItemDelete implements Command {
 
     private static final String PARAM_ITEM = "item";
+    private static final String PARAM_ITEM_NAME = "itemName";
+    private static final String PARAM_ITEM_PRICE = "itemPrice";
 
     private static final String PARAM_ERROR = "error";
     private static final String ERROR_MSG = "Delete item fail!";
@@ -30,11 +33,16 @@ public class CartItemDelete implements Command {
         OrderService orderService = serviceProvider.getOrderService();
 
         HttpSession session = request.getSession(true);
-
         String deleteValue = request.getParameter(PARAM_ITEM);
+        String deleteItemName = request.getParameter(PARAM_ITEM_NAME);
+        String deleteItemPrice = request.getParameter(PARAM_ITEM_PRICE);
+        int userId = 0;
+        if (session.getAttribute(Constants.PARAM_ID) != null){
+            userId = (int) session.getAttribute(Constants.PARAM_ID);
+        }
 
         try {
-            orderService.deleteOrderItem(deleteValue);
+            orderService.deleteOrderItem(deleteValue, userId, deleteItemName, deleteItemPrice);
 
         } catch (ServiceException e) {
 

@@ -1,7 +1,6 @@
 package net.epam.study.controller.listener;
 
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.dao.email.SendEmail;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -25,10 +24,6 @@ public class Listener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
         LOG.log(Level.INFO, "ServletContextListener was destroyed!");
-        try {
-            ConnectionPool.connectionPool.dispose();
-        } catch (ConnectionPoolException e) {
-            LOG.log(Level.INFO, "ServletContextListener was not destroyed!");
-        }
+        ConnectionPool.connectionPool.dispose();
     }
 }

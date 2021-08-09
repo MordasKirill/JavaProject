@@ -1,8 +1,11 @@
 package net.epam.study.service.validation.impl;
 
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Role;
 import net.epam.study.service.validation.ValidationService;
 
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,6 +139,10 @@ public class ValidationImpl implements ValidationService {
 
     public boolean isParamNotNull(int param) {
         return !(param == 0);
+    }
+
+    public boolean isParamNotNull(Map<Integer, LinkedList<MenuItem>> param) {
+        return !(param.size() == 0);
     }
 
 

@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ServiceProvider;
@@ -20,11 +21,12 @@ public class GoToBillPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
-        Constants.ORDER.clear();
-        Constants.TOTAL.clear();
-
         HttpSession session = request.getSession(true);
-
+        int userId = 0;
+        if (session.getAttribute(Constants.PARAM_ID) != null) {
+            userId = (int) session.getAttribute(Constants.PARAM_ID);
+        }
+        OrderProvider.getInstance().getOrder().get(userId).clear();
         if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
                 || !validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
 

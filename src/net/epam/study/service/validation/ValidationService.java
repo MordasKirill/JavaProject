@@ -1,5 +1,10 @@
 package net.epam.study.service.validation;
 
+import net.epam.study.bean.MenuItem;
+
+import java.util.LinkedList;
+import java.util.Map;
+
 public interface ValidationService {
     String emailErrorMsg(String email);
 
@@ -16,6 +21,8 @@ public interface ValidationService {
     boolean isParamNotNull(String param);
 
     boolean isParamNotNull(int param);
+
+    boolean isParamNotNull(Map<Integer, LinkedList<MenuItem>> param);
 
     boolean isAuthenticated(Boolean auth, String role);
 

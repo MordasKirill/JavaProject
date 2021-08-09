@@ -5,7 +5,7 @@ import net.epam.study.bean.User;
 import java.util.List;
 
 public interface UserService {
-    boolean isUserDataCorrect(int userId, String password) throws ServiceException;
+    boolean isUserDataCorrect(String login, String password) throws ServiceException;
 
     String getUserRole(int userId) throws ServiceException;
 

@@ -6,7 +6,7 @@ import net.epam.study.dao.connection.ConnectionPoolException;
 import java.util.List;
 
 public interface UserDAO {
-    boolean isUserDataCorrect(int userId, String password) throws DAOException, ConnectionPoolException;
+    boolean isUserDataCorrect(User user) throws DAOException, ConnectionPoolException;
 
     String getUserRole(int userId) throws DAOException, ConnectionPoolException;
 

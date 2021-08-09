@@ -23,7 +23,8 @@ public class UserDAOImpl implements UserDAO {
     private static final String COLUMN_USER_LOGIN = "login";
     private static final String COLUMN_ID_USER = "id";
 
-    private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select id, password, role from users where id = ?";
+    private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login = ?";
+    private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_ID = "select id, password, role from users where id = ?";
     private static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
     private static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
     private static final String SELECT_ALL_USERS = "select id from users where id>0";
@@ -60,16 +61,17 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    public boolean isUserDataCorrect(int userId, String password) throws DAOException, ConnectionPoolException {
+    public boolean isUserDataCorrect(User user) throws DAOException, ConnectionPoolException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
-            statement.setInt(1, userId);
+            statement.setString(1, user.getLogin());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                if (BCrypt.checkpw(password, resultSet.getString(COLUMN_PASSWORD))) {
+                if (resultSet.getString(COLUMN_LOGIN).equals(user.getLogin()) &&
+                        BCrypt.checkpw(user.getPassword(), resultSet.getString(COLUMN_PASSWORD))) {
                     LOG.info("SUCCESS: Login success.");
                     return true;
                 }
@@ -85,12 +87,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-    public String getUserRole(int userId) throws DAOException, ConnectionPoolException {
+    public String getUserRole(int userId) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN);
+            statement = connection.prepareStatement(SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_ID);
             statement.setInt(1, userId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -108,7 +110,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-    public boolean isUserUnique(String login) throws DAOException, ConnectionPoolException {
+    public boolean isUserUnique(String login) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         try {
@@ -133,7 +135,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> getUsers(int limit) throws DAOException, ConnectionPoolException {
+    public List<User> getUsers(int limit) throws DAOException {
         List<User> users = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -160,7 +162,7 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
-    public List<User> getAllUsers() throws DAOException, ConnectionPoolException {
+    public List<User> getAllUsers() throws DAOException {
         List<User> users = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -183,30 +185,16 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
-    @Override
-    public void deleteUser(String id) throws DAOException, ConnectionPoolException {
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_FROM_USERS);
-            statement.setString(1, id);
-            statement.executeUpdate();
-            LOG.info("SUCCESS DB: User deleted.");
-        } catch (SQLException exc) {
-            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
-            throw new DAOException(exc);
-        } finally {
-            ConnectionPool.connectionPool.putBack(connection);
-            assert statement != null;
-            ConnectionPool.connectionPool.closeConnection(statement);
-        }
+    public void deleteUser(String id) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_USERS, paramList);
     }
 
-    public int getUserId(String login) throws DAOException, ConnectionPoolException {
+    public int getUserId(String login) throws DAOException {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        int userId = 0;
         try {
             statement = connection.prepareStatement(GET_USER_ID);
             statement.setString(1, login);
@@ -214,9 +202,10 @@ public class UserDAOImpl implements UserDAO {
             LOG.info("SUCCESS DB: User id success.");
             while (resultSet.next()) {
                 if (login.equals(resultSet.getString(COLUMN_USER_LOGIN))) {
-                    userId = Integer.parseInt(resultSet.getString(COLUMN_ID_USER));
+                    return Integer.parseInt(resultSet.getString(COLUMN_ID_USER));
                 }
             }
+            throw new DAOException("FAIL DB: Fail to get user id.");
         } catch (SQLException exc) {
             LOG.log(Level.ERROR, "FAIL DB: Fail to get user id.", exc);
             throw new DAOException(exc);
@@ -224,10 +213,12 @@ public class UserDAOImpl implements UserDAO {
             ConnectionPool.connectionPool.putBack(connection);
             ConnectionPool.connectionPool.closeConnection(statement, resultSet);
         }
-        return userId;
     }
 
-    public void changeUserRole(String status, int id) throws DAOException, ConnectionPoolException {
-        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(status, id, UPDATE_USER_ROLE);
+    public void changeUserRole(String status, int id) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(status);
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_USER_ROLE, paramList);
     }
 }

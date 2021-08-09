@@ -13,12 +13,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public boolean isUserDataCorrect(int userId, String password) throws ServiceException {
+    public boolean isUserDataCorrect(String login, String password) throws ServiceException {
         DAOProvider provider = DAOProvider.getInstance();
         UserDAO userDAO = provider.getUserDAO();
 
         try {
-            return userDAO.isUserDataCorrect(userId, password);
+            return userDAO.isUserDataCorrect(new User(login, password));
         } catch (DAOException | ConnectionPoolException e) {
             throw new ServiceException("Fail to check if user exist", e);
         }

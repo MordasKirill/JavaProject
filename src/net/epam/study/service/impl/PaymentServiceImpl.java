@@ -4,7 +4,6 @@ import net.epam.study.bean.Order;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.PaymentDAO;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import net.epam.study.service.PaymentService;
 import net.epam.study.service.ServiceException;
 
@@ -25,7 +24,7 @@ public class PaymentServiceImpl implements PaymentService {
             result = paymentDAO.getDonePayments(userId);
             return result;
 
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Get all orders fail", e);
         }
 
@@ -38,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         try {
             paymentDAO.doPayment(userId, orderId, total, status);
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Payment create fail", e);
         }
     }
@@ -49,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         try {
             return paymentDAO.getAllOrders();
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Get all orders fail", e);
         }
     }
@@ -60,7 +59,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         try {
             paymentDAO.changePaymentStatus(status, id);
-        } catch (DAOException | ConnectionPoolException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Change order status fail", e);
         }
     }

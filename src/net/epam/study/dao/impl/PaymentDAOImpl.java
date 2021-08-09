@@ -5,7 +5,6 @@ import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.PaymentDAO;
 import net.epam.study.dao.connection.ConnectionPool;
-import net.epam.study.dao.connection.ConnectionPoolException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -26,29 +25,17 @@ public class PaymentDAOImpl implements PaymentDAO {
     private static final String SELECT_ALL_ORDERS = "select order_id from payment where order_id>0";
     private static final Logger LOG = Logger.getLogger(PaymentDAOImpl.class);
 
-    public void doPayment(int userId, int orderId, BigDecimal total, String status) throws DAOException, ConnectionPoolException {
-        Connection connection = ConnectionPool.connectionPool.retrieve();
-        PreparedStatement statement = null;
+    public void doPayment(int userId, int orderId, BigDecimal total, String status) throws DAOException {
         double doubleTotal = total.doubleValue();
-        try {
-            statement = connection.prepareStatement(INSERT_INTO_PAYMENT);
-            statement.setString(1, status);
-            statement.setDouble(2, doubleTotal);
-            statement.setInt(3, orderId);
-            statement.setInt(4, userId);
-            statement.executeUpdate();
-            LOG.info("SUCCESS DB: Payment created.");
-
-        } catch (SQLException exc) {
-            LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
-            throw new DAOException(exc);
-        } finally {
-            ConnectionPool.connectionPool.putBack(connection);
-            ConnectionPool.connectionPool.closeConnection(statement);
-        }
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(status);
+        paramList.add(doubleTotal);
+        paramList.add(orderId);
+        paramList.add(userId);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(INSERT_INTO_PAYMENT, paramList);
     }
 
-    public int getDonePayments(int userId) throws DAOException, ConnectionPoolException {
+    public int getDonePayments(int userId) throws DAOException {
         int result = 0;
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -70,7 +57,7 @@ public class PaymentDAOImpl implements PaymentDAO {
         return result;
     }
 
-    public List<Order> getAllOrders() throws DAOException, ConnectionPoolException {
+    public List<Order> getAllOrders() throws DAOException {
         List<Order> orders = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
@@ -93,7 +80,10 @@ public class PaymentDAOImpl implements PaymentDAO {
         return orders;
     }
 
-    public void changePaymentStatus(String status, int id) throws DAOException, ConnectionPoolException {
-        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(status, id, UPDATE_PAYMENT_STATUS);
+    public void changePaymentStatus(String status, int id) throws DAOException {
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(status);
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_PAYMENT_STATUS, paramList);
     }
 }

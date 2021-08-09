@@ -51,8 +51,12 @@ public class AddToCart implements Command {
             String price = request.getParameter(Constants.PARAM_PRICE);
             String time = request.getParameter(Constants.PARAM_TIME);
 
+            int userId = 0;
+            if (session.getAttribute(Constants.PARAM_ID) != null) {
+                userId = (int) session.getAttribute(Constants.PARAM_ID);
+            }
             session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
-            orderService.addToOrder(new MenuItem(name, price, time));
+            orderService.addToOrder(new MenuItem(name, price), userId);
 
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
             requestDispatcher.forward(request, response);

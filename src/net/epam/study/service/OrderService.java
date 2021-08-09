@@ -4,18 +4,20 @@ import net.epam.study.bean.MenuItem;
 import net.epam.study.bean.Order;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
-    void deleteOrderItem(String item) throws ServiceException;
+    void deleteOrderItem(String item, int userId, String itemName, String itemPrice) throws ServiceException;
 
-    void addToOrder(MenuItem menuItem);
+    void addToOrder(MenuItem menuItem, int userId);
 
     BigDecimal getTotal(int userId) throws ServiceException;
 
     int getDiscount(int userId) throws ServiceException;
 
-    StringBuilder getOrder();
+    String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId);
 
     void deleteOrder(String id) throws ServiceException;
 

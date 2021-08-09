@@ -1,8 +1,8 @@
 package net.epam.study.dao;
 
-import net.epam.study.dao.connection.ConnectionPoolException;
+import java.util.List;
 
 public interface DBCommonCRUDOperationDAO {
 
-    void executeUpdate(String changeValue, int id, String tableName) throws DAOException, ConnectionPoolException;
+    void executeUpdate(String sqlUpdateStatement, List<Object> params) throws DAOException;
 }
