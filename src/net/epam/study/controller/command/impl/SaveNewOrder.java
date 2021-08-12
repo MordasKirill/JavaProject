@@ -79,10 +79,10 @@ public class SaveNewOrder implements Command {
                     && validationService.phoneErrorMsg(phone) == null
                     && validationService.cityErrorMsg(city) == null) {
 
-                if (OrderProvider.getInstance().getOrder().size() == 0) {
+                if (OrderProvider.getInstance().getOrder().get(userId).size() == 0) {
 
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
-                    request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder());
+                    request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(userId));
                     request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
                     request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
 
@@ -120,7 +120,7 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
-                request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder());
+                request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(userId));
                 request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
                 request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
 

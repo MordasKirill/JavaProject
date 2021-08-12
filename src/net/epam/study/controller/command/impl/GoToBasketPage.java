@@ -72,7 +72,7 @@ public class GoToBasketPage implements Command {
             }
             LinkedList<MenuItem> linkedList = new LinkedList<>();
             request.setAttribute(ATTR_ORDER, linkedList);
-            if (validationService.isParamNotNull(OrderProvider.getInstance().getOrder())) {
+            if (OrderProvider.getInstance().getOrder().size() != 0) {
                 linkedList = OrderProvider.getInstance().getOrder().get(userId);
                 request.setAttribute(ATTR_ORDER, linkedList);
             }

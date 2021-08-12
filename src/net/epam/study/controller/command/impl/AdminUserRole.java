@@ -29,29 +29,20 @@ public class AdminUserRole implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         UserService userService = serviceProvider.getUserService();
         ValidationService validationService = serviceProvider.getValidationService();
-
         HttpSession session = request.getSession(true);
-
         if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
                 || !validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-
             int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
             String role = request.getParameter(Constants.ATTR_ROLE);
-
-            if (validationService.isParamNotNull(id)) {
-
-                try {
-                    userService.changeUserRole(role, id);
-                } catch (ServiceException e) {
-
-                    log.log(Level.ERROR, "AdminUserRole error.", e);
-                    session.setAttribute(PARAM_ERROR, ERROR_MSG);
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
-                    requestDispatcher.forward(request, response);
-                }
-
+            try {
+                userService.changeUserRole(role, id);
+            } catch (ServiceException e) {
+                log.log(Level.ERROR, "AdminUserRole error.", e);
+                session.setAttribute(PARAM_ERROR, ERROR_MSG);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
+                requestDispatcher.forward(request, response);
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);

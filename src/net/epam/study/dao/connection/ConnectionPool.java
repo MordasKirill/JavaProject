@@ -70,7 +70,7 @@ public final class ConnectionPool {
         }
     }
 
-    public void closeConnection(Statement st, ResultSet rs){
+    public void closeConnection(Statement st, ResultSet rs) {
         try {
             rs.close();
             st.close();
@@ -89,7 +89,7 @@ public final class ConnectionPool {
         }
     }
 
-    private void clearConnectionQueue(){
+    private void clearConnectionQueue() {
         try {
             closeConnectionsQueue(usedConnections);
             closeConnectionsQueue(availableConnections);
@@ -105,7 +105,7 @@ public final class ConnectionPool {
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
-            ((PooledConnection) connection).close();
+            connection.close();
         }
     }
 

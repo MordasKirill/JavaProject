@@ -9,8 +9,6 @@ import net.epam.study.dao.OrderDAO;
 import net.epam.study.dao.PaymentDAO;
 import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
-import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.validation.ValidationService;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -22,16 +20,15 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method to delete an item from order
      *
-     * @param item name of item to delete
-     *             throws in case something goes wrong
+     * @param userId user id
+     * @param itemName name of item to delete
+     *
      */
-    public void deleteOrderItem(String item, int userId, String itemName, String itemPrice) {
+    public void deleteOrderItem(int userId, String itemName) {
         LinkedList<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(userId);
-        MenuItem menuItem = new MenuItem(itemName, itemPrice);
-        for (int i = 0; i < linkedList.size(); i++){
-            if (menuItem.equals(linkedList.get(i))){
-                linkedList.remove(linkedList.get(i));
-                OrderProvider.getInstance().getOrder().put(userId, linkedList);
+        for(MenuItem item : linkedList){
+            if (item.getName().equals(itemName)) {
+                linkedList.remove(item);
                 break;
             }
         }
@@ -41,19 +38,19 @@ public class OrderServiceImpl implements OrderService {
      * Add to cart method
      *
      * @param menuItem name of item to be added to cart
+     * @param userId user id
+     *
      */
     public void addToOrder(MenuItem menuItem, int userId) {
-        if (menuItem.getName() != null && menuItem.getPrice() != null) {
-            if (OrderProvider.getInstance().getOrder().get(userId) == null){
-                LinkedList<MenuItem> linkedList = new LinkedList<>();
-                linkedList.add(menuItem);
-                OrderProvider.getInstance().getOrder().put(userId, linkedList);
-            } else {
-                LinkedList<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(userId);
-                linkedList.add(menuItem);
-                OrderProvider.getInstance().getOrder().put(userId, linkedList);
-            }
+        LinkedList<MenuItem> linkedList;
+        if (!OrderProvider.getInstance().getOrder().containsKey(userId)) {
+            linkedList =  new LinkedList<>();
+            linkedList.add(menuItem);
+        } else {
+            linkedList = OrderProvider.getInstance().getOrder().get(userId);
+            linkedList.add(menuItem);
         }
+        OrderProvider.getInstance().getOrder().put(userId, linkedList);
     }
 
     /**
@@ -61,50 +58,48 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param userId user login
      * @return returns BigDecimal total of order
-     * @throws ServiceException        exception in service
-     *                                 throws in case something goes wrong
+     * @throws ServiceException exception in service
+     *                          throws in case something goes wrong
      */
     public BigDecimal getTotal(int userId) throws ServiceException {
-        ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        ValidationService validationService = serviceProvider.getValidationService();
         BigDecimal result = new BigDecimal(0);
         BigDecimal sum = new BigDecimal(0);
-        int discount = 0;
-        LinkedList<MenuItem> linkedList = new LinkedList<>();
-        if (validationService.isParamNotNull(OrderProvider.getInstance().getOrder())) {
-            linkedList = OrderProvider.getInstance().getOrder().get(userId);
-        }
+        int discountPercentage = 0;
+        List<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(userId);
         for (MenuItem menuItem : linkedList) {
             BigDecimal total = new BigDecimal(menuItem.getPrice());
             sum = sum.add(total);
-            discount = getDiscount(userId);
-            if (discount >= 3) {
-                BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(discount))));
+            discountPercentage = getDiscount(userId);
+            if (discountPercentage >= 3) {
+                BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(discountPercentage))));
                 amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
                 result = sum.subtract(amount);
             }
-            if (discount < 3) {
+            if (discountPercentage < 3) {
                 result = sum;
             }
         }
         return result;
     }
 
-    public int getDiscount(int userId) throws ServiceException{
+    public int getDiscount(int userId) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-        int total = 0;
+        int successOrders = 0;
+        int discount10Percent = 10;
+        int discount3Percent = 3;
+        int withoutDiscount = 0;
         try {
-            total = paymentDAO.getDonePayments(userId);
+            successOrders = paymentDAO.getDonePayments(userId);
         } catch (DAOException e) {
             throw new ServiceException("Get discount fail", e);
         }
-        if (total == 3) {
-            return 3;
-        } else if (total >= 10) {
-            return 10;
+        if (successOrders == 3) {
+            return discount3Percent;
+        } else if (successOrders >= 10) {
+            return discount10Percent;
         }
-        return 0;
+        return withoutDiscount;
     }
 
     /**
@@ -114,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
      * of all products in a cart
      */
 
-    public String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId){
+    public String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId) {
         LinkedList<MenuItem> linkedList = order.get(userId);
         return linkedList.toString();
     }
@@ -146,12 +141,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void changeOrderStatus(String status, int id)throws ServiceException{
+    public void changeOrderStatus(String status, int id) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
             changeOrder.changeOrderStatus(status, id);
-        }catch (DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException("Fail to change order status", e);
         }
     }

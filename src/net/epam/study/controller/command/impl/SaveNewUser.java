@@ -1,6 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class SaveNewUser implements Command {
 
@@ -42,6 +45,8 @@ public class SaveNewUser implements Command {
 
             if (userService.isUserUnique(login)) {
                 userId = userService.createNewUser(login, PasswordUtils.hashPassword(password), role);
+                LinkedList<MenuItem> menuItems = new LinkedList<>();
+                OrderProvider.getInstance().getOrder().put(userId, menuItems);
                 session.setAttribute(Constants.ATTR_AUTH, true);
                 session.setAttribute(Constants.ATTR_ROLE, role);
                 session.setAttribute(Constants.PARAM_LOGIN, login);

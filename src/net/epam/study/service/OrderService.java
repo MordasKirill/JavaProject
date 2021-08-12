@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
-    void deleteOrderItem(String item, int userId, String itemName, String itemPrice) throws ServiceException;
+    void deleteOrderItem(int userId, String itemName) throws ServiceException;
 
     void addToOrder(MenuItem menuItem, int userId);
 

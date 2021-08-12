@@ -23,7 +23,7 @@ public class CommandProvider {
         commands.put(CommandName.DBINFODELETE, new AdminDelete());
         commands.put(CommandName.LOGOUT, new Logout());
         commands.put(CommandName.ITEMDELETE, new CartItemDelete());
-        commands.put(CommandName.ORDERSTATUS, new AdminOrderStatus());
+        commands.put(CommandName.ORDERSTATUS, new AdminChangeOrderStatus());
         commands.put(CommandName.USERROLE, new AdminUserRole());
         commands.put(CommandName.GOTOPAYMENTPAGE, new GoToPaymentPage());
         commands.put(CommandName.SAVEPAYMENT, new SaveNewPayment());

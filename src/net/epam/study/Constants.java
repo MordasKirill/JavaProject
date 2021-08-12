@@ -1,10 +1,5 @@
 package net.epam.study;
 
-import net.epam.study.bean.MenuItem;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Constants {
     public static final String ATTR_AUTH = "auth";
     public static final String ATTR_ROLE = "role";

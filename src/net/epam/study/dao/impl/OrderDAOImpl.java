@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class OrderDAOImpl implements OrderDAO {
     private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
 
     public void deleteOrder(String id) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_ORDERS, paramList);
     }
@@ -102,7 +103,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     public void changeOrderStatus(String status, int id) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(status);
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_ORDER_STATUS, paramList);

@@ -30,7 +30,7 @@ public class SaveNewPayment implements Command {
 
     private static final String ERR_MSG = "errMsg";
     private static final String ATTR_ERR_PAYMENT = "Payment fail!";
-    private static final String ATTR_ERR_TOTAL = "Get total fail!";
+    private static final String ERR_MSG_PRICE = "errMsgNullPrice";
     private static final String ERR_MSG_FULL_NAME = "errMsgFullName";
 
     private static final Logger log = Logger.getLogger(SaveNewPayment.class);
@@ -41,52 +41,37 @@ public class SaveNewPayment implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         PaymentService paymentService = serviceProvider.getPaymentService();
         OrderService orderService = serviceProvider.getOrderService();
-
         HttpSession session = request.getSession(true);
-
         int userId = (int) session.getAttribute(Constants.PARAM_ID);
-        int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
+        int orderId = 0;
+        if (session.getAttribute(ATTR_ORDER_ID) != null) {
+            orderId = (int) session.getAttribute(ATTR_ORDER_ID);
+        }
         String fullName = request.getParameter(Constants.PARAM_NAME);
         String number = request.getParameter(ATTR_CARD_NUMBER);
-
-        if (validationService.fullNameErrorMsg(fullName) == null) {
-
             try {
+                if (validationService.fullNameErrorMsg(fullName) == null &&
+                        orderService.getTotal(userId) != null) {
 
-                paymentService.changeOrderStatus(Status.DONE.toString().toLowerCase(), orderId);
-
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
-                requestDispatcher.forward(request, response);
-
+                    paymentService.changeOrderStatus(Status.DONE.toString().toLowerCase(), orderId);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
+                    requestDispatcher.forward(request, response);
+                } else {
+                    request.setAttribute(ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
+                    request.setAttribute(ERR_MSG_PRICE, validationService.priceErrorMsg(orderService.getTotal(userId)));
+                    request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
+                    session.setAttribute(ATTR_NUMBER_PAYMENT, number);
+                    session.setAttribute(ATTR_FULL_NAME_PAYMENT, fullName);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);
+                    requestDispatcher.forward(request, response);
+                }
             } catch (ServiceException e) {
-
                 log.log(Level.ERROR, "changePaymentStatus error.", e);
                 session.setAttribute(ERR_MSG, ATTR_ERR_PAYMENT);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-
-        } else {
-
-            request.setAttribute(ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
-
-            try {
-                request.setAttribute(ATTR_TOTAL, orderService.getTotal(userId));
-
-            } catch (ServiceException e) {
-
-                log.log(Level.ERROR, "getTotal error.", e);
-                session.setAttribute(ERR_MSG, ATTR_ERR_TOTAL);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
-                requestDispatcher.forward(request, response);
-            }
-
-            session.setAttribute(ATTR_NUMBER_PAYMENT, number);
-            session.setAttribute(ATTR_FULL_NAME_PAYMENT, fullName);
-
-
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);
-            requestDispatcher.forward(request, response);
-        }
     }
 }
+
+

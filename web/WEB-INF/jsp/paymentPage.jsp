@@ -138,6 +138,10 @@
             <fmt:message bundle="${loc}" key="${errMsgFullName}" var="err"/>
             <span style="color:red; font-size: 15px" >${err}</span>
         </c:if>
+        <c:if test="${errMsgNullPrice != null}">
+            <fmt:message bundle="${loc}" key="${errMsgNullPrice}" var="err"/>
+            <span style="color:red; font-size: 15px" >${err}</span>
+        </c:if>
         <input id="name" name="name" maxlength="20" type="text" placeholder="${err}" value="${fullNamePayment}" required>
     </div>
     <div class="field-container">

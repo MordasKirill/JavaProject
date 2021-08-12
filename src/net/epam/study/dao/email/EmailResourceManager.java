@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 public class EmailResourceManager {
     private final static EmailResourceManager instance = new EmailResourceManager();
 
-    private final ResourceBundle bundle = ResourceBundle.getBundle("net.epam.study.dao.email.mail");
+    private final ResourceBundle bundle = ResourceBundle.getBundle("resources.mail");
 
     public static EmailResourceManager getInstance() {
         return instance;

@@ -1,6 +1,8 @@
 package net.epam.study.controller.command.impl;
 
 import net.epam.study.Constants;
+import net.epam.study.OrderProvider;
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.ServiceException;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class CheckLoginAndPassword implements Command {
 
@@ -44,12 +47,13 @@ public class CheckLoginAndPassword implements Command {
             if (userService.isUserDataCorrect(login, password)) {
                 userId = userService.getUserId(login);
                 role = userService.getUserRole(userId);
+                LinkedList<MenuItem> menuItems = new LinkedList<>();
+                OrderProvider.getInstance().getOrder().put(userId, menuItems);
                 if (!validationService.isAdmin(role)) {
                     session.setAttribute(Constants.ATTR_AUTH, true);
                     request.setAttribute(ATTR_ERROR, "");
                     session.setAttribute(Constants.ATTR_ROLE, role);
                     session.setAttribute(Constants.PARAM_ID, userId);
-
                     ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                     requestDispatcher.forward(request, response);

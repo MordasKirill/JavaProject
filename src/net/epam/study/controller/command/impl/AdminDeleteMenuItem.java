@@ -46,42 +46,27 @@ public class AdminDeleteMenuItem implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         MenuService menuService = serviceProvider.getMenuService();
-
         String itemName = request.getParameter(Constants.ITEM_NAME_DELETE);
         String category = request.getParameter(Constants.CATEGORY_DELETE);
-
-
         HttpSession session = request.getSession(true);
-
         try {
-
             if (menuService.isMenuItemExists(itemName, category)) {
-
                 menuService.deleteMenuItem(itemName, category);
-
                 session.setAttribute(SUCCESS_ATR, SUCCESS_MSG);
-
                 session.removeAttribute(NOTFOUND_ATTR);
-
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
-
             } else {
                 session.removeAttribute(SUCCESS_ATR);
-
                 session.setAttribute(NOTFOUND_ATTR, NOTFOUND_MSG);
-
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
-
             }
         } catch (ServiceException e) {
-
             LOG.log(Level.ERROR, "AdminDeleteMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
-
     }
 }

@@ -56,9 +56,7 @@ public class Logout implements Command {
             session.removeAttribute("errMsgWaitTime");
 
             OrderProvider.getInstance().getOrder().get(userId).clear();
-
         }
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
         requestDispatcher.forward(request, response);
     }

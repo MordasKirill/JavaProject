@@ -18,13 +18,9 @@ import java.io.IOException;
 
 public class CartItemDelete implements Command {
 
-    private static final String PARAM_ITEM = "item";
     private static final String PARAM_ITEM_NAME = "itemName";
-    private static final String PARAM_ITEM_PRICE = "itemPrice";
-
     private static final String PARAM_ERROR = "error";
     private static final String ERROR_MSG = "Delete item fail!";
-
     private static final Logger log = Logger.getLogger(CartItemDelete.class);
 
     @Override
@@ -33,25 +29,19 @@ public class CartItemDelete implements Command {
         OrderService orderService = serviceProvider.getOrderService();
 
         HttpSession session = request.getSession(true);
-        String deleteValue = request.getParameter(PARAM_ITEM);
         String deleteItemName = request.getParameter(PARAM_ITEM_NAME);
-        String deleteItemPrice = request.getParameter(PARAM_ITEM_PRICE);
         int userId = 0;
-        if (session.getAttribute(Constants.PARAM_ID) != null){
+        if (session.getAttribute(Constants.PARAM_ID) != null) {
             userId = (int) session.getAttribute(Constants.PARAM_ID);
         }
-
         try {
-            orderService.deleteOrderItem(deleteValue, userId, deleteItemName, deleteItemPrice);
-
+            orderService.deleteOrderItem(userId, deleteItemName);
         } catch (ServiceException e) {
-
             log.log(Level.ERROR, "CartItemDelete error.", e);
             session.setAttribute(PARAM_ERROR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET_INDEX);
         requestDispatcher.forward(request, response);
     }

@@ -20,8 +20,8 @@ public class DBCommonCRUDOperationImpl implements DBCommonCRUDOperationDAO {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sqlUpdateStatement);
-            for(Object param:params){
-                statement.setObject(params.indexOf(param)+1, param);
+            for (Object param : params) {
+                statement.setObject(params.indexOf(param) + 1, param);
             }
             statement.executeUpdate();
             LOG.info("SUCCESS DB: Update executed.");

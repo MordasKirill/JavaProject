@@ -49,7 +49,6 @@ public class AddToCart implements Command {
 
             String name = request.getParameter(Constants.PARAM_NAME);
             String price = request.getParameter(Constants.PARAM_PRICE);
-            String time = request.getParameter(Constants.PARAM_TIME);
 
             int userId = 0;
             if (session.getAttribute(Constants.PARAM_ID) != null) {

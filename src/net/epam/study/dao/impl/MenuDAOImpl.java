@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MenuDAOImpl implements MenuDAO {
@@ -27,12 +28,12 @@ public class MenuDAOImpl implements MenuDAO {
 
     private static final Logger LOG = Logger.getLogger(MenuDAOImpl.class);
 
-    public void createMenuItem(String itemName, String price, String waitTime, String category) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
-        paramList.add(itemName);
-        paramList.add(price);
-        paramList.add(waitTime);
-        paramList.add(category);
+    public void createMenuItem(MenuItem menuItem) throws DAOException {
+        List<Object> paramList = new LinkedList<>();
+        paramList.add(menuItem.getName());
+        paramList.add(menuItem.getPrice());
+        paramList.add(menuItem.getFilingTime());
+        paramList.add(menuItem.getCategory());
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(INSERT_INTO_MENU, paramList);
     }
 
@@ -53,7 +54,7 @@ public class MenuDAOImpl implements MenuDAO {
         } catch (SQLException exc) {
             LOG.log(Level.ERROR, "FAIL DB: Fail to check MenuItem.", exc);
             throw new DAOException(exc);
-        }  finally{
+        } finally {
             ConnectionPool.connectionPool.putBack(connection);
             ConnectionPool.connectionPool.closeConnection(statement, resultSet);
         }
@@ -61,7 +62,7 @@ public class MenuDAOImpl implements MenuDAO {
     }
 
     public void deleteMenuItem(String itemName, String category) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(itemName);
         paramList.add(category);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_MENU, paramList);

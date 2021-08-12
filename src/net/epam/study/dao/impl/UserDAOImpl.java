@@ -13,6 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
@@ -186,7 +187,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void deleteUser(String id) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_USERS, paramList);
     }
@@ -216,7 +217,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void changeUserRole(String status, int id) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(status);
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_USER_ROLE, paramList);

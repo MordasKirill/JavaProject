@@ -20,7 +20,6 @@ public final class SendEmail {
 
     public SendEmail() {
         EmailResourceManager emailResourceManager = EmailResourceManager.getInstance();
-
         props = new Properties();
         props.put(EmailParameter.AUTH, emailResourceManager.getValue(EmailParameter.AUTH));
         props.put(EmailParameter.HOST, emailResourceManager.getValue(EmailParameter.HOST));
@@ -33,58 +32,42 @@ public final class SendEmail {
     }
 
     public void send(String status, String toEmail) throws EmailException {
-
         EmailResourceManager emailResourceManager = EmailResourceManager.getInstance();
-
+        String result;
         if (toEmail == null) {
             toEmail = emailResourceManager.getValue(EmailParameter.USER);
         }
-
-        String success;
-
         if (status.equals("accepted")) {
-
-            success = "We'll complete it during an hour, thank you!";
-
+            result = "We'll complete it during an hour, thank you!";
         } else {
-            success = "Please, check entered data.";
+            result = "Please, check entered data.";
         }
 
         Session mailSession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
         });
 
         try {
-            String htmlBody = "<strong>Your order is " + status.toUpperCase() + ". " + success + "</strong>";
-
+            String htmlBody = "<strong>Your order is " + status.toUpperCase() + ". " + result + "</strong>";
             Message message = new MimeMessage(mailSession);
-
             message.setFrom(new InternetAddress(emailResourceManager.getValue(EmailParameter.USER)));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-
             message.setSubject("ORDER FBOnline");
 
             MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
-
             mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
             mc.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
             mc.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
             mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
             mc.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
-
             CommandMap.setDefaultCommandMap(mc);
-
             message.setContent(htmlBody, "text/html");
             Transport.send(message);
-
             LOG.info("Email sent.");
 
-
         } catch (MessagingException e) {
-
             LOG.log(Level.ERROR, "SendEmail error.", e);
             throw new EmailException("Send email exception", e);
         }

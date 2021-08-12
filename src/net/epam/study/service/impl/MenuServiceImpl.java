@@ -49,7 +49,7 @@ public class MenuServiceImpl implements MenuService {
     public void createMenuItem(String itemName, String price, String waitTime, String category) throws ServiceException {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
         try {
-            menuDAO.createMenuItem(itemName, price, waitTime, category);
+            menuDAO.createMenuItem(new MenuItem(itemName, price, waitTime, category));
         } catch (DAOException e) {
             throw new ServiceException("Menu item create fail", e);
         }

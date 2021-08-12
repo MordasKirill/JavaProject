@@ -53,10 +53,8 @@ public class GoToMenuPage implements Command {
                         && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {
                     session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
                 }
-                LinkedList<MenuItem> linkedList = new LinkedList<>();
-                if (validationService.isParamNotNull(OrderProvider.getInstance().getOrder())) {
-                    linkedList = OrderProvider.getInstance().getOrder().get(userId);
-                }
+                LinkedList<MenuItem> linkedList;
+                linkedList = OrderProvider.getInstance().getOrder().get(userId);
                 request.setAttribute(ATTR_SIZE, linkedList.size());
                 request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
 

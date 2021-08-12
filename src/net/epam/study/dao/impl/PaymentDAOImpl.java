@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PaymentDAOImpl implements PaymentDAO {
@@ -27,7 +28,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public void doPayment(int userId, int orderId, BigDecimal total, String status) throws DAOException {
         double doubleTotal = total.doubleValue();
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(status);
         paramList.add(doubleTotal);
         paramList.add(orderId);
@@ -81,7 +82,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     }
 
     public void changePaymentStatus(String status, int id) throws DAOException {
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = new LinkedList<>();
         paramList.add(status);
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_PAYMENT_STATUS, paramList);

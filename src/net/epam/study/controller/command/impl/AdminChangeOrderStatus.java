@@ -3,10 +3,11 @@ package net.epam.study.controller.command.impl;
 import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
+import net.epam.study.dao.email.EmailException;
+import net.epam.study.dao.email.SendEmail;
 import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.UserService;
 import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -18,61 +19,40 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Class represents an adminDelete command
- * command that provides tools that can
- * help admin to delete user or order.
- */
-
-public class AdminDelete implements Command {
+public class AdminChangeOrderStatus implements Command {
     private static final String ATTR_ERROR = "error";
-    private static final String MSG_ERROR = "Delete order error!";
-    /**
-     * Logger to get error log
-     */
-    private static final Logger LOG = Logger.getLogger(AdminDelete.class);
+    private static final String MSG_ERROR = "Change status error!";
+    private static final String MSG_EMAIL = "Send email error!";
 
-    /**
-     * @param request  stores information about the request
-     * @param response manages the response to the request
-     * @throws ServletException servlet exceptions
-     * @throws IOException      exceptions produced by failed or
-     *                          interrupted I/O operations.
-     *                          <p>
-     *                          In case incorrect role user will be redirected to loginPage
-     *                          to prevent security breach.
-     */
+    private static final Logger LOG = Logger.getLogger(AdminChangeOrderStatus.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        UserService userService = serviceProvider.getUserService();
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         if (!validationService.isAuthenticated((Boolean) session.getAttribute(Constants.ATTR_AUTH), (String) session.getAttribute(Constants.ATTR_ROLE))
                 || !validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
-
         } else {
-
-            String idOrder = request.getParameter(Constants.ID_ORDER);
-            String idUser = request.getParameter(Constants.ID_USER);
-
+            int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
+            String status = request.getParameter(Constants.PARAM_STATUS);
+            String email = request.getParameter(Constants.PARAM_EMAIL);
             try {
-                if (idOrder != null) {
-                    orderService.deleteOrder(idOrder);
-                }
-                if (idUser != null) {
-                    userService.deleteUser(idUser);
-                }
+                orderService.changeOrderStatus(status, id);
+                SendEmail.sendEmail.send(status, email);
             } catch (ServiceException e) {
-
-                LOG.log(Level.ERROR, "Admin delete action error.", e);
+                LOG.log(Level.ERROR, "AdminOrderStatus error.", e);
                 session.setAttribute(ATTR_ERROR, MSG_ERROR);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
+            } catch (EmailException e) {
+                LOG.log(Level.ERROR, "SendEmail error.", e);
+                session.setAttribute(ATTR_ERROR, MSG_EMAIL);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
+                requestDispatcher.forward(request, response);
             }
-
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         }
