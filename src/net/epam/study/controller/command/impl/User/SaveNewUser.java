@@ -3,6 +3,7 @@ package net.epam.study.controller.command.impl.user;
 import net.epam.study.Constants;
 import net.epam.study.OrderProvider;
 import net.epam.study.bean.MenuItem;
+import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.controller.command.Role;
@@ -44,7 +45,7 @@ public class SaveNewUser implements Command {
         try {
 
             if (userService.isUserUnique(login)) {
-                userId = userService.createNewUser(login, PasswordUtils.hashPassword(password), role);
+                userId = userService.createNewUser(new User(login, PasswordUtils.hashPassword(password)));
                 LinkedList<MenuItem> menuItems = new LinkedList<>();
                 OrderProvider.getInstance().getOrder().put(userId, menuItems);
                 session.setAttribute(Constants.ATTR_AUTH, true);

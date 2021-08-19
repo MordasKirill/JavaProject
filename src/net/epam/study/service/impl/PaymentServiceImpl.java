@@ -15,16 +15,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public int getDonePayments(int userId) throws ServiceException {
-
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-
-        int result;
-
         try {
-            result = paymentDAO.getDonePayments(userId);
-            return result;
-
+            return paymentDAO.getDonePayments(userId);
         } catch (DAOException e) {
             throw new ServiceException("Get all orders fail", e);
         }
@@ -35,7 +29,6 @@ public class PaymentServiceImpl implements PaymentService {
     public void doPayment(int userId, int orderId, BigDecimal total, String status) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-
         try {
             paymentDAO.doPayment(userId, orderId, total, status);
         } catch (DAOException e) {

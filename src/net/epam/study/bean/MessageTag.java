@@ -14,9 +14,7 @@ public class MessageTag extends SimpleTagSupport {
         this.message = msg;
     }
 
-    public void doTag()
-
-            throws JspException, IOException {
+    public void doTag() throws JspException, IOException {
         if (message != null) {
             JspWriter out = getJspContext().getOut();
             out.println(message);

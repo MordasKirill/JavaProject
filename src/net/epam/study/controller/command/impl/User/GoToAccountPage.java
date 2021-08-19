@@ -28,7 +28,7 @@ public class GoToAccountPage implements Command {
     private static final String LIMIT_ORDERS = "limit_orders";
     private static final String PARAM_ORDERS = "userOrders";
 
-    private static final Logger log = Logger.getLogger(GoToBasketPage.class);
+    private static final Logger log = Logger.getLogger(GoToAccountPage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,20 +38,16 @@ public class GoToAccountPage implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        if (!validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        int userId = user.getId();
+        if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
-                if (session.getAttribute(LIMIT_ORDERS) == null) {
-                    session.setAttribute(LIMIT_ORDERS, 0);
-                }
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
-
                 if (request.getParameter(LOAD_ORDERS) != null) {
                     session.setAttribute(LIMIT_ORDERS, paginationService.getActualLimit(limitOrders));
                     response.sendRedirect(PagePath.REDIRECT_ACCOUNT);
@@ -62,7 +58,6 @@ public class GoToAccountPage implements Command {
                     response.sendRedirect(PagePath.REDIRECT_ACCOUNT);
                     return;
                 }
-
                 int ordersSize = orderService.getOrderDetails(userId).size();
                 boolean resultOrdersNext = ordersSize > limitOrders + Constants.DEFAULT_LIMIT;
                 boolean resultOrdersBack = limitOrders != 0;
@@ -72,7 +67,6 @@ public class GoToAccountPage implements Command {
                 session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(userId));
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ACCOUNT);
                 requestDispatcher.forward(request, response);
-
             } catch (ServiceException e) {
                 log.log(Level.ERROR, "GoToAccountPage error.", e);
                 session.setAttribute(PARAM_ERROR, ERROR_MSG);

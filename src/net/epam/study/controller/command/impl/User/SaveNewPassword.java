@@ -25,7 +25,7 @@ public class SaveNewPassword implements Command {
     private static final String SUCCESS_ATR = "successDelete";
     private static final String SUCCESS_MSG = "local.error.sucess";
 
-    private static final Logger log = Logger.getLogger(SaveNewUser.class);
+    private static final Logger log = Logger.getLogger(SaveNewPassword.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,11 +33,11 @@ public class SaveNewPassword implements Command {
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         UserService userService = serviceProvider.getUserService();
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
+        int userId = user.getId();
         try {
             if (password != null) {
                 userService.changeUserPassword(PasswordUtils.hashPassword(password), userId);

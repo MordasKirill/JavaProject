@@ -36,28 +36,23 @@ public class AddToCart implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
-
         HttpSession session = request.getSession(true);
-
-        if (!validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
+        }
+        int userId = user.getId();
+        if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-
             String name = request.getParameter(Constants.PARAM_NAME);
             String price = request.getParameter(Constants.PARAM_PRICE);
 
-            int userId = 0;
-            if (session.getAttribute(Constants.PARAM_USER) != null) {
-                User user = (User) session.getAttribute(Constants.PARAM_USER);
-                userId = Integer.parseInt(user.getId());
-            }
             session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
             orderService.addToOrder(new MenuItem(name, price), userId);
-
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
             requestDispatcher.forward(request, response);
         }

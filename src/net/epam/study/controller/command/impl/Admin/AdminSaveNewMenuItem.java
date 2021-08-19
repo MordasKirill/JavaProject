@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl.admin;
 
+import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.MenuService;
@@ -39,58 +40,37 @@ public class AdminSaveNewMenuItem implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         ValidationService validationService = serviceProvider.getValidationService();
         MenuService menuService = serviceProvider.getMenuService();
-
-
         String itemName = request.getParameter(PARAM_ITEM_NAME);
         String price = request.getParameter(PARAM_PRICE);
         String category = request.getParameter(PARAM_CATEGORY);
         String waitTime = request.getParameter(PARAM_WAIT_TIME);
-
         HttpSession session = request.getSession(true);
-
         try {
-
             if (validationService.priceErrorMsg(price) == null
                     && validationService.timeErrorMsg(waitTime) == null
                     && !menuService.isMenuItemExists(itemName, category)) {
-
-
-                menuService.createMenuItem(itemName, price, waitTime, category);
-
-
+                menuService.createMenuItem(new MenuItem(itemName, price, waitTime, category));
                 session.setAttribute(SUCCESS_ATTR, SUCCESS_MSG);
-
                 session.removeAttribute(PRICE_ERROR);
                 session.removeAttribute(WAIT_TIME_ERROR);
                 session.removeAttribute(ITEM_ERROR_ERR_MSG_ITEM_EXIST);
-
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
-
             } else {
-
                 if (menuService.isMenuItemExists(itemName, category)) {
-
                     session.setAttribute(ITEM_ERROR_ERR_MSG_ITEM_EXIST, ITEM_ERROR);
                 }
-
                 session.removeAttribute(SUCCESS_ATTR);
-
                 session.setAttribute(PRICE_ERROR, validationService.priceErrorMsg(price));
                 session.setAttribute(WAIT_TIME_ERROR, validationService.timeErrorMsg(waitTime));
-
-
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
             }
         } catch (ServiceException e) {
-
             log.log(Level.ERROR, "AdminSaveNewMenuItem error.", e);
             session.setAttribute(ERROR_ATTR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
             requestDispatcher.forward(request, response);
         }
-
-
     }
 }

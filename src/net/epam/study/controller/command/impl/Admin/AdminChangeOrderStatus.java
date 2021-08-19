@@ -33,11 +33,14 @@ public class AdminChangeOrderStatus implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
-        if (!validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
+        }
+        int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
+        if (!validationService.isUser(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            int id = Integer.parseInt(user.getId());
             String status = request.getParameter(Constants.PARAM_STATUS);
             String email = request.getParameter(Constants.PARAM_EMAIL);
             try {

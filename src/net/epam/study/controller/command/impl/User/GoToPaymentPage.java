@@ -34,30 +34,23 @@ public class GoToPaymentPage implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
-
         HttpSession session = request.getSession(true);
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        if (!validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
-
+        int userId = user.getId();
+        if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
-
             try {
                 request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), userId));
-
             } catch (ServiceException e) {
-
                 log.log(Level.ERROR, "GoToPaymentPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-
-
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);
             requestDispatcher.forward(request, response);

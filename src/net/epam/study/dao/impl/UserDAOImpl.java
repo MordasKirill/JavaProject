@@ -149,7 +149,7 @@ public class UserDAOImpl implements UserDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setId(resultSet.getString(COLUMN_ID_USER));
+                user.setId(resultSet.getInt(COLUMN_ID_USER));
                 user.setLogin(resultSet.getString(COLUMN_LOGIN));
                 user.setRole(resultSet.getString(COLUMN_ROLE));
                 users.add(user);
@@ -174,7 +174,7 @@ public class UserDAOImpl implements UserDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setId(resultSet.getString(COLUMN_ID_USER));
+                user.setId(resultSet.getInt(COLUMN_ID_USER));
                 users.add(user);
             }
         } catch (SQLException | RuntimeException exc) {

@@ -1,4 +1,4 @@
-package net.epam.study.controller.command.impl.order;
+package net.epam.study.controller.command.impl.Order;
 
 import net.epam.study.Constants;
 import net.epam.study.bean.User;

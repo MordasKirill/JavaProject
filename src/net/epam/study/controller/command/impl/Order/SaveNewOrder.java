@@ -2,6 +2,7 @@ package net.epam.study.controller.command.impl.order;
 
 import net.epam.study.Constants;
 import net.epam.study.OrderProvider;
+import net.epam.study.bean.Order;
 import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
@@ -61,29 +62,24 @@ public class SaveNewOrder implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         OrderService orderService = serviceProvider.getOrderService();
         PaymentService paymentService = serviceProvider.getPaymentService();
-
         String email = request.getParameter(ATTR_EMAIL).trim();
         String fullName = request.getParameter(ATTR_FULL_NAME).trim();
         String address = request.getParameter(ATTR_ADDRESS);
         String phone = request.getParameter(ATTR_PHONE).trim();
         String city = request.getParameter(ATTR_CITY).trim();
         String paymentMethod = request.getParameter(ATTR_METHOD);
-
         HttpSession session = request.getSession(true);
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
+        int userId = user.getId();
         int orderId = 0;
-
         try {
-
             if (validationService.emailErrorMsg(email) == null
                     && validationService.fullNameErrorMsg(fullName) == null
                     && validationService.phoneErrorMsg(phone) == null
                     && validationService.cityErrorMsg(city) == null) {
-
                 if (OrderProvider.getInstance().getOrder().get(userId).size() == 0) {
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                     request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(userId));
@@ -91,9 +87,8 @@ public class SaveNewOrder implements Command {
                     request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
-
                 } else {
-                    orderId = orderService.createOrder(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), userId));
+                    orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), userId)));
                     session.setAttribute(ATTR_ORDER_ID, orderId);
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {
                         paymentService.doPayment(userId, orderId, orderService.applyDiscount(orderService.getTotal(userId), userId), STATUS_PROCESSING);
@@ -121,9 +116,7 @@ public class SaveNewOrder implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                 requestDispatcher.forward(request, response);
             }
-
         } catch (ServiceException e) {
-
             log.log(Level.ERROR, "SaveNewOrder error.", e);
             session.setAttribute(ATTR_ERROR, ATTR_ERROR_ORDER_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);

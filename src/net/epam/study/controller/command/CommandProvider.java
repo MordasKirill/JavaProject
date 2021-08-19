@@ -1,11 +1,11 @@
 package net.epam.study.controller.command;
 
-import net.epam.study.controller.command.impl.admin.*;
 import net.epam.study.controller.command.impl.order.AddToCart;
 import net.epam.study.controller.command.impl.order.CartItemDelete;
+import net.epam.study.controller.command.impl.order.CheckLoginAndPassword;
 import net.epam.study.controller.command.impl.order.SaveNewOrder;
-import net.epam.study.controller.command.impl.order.SaveNewPayment;
 import net.epam.study.controller.command.impl.user.*;
+import net.epam.study.controller.command.impl.admin.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class CommandProvider {
     private final Map<CommandName, Command> commands = new HashMap<>();
 
     public CommandProvider() {
-        commands.put(CommandName.REGISTRATION, new GoToRegistrPage());
+        commands.put(CommandName.REGISTRATION, new GoToRegistrationPage());
         commands.put(CommandName.SAVENEWUSER, new SaveNewUser());
         commands.put(CommandName.GOTOLOGINPAGE, new GoToLoginPage());
         commands.put(CommandName.GOTOADMINPAGE, new GoToAdminPage());

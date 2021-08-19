@@ -11,5 +11,5 @@ public interface MenuService {
 
     List<MenuItem> getMenu() throws ServiceException;
 
-    void createMenuItem(String itemName, String price, String waitTime, String category) throws ServiceException;
+    void createMenuItem(MenuItem menuItem) throws ServiceException;
 }

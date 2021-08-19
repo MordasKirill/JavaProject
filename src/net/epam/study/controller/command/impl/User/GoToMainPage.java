@@ -28,13 +28,13 @@ public class GoToMainPage implements Command {
         if (session.getAttribute(Constants.PARAM_LOGIN) == null) {
             session.setAttribute(Constants.PARAM_LOGIN, ATTR_LOGIN_STRANGER);
         }
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
+        int userId = user.getId();
 
-        if (!validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
 
         } else {

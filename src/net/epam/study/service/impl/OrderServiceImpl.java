@@ -17,8 +17,9 @@ import java.util.Map;
 
 public class OrderServiceImpl implements OrderService {
 
-    final static int discount10Percent = 10;
-    final static int discount3Percent = 3;
+    final static int DISCOUNT_10_PERCENT = 10;
+    final static int DISCOUNT_3_PERCENT = 3;
+
     /**
      * Method to delete an item from order
      *
@@ -71,7 +72,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return total;
     }
-
     /**
      * Method to apply discount
      *
@@ -82,10 +82,9 @@ public class OrderServiceImpl implements OrderService {
      *                          throws in case something goes wrong
      */
     public BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException {
-        BigDecimal totalWithDiscount = new BigDecimal(0);
-        totalWithDiscount = totalWithDiscount.add(totalPrice);
+        BigDecimal totalWithDiscount = new BigDecimal(String.valueOf(totalPrice));
         int discount = getDiscount(userId);
-        if (discount >= 3) {
+        if (discount >= 0) {
             BigDecimal amount = new BigDecimal(String.valueOf(totalWithDiscount.multiply(BigDecimal.valueOf(discount))));
             amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
             return totalWithDiscount.subtract(amount);
@@ -111,9 +110,9 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException("Get discount fail", e);
         }
         if (successOrders >= 3 && successOrders < 10) {
-            return discount3Percent;
+            return DISCOUNT_3_PERCENT;
         } else if (successOrders >= 10) {
-            return discount10Percent;
+            return DISCOUNT_10_PERCENT;
         }
         return 0;
     }
@@ -124,7 +123,6 @@ public class OrderServiceImpl implements OrderService {
      * @return returns a StringBuilder value
      * of all products in a cart
      */
-
     public String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId) {
         LinkedList<MenuItem> linkedList = order.get(userId);
         return linkedList.toString();
@@ -136,7 +134,6 @@ public class OrderServiceImpl implements OrderService {
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
             return changeOrder.getOrderDetailsWithLimit(limit);
-
         } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);
         }
@@ -148,7 +145,6 @@ public class OrderServiceImpl implements OrderService {
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
             return changeOrder.getOrderDetails(userId);
-
         } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);
         }
@@ -160,7 +156,6 @@ public class OrderServiceImpl implements OrderService {
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
             return changeOrder.getAllOrders();
-
         } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);
         }
@@ -168,16 +163,14 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public int createOrder(String fullName, String address, String email, String phone, String details) throws ServiceException {
+    public int createOrder(Order order) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
-        int orderId = 0;
         try {
-            orderId = changeOrder.createOrder(new Order(fullName, address, email, phone, details));
+            return changeOrder.createOrder(order);
         } catch (DAOException e) {
             throw new ServiceException("Order create fail", e);
         }
-        return orderId;
     }
 
     @Override

@@ -8,7 +8,7 @@ public class User implements Serializable {
     private String login;
     private String password;
     private String role;
-    private String id;
+    private int id;
     boolean auth;
 
     public User() {
@@ -19,7 +19,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(String id, String role, boolean auth){
+    public User(int id, String role, boolean auth){
         this.id = id;
         this.role = role;
         this.auth = auth;
@@ -55,11 +55,11 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -70,8 +70,7 @@ public class User implements Serializable {
         User user = (User) o;
         return getLogin().equals(user.getLogin()) &&
                 getPassword().equals(user.getPassword()) &&
-                getRole().equals(user.getRole()) &&
-                getId().equals(user.getId());
+                getRole().equals(user.getRole());
     }
 
     @Override

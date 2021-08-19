@@ -1,6 +1,7 @@
 package net.epam.study.controller.command.impl.admin;
 
 import net.epam.study.Constants;
+import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
@@ -49,7 +50,11 @@ public class AdminDelete implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
-        if (!validationService.isUser((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
+        }
+        if (!validationService.isUser(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
 
         } else {

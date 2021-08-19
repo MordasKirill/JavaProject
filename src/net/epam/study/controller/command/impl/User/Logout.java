@@ -2,6 +2,7 @@ package net.epam.study.controller.command.impl.user;
 
 import net.epam.study.Constants;
 import net.epam.study.OrderProvider;
+import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 
@@ -18,10 +19,11 @@ public class Logout implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if (session != null) {
-            int userId = 0;
-            if (session.getAttribute(Constants.PARAM_ID) != null) {
-                userId = (int) session.getAttribute(Constants.PARAM_ID);
+            User user = (User) session.getAttribute(Constants.PARAM_USER);
+            if (session.getAttribute(Constants.PARAM_USER) == null) {
+                response.sendRedirect(PagePath.REDIRECT_LOGIN);
             }
+            int userId = user.getId();
             Enumeration<String> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
                 String attributeName = enumeration.nextElement();

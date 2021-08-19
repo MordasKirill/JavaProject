@@ -39,17 +39,16 @@ public class GoToMenuPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
 
         HttpSession session = request.getSession(true);
-        int userId = 0;
-        if (session.getAttribute(Constants.PARAM_USER) != null) {
-            User user = (User) session.getAttribute(Constants.PARAM_USER);
-            userId = Integer.parseInt(user.getId());
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
+        if (session.getAttribute(Constants.PARAM_USER) == null) {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        if (!validationService.isAdmin((String) session.getAttribute(Constants.ATTR_ROLE))) {
+        int userId = user.getId();
+        if (!validationService.isAdmin(user.getRole())) {
 
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
-
                 if (request.getParameter(Constants.PARAM_CATEGORY) != null
                         && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {
                     session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
@@ -58,17 +57,13 @@ public class GoToMenuPage implements Command {
                 linkedList = OrderProvider.getInstance().getOrder().get(userId);
                 request.setAttribute(ATTR_SIZE, linkedList.size());
                 request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
-
                 if (request.getParameter(Constants.PARAM_LOCALE) != null) {
                     ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                 }
-
                 request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU);
                 requestDispatcher.forward(request, response);
-
             } catch (ServiceException e) {
-
                 log.log(Level.ERROR, "GoToMenuPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);

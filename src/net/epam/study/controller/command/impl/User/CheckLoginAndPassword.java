@@ -1,4 +1,4 @@
-package net.epam.study.controller.command.impl.user;
+package net.epam.study.controller.command.impl.User;
 
 import net.epam.study.Constants;
 import net.epam.study.OrderProvider;
@@ -46,7 +46,7 @@ public class CheckLoginAndPassword implements Command {
         String role;
         int userId;
         try {
-            if (userService.isUserDataCorrect(login, password)) {
+            if (userService.isUserDataCorrect(new User(login, password))) {
                 userId = userService.getUserId(login);
                 role = userService.getUserRole(userId);
                 LinkedList<MenuItem> menuItems = new LinkedList<>();

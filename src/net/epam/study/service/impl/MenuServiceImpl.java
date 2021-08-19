@@ -24,32 +24,28 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public boolean isMenuItemExists(String itemName, String category) throws ServiceException {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
-        boolean result;
         try {
-            result = menuDAO.isMenuItemExists(itemName, category);
+            return menuDAO.isMenuItemExists(itemName, category);
         } catch (DAOException e) {
             throw new ServiceException("Fail to delete user", e);
         }
-        return result;
     }
 
     @Override
     public List<MenuItem> getMenu() throws ServiceException {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
-        List<MenuItem> menuItems;
         try {
-            menuItems = menuDAO.getMenu();
-            return menuItems;
+            return menuDAO.getMenu();
         } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);
         }
     }
 
     @Override
-    public void createMenuItem(String itemName, String price, String waitTime, String category) throws ServiceException {
+    public void createMenuItem(MenuItem menuItem) throws ServiceException {
         MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
         try {
-            menuDAO.createMenuItem(new MenuItem(itemName, price, waitTime, category));
+            menuDAO.createMenuItem(menuItem);
         } catch (DAOException e) {
             throw new ServiceException("Menu item create fail", e);
         }

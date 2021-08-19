@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
-    void deleteOrderItem(int userId, String itemName) throws ServiceException;
+    void deleteOrderItem(int userId, String itemName);
 
     void addToOrder(MenuItem menuItem, int userId);
 
-    BigDecimal getTotal(int userId) throws ServiceException;
+    BigDecimal getTotal(int userId);
 
     BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException;
 
@@ -29,7 +29,7 @@ public interface OrderService {
 
     List<Order> getAllOrders() throws ServiceException;
 
-    int createOrder(String fullName, String address, String email, String phone, String details) throws ServiceException;
+    int createOrder(Order oder) throws ServiceException;
 
     void changeOrderStatus(String status, int id) throws ServiceException;
 }
