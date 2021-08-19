@@ -5,7 +5,7 @@ public class Constants {
     public static final String ATTR_ROLE = "role";
     public static final String PARAM_NAME = "name";
     public static final String PARAM_PRICE = "price";
-    public static final String PARAM_TIME = "time";
+    public static final String PARAM_USER = "user";
     public static final String PARAM_CATEGORY = "category";
     public static final String ITEM_NAME_DELETE = "itemNameDelete";
     public static final String CATEGORY_DELETE = "categoryDelete";

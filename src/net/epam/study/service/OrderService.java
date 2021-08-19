@@ -15,13 +15,19 @@ public interface OrderService {
 
     BigDecimal getTotal(int userId) throws ServiceException;
 
+    BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException;
+
     int getDiscount(int userId) throws ServiceException;
 
     String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId);
 
     void deleteOrder(String id) throws ServiceException;
 
-    List<Order> getOrders(int limit) throws ServiceException;
+    List<Order> getOrderDetailsWithLimit(int limit) throws ServiceException;
+
+    List<Order> getOrderDetails(int userId) throws ServiceException;
+
+    List<Order> getAllOrders() throws ServiceException;
 
     int createOrder(String fullName, String address, String email, String phone, String details) throws ServiceException;
 

@@ -12,5 +12,7 @@ public interface PaymentService {
 
     void changeOrderStatus(String status, int id) throws ServiceException;
 
-    List<Order> getAllOrders() throws ServiceException;
+    List<Order> getAllPayments(int userId, int limit) throws ServiceException;
+
+    List<Order> getDetailsForCurrentUser(List<Order> allOrders, List<Order> userOrders);
 }

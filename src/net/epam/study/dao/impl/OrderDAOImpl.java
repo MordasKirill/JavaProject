@@ -30,7 +30,9 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String COLUMN_PAYMENT_STATUS = "paymentStatus";
     private static final String DELETE_FROM_ORDERS = "delete from orders where order_id = ?";
     private static final String INSERT_INTO_ORDERS = "insert into orders (fullName,address,email,phone,details,status) values (?,?,?,?,?,?)";
-    private static final String SELECT_FROM_ORDERS_PAYMENTS = "select * from orders, payment where Orders.order_id = Payment.order_id LIMIT ?,?";
+    private static final String SELECT_FROM_ORDERS_PAYMENTS_WITH_LIMIT = "select * from orders, payment where Orders.order_id = Payment.order_id LIMIT ?,?";
+    private static final String SELECT_FROM_ORDERS_PAYMENTS = "select * from orders, payment where Orders.order_id = Payment.order_id and Payment.user_id = ?";
+    private static final String SELECT_FROM_ORDERS = "select order_id from payment";
     private static final String UPDATE_ORDER_STATUS = "update orders set status = ? where order_id = ?";
 
     private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
@@ -41,13 +43,13 @@ public class OrderDAOImpl implements OrderDAO {
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_ORDERS, paramList);
     }
 
-    public List<Order> getOrders(int limit) throws DAOException {
+    public List<Order> getOrderDetailsWithLimit(int limit) throws DAOException {
         List<Order> orders = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS);
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS_WITH_LIMIT);
             statement.setInt(1, limit);
             statement.setInt(2, Constants.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
@@ -61,6 +63,60 @@ public class OrderDAOImpl implements OrderDAO {
                 order.setDetails(resultSet.getString(COLUMN_DETAILS));
                 order.setStatus(resultSet.getString(COLUMN_STATUS));
                 order.setPaymentStatus(resultSet.getString(COLUMN_PAYMENT_STATUS));
+                orders.add(order);
+            }
+        } catch (SQLException | RuntimeException exc) {
+            LOG.log(Level.ERROR, "FAIL DB: Fail to retrieve records from DB.", exc);
+            throw new DAOException(exc);
+        } finally {
+            ConnectionPool.connectionPool.putBack(connection);
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+        return orders;
+    }
+
+    public List<Order> getOrderDetails(int userId) throws DAOException {
+        List<Order> orders = new ArrayList<>();
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS_PAYMENTS);
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                order.setFullName(resultSet.getString(COLUMN_FULL_NAME));
+                order.setAddress(resultSet.getString(COLUMN_ADDRESS));
+                order.setEmail(resultSet.getString(COLUMN_EMAIL));
+                order.setPhone(resultSet.getString(COLUMN_PHONE));
+                order.setDetails(resultSet.getString(COLUMN_DETAILS));
+                order.setStatus(resultSet.getString(COLUMN_STATUS));
+                order.setPaymentStatus(resultSet.getString(COLUMN_PAYMENT_STATUS));
+                orders.add(order);
+            }
+        } catch (SQLException | RuntimeException exc) {
+            LOG.log(Level.ERROR, "FAIL DB: Fail to retrieve records from DB.", exc);
+            throw new DAOException(exc);
+        } finally {
+            ConnectionPool.connectionPool.putBack(connection);
+            ConnectionPool.connectionPool.closeConnection(statement, resultSet);
+        }
+        return orders;
+    }
+
+    public List<Order> getAllOrders() throws DAOException {
+        List<Order> orders = new ArrayList<>();
+        Connection connection = ConnectionPool.connectionPool.retrieve();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(SELECT_FROM_ORDERS);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getString(COLUMN_ID_ORDER));
                 orders.add(order);
             }
         } catch (SQLException | RuntimeException exc) {

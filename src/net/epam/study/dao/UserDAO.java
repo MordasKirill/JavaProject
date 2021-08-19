@@ -1,26 +1,27 @@
 package net.epam.study.dao;
 
 import net.epam.study.bean.User;
-import net.epam.study.dao.connection.ConnectionPoolException;
 
 import java.util.List;
 
 public interface UserDAO {
-    boolean isUserDataCorrect(User user) throws DAOException, ConnectionPoolException;
+    boolean isUserDataCorrect(User user) throws DAOException;
 
-    String getUserRole(int userId) throws DAOException, ConnectionPoolException;
+    String getUserRole(int userId) throws DAOException;
 
-    boolean isUserUnique(String login) throws DAOException, ConnectionPoolException;
+    boolean isUserUnique(String login) throws DAOException;
 
-    int getUserId(String login) throws DAOException, ConnectionPoolException;
+    int getUserId(String login) throws DAOException;
 
-    List<User> getUsers(int limit) throws DAOException, ConnectionPoolException;
+    List<User> getUsers(int limit) throws DAOException;
 
-    List<User> getAllUsers() throws DAOException, ConnectionPoolException;
+    List<User> getAllUsers() throws DAOException;
 
-    void deleteUser(String id) throws DAOException, ConnectionPoolException;
+    void deleteUser(String id) throws DAOException;
 
-    void changeUserRole(String status, int id) throws DAOException, ConnectionPoolException;
+    void changeUserRole(String status, int id) throws DAOException;
 
-    int createNewUser(User user) throws DAOException, ConnectionPoolException;
+    void changeUserPassword(String password, int id) throws DAOException;
+
+    int createNewUser(User user) throws DAOException;
 }

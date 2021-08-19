@@ -118,6 +118,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void changeUserPassword(String role, int id) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        UserDAO userDAO = daoProvider.getUserDAO();
+        try {
+            userDAO.changeUserPassword(role, id);
+        } catch (DAOException | ConnectionPoolException e) {
+            throw new ServiceException("Change user role fail", e);
+        }
+    }
+
     @Override
     public int createNewUser(String login, String hashPassword, String role) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();

@@ -21,5 +21,7 @@ public interface UserService {
 
     void changeUserRole(String role, int id) throws ServiceException;
 
+    void changeUserPassword(String password, int id) throws ServiceException;
+
     int createNewUser(String login, String hashPassword, String role) throws ServiceException;
 }

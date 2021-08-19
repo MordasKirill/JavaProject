@@ -24,10 +24,11 @@
 <fmt:message bundle="${loc}" key="local.title.mainPage" var="mainPage"/>
 <!DOCTYPE html PUBLIC>
 <html>
+<script src="https://kit.fontawesome.com/f37755bf06.js" crossorigin="anonymous"></script>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>${mainPage}</title>
-    <link rel="stylesheet" href="css/styleMainPage.css">
+    <link rel="stylesheet" href="css/styleMain.css">
 </head>
 <body>
 <header class="site-header">
@@ -36,6 +37,7 @@
         <p>${logo}!</p>
         <p1>${regards}, <%= session.getAttribute("login")%> !
             <a href="Controller?command=logout" class="green" style="margin-left: -440px">${logout}</a>
+            <a href="Controller?command=account" class="button button1" style="margin-left: 850px; margin-top: -200px"><i class="fas fa-user-alt"></i></a>
         </p1>
     </div>
 </header>

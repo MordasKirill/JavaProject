@@ -1,5 +1,6 @@
 package net.epam.study.dao.impl;
 
+import net.epam.study.Constants;
 import net.epam.study.bean.Order;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
@@ -23,7 +24,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     private static final String SELECT_FROM_PAYMENTS = "select * from payment where user_id= ? and paymentStatus='done'";
     private static final String UPDATE_PAYMENT_STATUS = "update payment set paymentStatus = ? where order_id = ?";
     private static final String INSERT_INTO_PAYMENT = "INSERT INTO payment (paymentStatus,total,order_id,user_id) VALUES (?,?,?,?)";
-    private static final String SELECT_ALL_ORDERS = "select order_id from payment where order_id>0";
+    private static final String SELECT_ALL_PAYMENTS_WHERE_USER_ID = "select order_id from payment where user_id = ? LIMIT ?,?";
     private static final Logger LOG = Logger.getLogger(PaymentDAOImpl.class);
 
     public void doPayment(int userId, int orderId, BigDecimal total, String status) throws DAOException {
@@ -58,13 +59,16 @@ public class PaymentDAOImpl implements PaymentDAO {
         return result;
     }
 
-    public List<Order> getAllOrders() throws DAOException {
+    public List<Order> getAllPayments(int userId, int limit) throws DAOException {
         List<Order> orders = new ArrayList<>();
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(SELECT_ALL_ORDERS);
+            statement = connection.prepareStatement(SELECT_ALL_PAYMENTS_WHERE_USER_ID);
+            statement.setInt(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, Constants.DEFAULT_LIMIT);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();

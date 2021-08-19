@@ -27,8 +27,16 @@
             <param-value>utf-8</param-value>
         </init-param>
     </filter>
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>net.epam.study.controller.filter.AuthFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
+        <url-pattern>/Controller</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
         <url-pattern>/Controller</url-pattern>
     </filter-mapping>
     <listener>

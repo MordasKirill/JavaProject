@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String password;
     private String role;
     private String id;
+    boolean auth;
 
     public User() {
     }
@@ -16,6 +17,12 @@ public class User implements Serializable {
     public User(String login, String password) {
         this.login = login;
         this.password = password;
+    }
+
+    public User(String id, String role, boolean auth){
+        this.id = id;
+        this.role = role;
+        this.auth = auth;
     }
 
     public User(String login, String password, String role) {

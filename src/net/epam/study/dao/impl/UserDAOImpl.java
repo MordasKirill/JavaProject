@@ -27,12 +27,13 @@ public class UserDAOImpl implements UserDAO {
     private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_LOGIN = "select login, password, role from users where login = ?";
     private static final String SELECT_LOGIN_PASSWORD_ROLE_FROM_USERS_WHERE_ID = "select id, password, role from users where id = ?";
     private static final String SELECT_LOGIN_FROM_USERS_WHERE_LOGIN = "select login from users where login =?";
-    private static final String INSERT_INTO = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
+    private static final String INSERT_INTO_NEW = "INSERT INTO users (login,password,role) VALUES (?,?,?)";
     private static final String SELECT_ALL_USERS = "select id from users where id>0";
     private static final String SELECT_FROM_USERS = "select id, login, role from users where id>0 LIMIT ?,?";
     private static final String DELETE_FROM_USERS = "delete from users where id = ?";
     private static final String GET_USER_ID = "SELECT id, login FROM users WHERE login= ?";
     private static final String UPDATE_USER_ROLE = "update users set role = ? where id = ?";
+    private static final String UPDATE_USER_PASSWORD = "update users set password = ? where id = ?";
 
     private static final Logger LOG = Logger.getLogger(UserDAOImpl.class);
 
@@ -40,7 +41,7 @@ public class UserDAOImpl implements UserDAO {
         Connection connection = ConnectionPool.connectionPool.retrieve();
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement(INSERT_INTO, Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement(INSERT_INTO_NEW, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getRole());
@@ -190,6 +191,13 @@ public class UserDAOImpl implements UserDAO {
         List<Object> paramList = new LinkedList<>();
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_USERS, paramList);
+    }
+
+    public void changeUserPassword(String password, int id) throws DAOException {
+        List<Object> paramList = new LinkedList<>();
+        paramList.add(password);
+        paramList.add(id);
+        DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(UPDATE_USER_PASSWORD, paramList);
     }
 
     public int getUserId(String login) throws DAOException {

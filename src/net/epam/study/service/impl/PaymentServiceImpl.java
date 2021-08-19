@@ -8,6 +8,7 @@ import net.epam.study.service.PaymentService;
 import net.epam.study.service.ServiceException;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentServiceImpl implements PaymentService {
@@ -43,11 +44,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Order> getAllOrders() throws ServiceException {
+    public List<Order> getAllPayments(int userId, int limit) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         try {
-            return paymentDAO.getAllOrders();
+            return paymentDAO.getAllPayments(userId, limit);
         } catch (DAOException e) {
             throw new ServiceException("Get all orders fail", e);
         }
@@ -62,5 +63,18 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (DAOException e) {
             throw new ServiceException("Change order status fail", e);
         }
+    }
+
+    public List<Order> getDetailsForCurrentUser(List<Order> allOrders, List<Order> userOrders){
+        List<Order> currentUserDetails = new ArrayList<>();
+        for (Order allOrder : allOrders) {
+            for (Order userOrder : userOrders) {
+                if (allOrder.getId().equals(userOrder.getId())) {
+                    currentUserDetails.add(allOrder);
+                    break;
+                }
+            }
+        }
+        return currentUserDetails;
     }
 }

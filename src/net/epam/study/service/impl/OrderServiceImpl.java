@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class OrderServiceImpl implements OrderService {
 
+    final static int discount10Percent = 10;
+    final static int discount3Percent = 3;
     /**
      * Method to delete an item from order
      *
@@ -57,49 +59,63 @@ public class OrderServiceImpl implements OrderService {
      * Method to get order total
      *
      * @param userId user login
+     * @return returns BigDecimal total price
+     * without discount
+     */
+    public BigDecimal getTotal(int userId) {
+        BigDecimal total = new BigDecimal(0);
+        List<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(userId);
+        for (MenuItem menuItem : linkedList) {
+            BigDecimal totalWithoutDiscount = new BigDecimal(menuItem.getPrice());
+            total = total.add(totalWithoutDiscount);
+        }
+        return total;
+    }
+
+    /**
+     * Method to apply discount
+     *
+     * @param totalPrice price without discount
+     * @param userId user login
      * @return returns BigDecimal total of order
      * @throws ServiceException exception in service
      *                          throws in case something goes wrong
      */
-    public BigDecimal getTotal(int userId) throws ServiceException {
-        BigDecimal result = new BigDecimal(0);
-        BigDecimal sum = new BigDecimal(0);
-        int discountPercentage = 0;
-        List<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(userId);
-        for (MenuItem menuItem : linkedList) {
-            BigDecimal total = new BigDecimal(menuItem.getPrice());
-            sum = sum.add(total);
-            discountPercentage = getDiscount(userId);
-            if (discountPercentage >= 3) {
-                BigDecimal amount = new BigDecimal(String.valueOf(sum.multiply(BigDecimal.valueOf(discountPercentage))));
-                amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
-                result = sum.subtract(amount);
-            }
-            if (discountPercentage < 3) {
-                result = sum;
-            }
+    public BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException {
+        BigDecimal totalWithDiscount = new BigDecimal(0);
+        totalWithDiscount = totalWithDiscount.add(totalPrice);
+        int discount = getDiscount(userId);
+        if (discount >= 3) {
+            BigDecimal amount = new BigDecimal(String.valueOf(totalWithDiscount.multiply(BigDecimal.valueOf(discount))));
+            amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
+            return totalWithDiscount.subtract(amount);
         }
-        return result;
+        return totalWithDiscount;
     }
 
+    /**
+     * Method to get discount
+     *
+     * @param userId user login
+     * @return returns int discount x %
+     * @throws ServiceException exception in service
+     *                          throws in case something goes wrong
+     */
     public int getDiscount(int userId) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         int successOrders = 0;
-        int discount10Percent = 10;
-        int discount3Percent = 3;
-        int withoutDiscount = 0;
         try {
             successOrders = paymentDAO.getDonePayments(userId);
         } catch (DAOException e) {
             throw new ServiceException("Get discount fail", e);
         }
-        if (successOrders == 3) {
+        if (successOrders >= 3 && successOrders < 10) {
             return discount3Percent;
         } else if (successOrders >= 10) {
             return discount10Percent;
         }
-        return withoutDiscount;
+        return 0;
     }
 
     /**
@@ -115,11 +131,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrders(int limit) throws ServiceException {
+    public List<Order> getOrderDetailsWithLimit(int limit) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
-            return changeOrder.getOrders(limit);
+            return changeOrder.getOrderDetailsWithLimit(limit);
+
+        } catch (DAOException e) {
+            throw new ServiceException("Get orders fail", e);
+        }
+    }
+
+    @Override
+    public List<Order> getOrderDetails(int userId) throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        OrderDAO changeOrder = daoProvider.getOrderDAO();
+        try {
+            return changeOrder.getOrderDetails(userId);
+
+        } catch (DAOException e) {
+            throw new ServiceException("Get orders fail", e);
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrders() throws ServiceException {
+        DAOProvider daoProvider = DAOProvider.getInstance();
+        OrderDAO changeOrder = daoProvider.getOrderDAO();
+        try {
+            return changeOrder.getAllOrders();
 
         } catch (DAOException e) {
             throw new ServiceException("Get orders fail", e);

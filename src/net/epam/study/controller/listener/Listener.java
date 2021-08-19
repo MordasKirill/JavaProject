@@ -14,7 +14,6 @@ public class Listener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
         LOG.log(Level.INFO, "ServletContextListener was created!");
         ConnectionPool.connectionPool = new ConnectionPool();
         SendEmail.sendEmail = new SendEmail();

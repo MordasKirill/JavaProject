@@ -29,6 +29,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html PUBLIC>
 <html>
+<script src="https://kit.fontawesome.com/f37755bf06.js" crossorigin="anonymous"></script>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>${menuPage}</title>
@@ -42,6 +43,7 @@
     <a href="Controller?command=logout" class="green" style="margin-left: 400px">${logout}</a>
     <a href="Controller?command=gotomenupage&locale=en" class="green" style="margin-top: -100px; margin-left: 600px">${en_button}</a>
     <a href="Controller?command=gotomenupage&locale=ru" class="green" style=" margin-left: 600px">${ru_button}</a>
+    <a href="Controller?command=account" class="account account1" style=" margin-left: 800px; margin-top: -80px"><i class="fas fa-user-alt"></i></a>
     <div class="menu">
         <a href="Controller?command=gotobasketpage" class="green">${cart} <c:out value="${size}"/> ${item}</a>
     </div>

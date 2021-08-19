@@ -1,17 +1,20 @@
 package net.epam.study.dao;
 
 import net.epam.study.bean.Order;
-import net.epam.study.dao.connection.ConnectionPoolException;
 
 import java.util.List;
 
 public interface OrderDAO {
 
-    List<Order> getOrders(int limit) throws DAOException, ConnectionPoolException;
+    List<Order> getOrderDetailsWithLimit(int limit) throws DAOException;
 
-    void deleteOrder(String id) throws DAOException, ConnectionPoolException;
+    List<Order> getOrderDetails(int userId) throws DAOException;
 
-    int createOrder(Order order) throws DAOException, ConnectionPoolException;
+    List<Order> getAllOrders() throws DAOException;
 
-    void changeOrderStatus(String status, int id) throws DAOException, ConnectionPoolException;
+    void deleteOrder(String id) throws DAOException;
+
+    int createOrder(Order order) throws DAOException;
+
+    void changeOrderStatus(String status, int id) throws DAOException;
 }
