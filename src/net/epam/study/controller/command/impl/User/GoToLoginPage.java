@@ -1,4 +1,4 @@
-package net.epam.study.controller.command.impl.User;
+package net.epam.study.controller.command.impl.user;
 
 import net.epam.study.Constants;
 import net.epam.study.controller.command.Command;

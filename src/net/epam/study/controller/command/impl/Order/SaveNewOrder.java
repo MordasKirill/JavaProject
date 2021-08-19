@@ -1,4 +1,4 @@
-package net.epam.study.controller.command.impl.Order;
+package net.epam.study.controller.command.impl.order;
 
 import net.epam.study.Constants;
 import net.epam.study.OrderProvider;

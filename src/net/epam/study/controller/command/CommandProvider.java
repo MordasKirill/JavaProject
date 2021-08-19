@@ -1,11 +1,11 @@
 package net.epam.study.controller.command;
 
-import net.epam.study.controller.command.impl.Admin.*;
-import net.epam.study.controller.command.impl.Order.AddToCart;
-import net.epam.study.controller.command.impl.Order.CartItemDelete;
-import net.epam.study.controller.command.impl.Order.SaveNewOrder;
-import net.epam.study.controller.command.impl.Order.SaveNewPayment;
-import net.epam.study.controller.command.impl.User.*;
+import net.epam.study.controller.command.impl.admin.*;
+import net.epam.study.controller.command.impl.order.AddToCart;
+import net.epam.study.controller.command.impl.order.CartItemDelete;
+import net.epam.study.controller.command.impl.order.SaveNewOrder;
+import net.epam.study.controller.command.impl.order.SaveNewPayment;
+import net.epam.study.controller.command.impl.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
