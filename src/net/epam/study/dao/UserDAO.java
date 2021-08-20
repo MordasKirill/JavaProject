@@ -17,7 +17,7 @@ public interface UserDAO {
 
     List<User> getAllUsers() throws DAOException;
 
-    void deleteUser(String id) throws DAOException;
+    void deleteUser(int id) throws DAOException;
 
     void changeUserRole(String status, int id) throws DAOException;
 

@@ -11,7 +11,7 @@ public interface UserService {
 
     boolean isUserUnique(String login) throws ServiceException;
 
-    void deleteUser(String id) throws ServiceException;
+    void deleteUser(int id) throws ServiceException;
 
     List<User> getUsers(int limit) throws ServiceException;
 

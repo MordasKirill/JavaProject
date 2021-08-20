@@ -188,7 +188,7 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
-    public void deleteUser(String id) throws DAOException {
+    public void deleteUser(int id) throws DAOException {
         List<Object> paramList = new LinkedList<>();
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_USERS, paramList);

@@ -49,10 +49,8 @@ public class GoToAdminPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        }
-        if (!validationService.isUser(user.getRole())) {
+        if (session.getAttribute(Constants.PARAM_USER) == null
+        || !validationService.isUser(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {
