@@ -88,6 +88,7 @@ public class GoToAdminPage implements Command {
                 request.setAttribute(PARAM_BACK_ORDERS, resultOrdersBack);
                 request.setAttribute(PARAM_NEXT_USERS, resultUsersNext);
                 request.setAttribute(PARAM_BACK_USERS, resultUsersBack);
+                request.setAttribute(Constants.ATTR_ROLE, user.getRole());
                 request.setAttribute(PARAM_ORDERS, orderService.getOrderDetailsWithLimit(limitOrders));
                 request.setAttribute(PARAM_USERS, userService.getUsers(limitUsers));
                 if (request.getParameter(Constants.PARAM_LOCALE) != null) {

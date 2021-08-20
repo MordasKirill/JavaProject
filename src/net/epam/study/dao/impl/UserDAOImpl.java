@@ -2,6 +2,7 @@ package net.epam.study.dao.impl;
 
 import net.epam.study.Constants;
 import net.epam.study.bean.User;
+import net.epam.study.controller.command.Role;
 import net.epam.study.dao.DAOException;
 import net.epam.study.dao.DAOProvider;
 import net.epam.study.dao.UserDAO;
@@ -44,7 +45,7 @@ public class UserDAOImpl implements UserDAO {
             statement = connection.prepareStatement(INSERT_INTO_NEW, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPassword());
-            statement.setString(3, user.getRole());
+            statement.setString(3, Role.USER.name().toLowerCase());
             statement.executeUpdate();
             LOG.info("SUCCESS DB: User created.");
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -52,7 +53,7 @@ public class UserDAOImpl implements UserDAO {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
-            throw new DAOException("Order not created! " + user.toString());
+            throw new DAOException("User not created! " + user.toString());
         } catch (SQLException exc) {
             LOG.log(Level.ERROR, "FAIL DB: Fail to write DB.", exc);
             throw new DAOException(exc);

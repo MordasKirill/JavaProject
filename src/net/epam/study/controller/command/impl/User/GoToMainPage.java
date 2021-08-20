@@ -33,10 +33,8 @@ public class GoToMainPage implements Command {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
         int userId = user.getId();
-
         if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
-
         } else {
             OrderProvider.getInstance().getOrder().get(userId).clear();
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);

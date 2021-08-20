@@ -37,7 +37,6 @@ public class GoToMenuPage implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         MenuService menuService = serviceProvider.getMenuService();
         ValidationService validationService = serviceProvider.getValidationService();
-
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
         if (session.getAttribute(Constants.PARAM_USER) == null) {
@@ -45,7 +44,6 @@ public class GoToMenuPage implements Command {
         }
         int userId = user.getId();
         if (!validationService.isAdmin(user.getRole())) {
-
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             try {

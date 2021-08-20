@@ -42,7 +42,6 @@ public class CheckLoginAndPassword implements Command {
         ServiceProvider provider = ServiceProvider.getInstance();
         UserService userService = provider.getUserService();
         ValidationService validationService = provider.getValidationService();
-
         String login = request.getParameter(Constants.PARAM_LOGIN).trim();
         String password = request.getParameter(Constants.PARAM_PASSWORD);
         HttpSession session = request.getSession(true);
@@ -58,10 +57,9 @@ public class CheckLoginAndPassword implements Command {
                     session.setAttribute(LIMIT_ORDERS, 0);
                     session.setAttribute(LIMIT_USERS, 0);
                     session.setAttribute(USER, new User(userId, role, true));
+                    System.out.println(role);
                     session.setAttribute(Constants.ATTR_AUTH, true);
                     request.setAttribute(ATTR_ERROR, "");
-                    session.setAttribute(Constants.ATTR_ROLE, role);
-                    session.setAttribute(Constants.PARAM_ID, userId);
                     ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                     requestDispatcher.forward(request, response);
@@ -71,26 +69,19 @@ public class CheckLoginAndPassword implements Command {
                     session.setAttribute(USER, new User(userId, role, true));
                     session.setAttribute(Constants.ATTR_AUTH, true);
                     session.setAttribute(Constants.PARAM_LOGIN, login);
-                    session.setAttribute(Constants.PARAM_ID, userId);
                     request.setAttribute(ATTR_ERROR, "");
-                    session.setAttribute(Constants.ATTR_ROLE, role);
-
                     ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN_INDEX);
                     requestDispatcher.forward(request, response);
                 }
             } else {
-
                 request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                 session.setAttribute(Constants.PARAM_LOGIN, login);
                 ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
-
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
                 requestDispatcher.forward(request, response);
             }
-
         } catch (ServiceException e) {
-
             log.log(Level.ERROR, "CheckLoginAndPassword error.", e);
             session.setAttribute(PARAM_ERROR, ERROR_MSG);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);

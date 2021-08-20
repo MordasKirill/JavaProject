@@ -56,12 +56,9 @@ public class AdminDelete implements Command {
         }
         if (!validationService.isUser(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
-
         } else {
-
             String idOrder = request.getParameter(Constants.ID_ORDER);
             String idUser = request.getParameter(Constants.ID_USER);
-
             try {
                 if (idOrder != null) {
                     orderService.deleteOrder(idOrder);
@@ -70,13 +67,11 @@ public class AdminDelete implements Command {
                     userService.deleteUser(idUser);
                 }
             } catch (ServiceException e) {
-
                 LOG.log(Level.ERROR, "Admin delete action error.", e);
                 session.setAttribute(ATTR_ERROR, MSG_ERROR);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
-
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         }

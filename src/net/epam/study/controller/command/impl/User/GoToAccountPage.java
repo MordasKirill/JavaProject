@@ -64,6 +64,7 @@ public class GoToAccountPage implements Command {
                 request.setAttribute(PARAM_NEXT_ORDERS, resultOrdersNext);
                 request.setAttribute(PARAM_BACK_ORDERS, resultOrdersBack);
                 request.setAttribute(PARAM_ORDERS, paymentService.getDetailsForCurrentUser(orderService.getOrderDetails(userId), paymentService.getAllPayments(userId, limitOrders)));
+                request.setAttribute(Constants.ATTR_ROLE, user.getRole());
                 session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(userId));
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ACCOUNT);
                 requestDispatcher.forward(request, response);

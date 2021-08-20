@@ -42,20 +42,17 @@ public final class SendEmail {
         } else {
             result = "Please, check entered data.";
         }
-
         Session mailSession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
         });
-
         try {
             String htmlBody = "<strong>Your order is " + status.toUpperCase() + ". " + result + "</strong>";
             Message message = new MimeMessage(mailSession);
             message.setFrom(new InternetAddress(emailResourceManager.getValue(EmailParameter.USER)));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("ORDER FBOnline");
-
             MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
             mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
             mc.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
@@ -66,7 +63,6 @@ public final class SendEmail {
             message.setContent(htmlBody, "text/html");
             Transport.send(message);
             LOG.info("Email sent.");
-
         } catch (MessagingException e) {
             LOG.log(Level.ERROR, "SendEmail error.", e);
             throw new EmailException("Send email exception", e);

@@ -25,7 +25,6 @@ public class ValidationImpl implements ValidationService {
         if (city == null) {
             return false;
         }
-
         boolean result = false;
         if (city.equalsIgnoreCase("Minsk") ||
                 city.equalsIgnoreCase("Минск")) {
@@ -51,7 +50,7 @@ public class ValidationImpl implements ValidationService {
     }
 
     public String priceErrorMsg(BigDecimal price) {
-        if (!isParamNotNull(price)) {
+        if (!isPriceZero(price)) {
             return "local.error.errMsgNullPrice";
         }
         return null;
@@ -100,7 +99,7 @@ public class ValidationImpl implements ValidationService {
         return !Role.USER.toString().equalsIgnoreCase(role);
     }
 
-    public boolean isParamNotNull(BigDecimal param) {
+    public boolean isPriceZero(BigDecimal param) {
         return !(param.compareTo(BigDecimal.ZERO) == 0);
     }
 }

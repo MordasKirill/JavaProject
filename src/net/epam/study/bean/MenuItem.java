@@ -9,7 +9,6 @@ public class MenuItem implements Serializable {
     private String filingTime;
     private String category;
 
-
     public MenuItem() {
     }
 

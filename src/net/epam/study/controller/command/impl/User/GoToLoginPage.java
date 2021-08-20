@@ -15,12 +15,10 @@ public class GoToLoginPage implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         if (request.getParameter(Constants.PARAM_LOCALE) != null) {
             ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
         }
         request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
         requestDispatcher.forward(request, response);
     }

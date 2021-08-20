@@ -19,7 +19,6 @@ public class GoToRegistrationPage implements Command {
             ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);
         }
         request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_REGISTRATION);
         requestDispatcher.forward(request, response);
     }

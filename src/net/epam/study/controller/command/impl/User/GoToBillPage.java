@@ -30,11 +30,9 @@ public class GoToBillPage implements Command {
         int userId = user.getId();
         OrderProvider.getInstance().getOrder().get(userId).clear();
         if (!validationService.isAdmin(user.getRole())) {
-
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         } else {
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
-
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL);
             requestDispatcher.forward(request, response);
         }

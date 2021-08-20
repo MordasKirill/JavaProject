@@ -59,9 +59,7 @@ public class GoToBasketPage implements Command {
         }
         if (!validationService.isAdmin(user.getRole())) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
-
         } else {
-
             if (request.getParameter(PARAM_PAYMENT) != null) {
                 try {
                     paymentService.changeOrderStatus(Status.REJECTED.toString().toLowerCase(), orderId);

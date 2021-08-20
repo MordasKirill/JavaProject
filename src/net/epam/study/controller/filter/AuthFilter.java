@@ -25,7 +25,8 @@ public class AuthFilter implements Filter {
         boolean isLoggedIn = session != null && session.getAttribute("user") != null;
         boolean isLoggingPathValid = name.equalsIgnoreCase(CommandName.GOTOLOGINPAGE.name())
                 || name.equalsIgnoreCase(CommandName.CHECKLOGINANDPASSWORD.name())
-                || name.equalsIgnoreCase(CommandName.SAVENEWPASSWORD.name());
+                || name.equalsIgnoreCase(CommandName.SAVENEWUSER.name())
+                || name.equalsIgnoreCase(CommandName.REGISTRATION.name());
         if (isLoggedIn || isLoggingPathValid) {
             filterChain.doFilter(request, response);
         } else {
