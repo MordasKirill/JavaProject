@@ -21,7 +21,7 @@ public interface OrderService {
 
     String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId);
 
-    void deleteOrder(String id) throws ServiceException;
+    void deleteOrder(int id) throws ServiceException;
 
     List<Order> getOrderDetailsWithLimit(int limit) throws ServiceException;
 

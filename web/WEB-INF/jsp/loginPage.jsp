@@ -1,6 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix = "customTag" uri = "/WEB-INF/tld/tagLib.tld"%>
+
 <%--
   Created by IntelliJ IDEA.
   User: Kirill
@@ -8,9 +6,12 @@
   Time: 21:16
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "customTag" uri = "/WEB-INF/tld/tagLib.tld"%>
 <fmt:setLocale value="${sessionScope.local}"/>
-<fmt:setBundle basename="resources.local" var="loc"/>
+<fmt:setBundle basename="resources.local" var="loc" />
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
 <fmt:message bundle="${loc}" key="local.login.login" var="loginLabel"/>
@@ -23,9 +24,9 @@
 <fmt:message bundle="${loc}" key="local.title.loginPage" var="loginPage"/>
 
 
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>${loginPage}</title>
     <link rel="stylesheet" href="css/styleLoginRegistr.css" />
 </head>

@@ -37,7 +37,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
 
-    public void deleteOrder(String id) throws DAOException {
+    public void deleteOrder(int id) throws DAOException {
         List<Object> paramList = new LinkedList<>();
         paramList.add(id);
         DAOProvider.getInstance().getDBCommonCRUDOperationDAO().executeUpdate(DELETE_FROM_ORDERS, paramList);

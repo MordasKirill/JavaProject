@@ -12,7 +12,7 @@ public interface OrderDAO {
 
     List<Order> getAllOrders() throws DAOException;
 
-    void deleteOrder(String id) throws DAOException;
+    void deleteOrder(int id) throws DAOException;
 
     int createOrder(Order order) throws DAOException;
 

@@ -1,7 +1,6 @@
 package net.epam.study.controller.command;
 
 public class PagePath {
-    public static final String START_PATH = "/WebAppTest_war_exploded/Controller";
     public static final String REDIRECT_LOGIN = "Controller?command=gotologinpage";
     public static final String REDIRECT_ADMIN = "Controller?command=gotoadminpage";
     public static final String REDIRECT_ACCOUNT = "Controller?command=account";

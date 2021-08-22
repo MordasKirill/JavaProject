@@ -37,10 +37,10 @@ public class AdminChangeOrderStatus implements Command {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
         if (validationService.isUser(user.getRole())) {
             String status = request.getParameter(Constants.PARAM_STATUS);
             String email = request.getParameter(Constants.PARAM_EMAIL);
+            int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
             try {
                 orderService.changeOrderStatus(status, id);
                 SendEmail.sendEmail.send(status, email);

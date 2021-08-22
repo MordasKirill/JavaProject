@@ -55,7 +55,6 @@ public class CheckLoginAndPassword implements Command {
                     session.setAttribute(LIMIT_ORDERS, 0);
                     session.setAttribute(LIMIT_USERS, 0);
                     session.setAttribute(USER, new User(userId, role, true));
-                    System.out.println(role);
                     session.setAttribute(Constants.ATTR_AUTH, true);
                     request.setAttribute(ATTR_ERROR, "");
                     ValidationImpl.userLocale = request.getParameter(Constants.PARAM_LOCALE);

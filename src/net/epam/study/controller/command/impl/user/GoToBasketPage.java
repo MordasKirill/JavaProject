@@ -63,12 +63,8 @@ public class GoToBasketPage implements Command {
                     requestDispatcher.forward(request, response);
                 }
             }
-            LinkedList<MenuItem> linkedList = new LinkedList<>();
+            LinkedList<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(user.getId());
             request.setAttribute(ATTR_ORDER, linkedList);
-            if (OrderProvider.getInstance().getOrder().size() != 0) {
-                linkedList = OrderProvider.getInstance().getOrder().get(user.getId());
-                request.setAttribute(ATTR_ORDER, linkedList);
-            }
             try {
                 request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
                 session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(user.getId()));

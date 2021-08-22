@@ -56,7 +56,7 @@ public class AdminDelete implements Command {
             String idUser = request.getParameter(Constants.ID_USER);
             try {
                 if (idOrder != null) {
-                    orderService.deleteOrder(idOrder);
+                    orderService.deleteOrder(Integer.parseInt(idOrder));
                 }
                 if (idUser != null) {
                     userService.deleteUser(Integer.parseInt(idUser));

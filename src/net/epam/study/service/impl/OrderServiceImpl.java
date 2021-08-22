@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(String id) throws ServiceException {
+    public void deleteOrder(int id) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();
         OrderDAO changeOrder = daoProvider.getOrderDAO();
         try {
