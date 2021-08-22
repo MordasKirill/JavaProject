@@ -70,32 +70,30 @@ public class SaveNewOrder implements Command {
         String paymentMethod = request.getParameter(ATTR_METHOD);
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
+        if (user == null) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        int userId = user.getId();
-        int orderId = 0;
         try {
-            if (validationService.emailErrorMsg(email) == null
-                    && validationService.fullNameErrorMsg(fullName) == null
-                    && validationService.phoneErrorMsg(phone) == null
+            if (validationService.getErrorMsg(email, Constants.EMAIL_PATTERN, Constants.EMAIL_ERROR) == null
+                    && validationService.getErrorMsg(fullName, Constants.FULL_NAME_PATTERN, Constants.FULL_NAME_ERROR) == null
+                    && validationService.getErrorMsg(phone, Constants.PHONE_PATTERN, Constants.PHONE_ERROR) == null
                     && validationService.cityErrorMsg(city) == null) {
-                if (OrderProvider.getInstance().getOrder().get(userId).size() == 0) {
+                if (OrderProvider.getInstance().getOrder().get(user.getId()).size() == 0) {
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
-                    request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(userId));
-                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), userId));
+                    request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(user.getId()));
+                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
                     request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
                 } else {
-                    orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), userId)));
+                    int orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), user.getId())));
                     session.setAttribute(ATTR_ORDER_ID, orderId);
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {
-                        paymentService.doPayment(userId, orderId, orderService.applyDiscount(orderService.getTotal(userId), userId), STATUS_PROCESSING);
+                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()), STATUS_PROCESSING);
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
                     } else {
-                        paymentService.doPayment(userId, orderId, orderService.applyDiscount(orderService.getTotal(userId), userId), STATUS_UPON_RECEIPT);
+                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()), STATUS_UPON_RECEIPT);
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
                     }
@@ -106,12 +104,12 @@ public class SaveNewOrder implements Command {
                 session.setAttribute(ATTR_ADDRESS_SESSION, address);
                 session.setAttribute(ATTR_PHONE_SESSION, phone);
                 session.setAttribute(ATTR_CITY_SESSION, city);
-                request.setAttribute(ATTR_ERR_MSG_EMAIL, validationService.emailErrorMsg(email));
-                request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
-                request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.phoneErrorMsg(phone));
+                request.setAttribute(ATTR_ERR_MSG_EMAIL, validationService.getErrorMsg(email, Constants.EMAIL_PATTERN, Constants.EMAIL_ERROR));
+                request.setAttribute(ATTR_ERR_MSG_FULL_NAME, validationService.getErrorMsg(fullName, Constants.FULL_NAME_PATTERN, Constants.FULL_NAME_ERROR));
+                request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.getErrorMsg(phone, Constants.PHONE_PATTERN, Constants.PHONE_ERROR));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
-                request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(userId));
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), userId));
+                request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(user.getId()));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
                 request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                 requestDispatcher.forward(request, response);

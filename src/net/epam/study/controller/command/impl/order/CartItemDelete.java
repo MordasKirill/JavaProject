@@ -25,11 +25,10 @@ public class CartItemDelete implements Command {
         HttpSession session = request.getSession(true);
         String deleteItemName = request.getParameter(PARAM_ITEM_NAME);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
+        if (user == null) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        int userId = user.getId();
-        orderService.deleteOrderItem(userId, deleteItemName);
+        orderService.deleteOrderItem(user.getId(), deleteItemName);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET_INDEX);
         requestDispatcher.forward(request, response);
     }

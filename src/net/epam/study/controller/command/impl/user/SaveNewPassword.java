@@ -34,13 +34,12 @@ public class SaveNewPassword implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         UserService userService = serviceProvider.getUserService();
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
+        if (user == null) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        int userId = user.getId();
         try {
             if (password != null) {
-                userService.changeUserPassword(PasswordUtils.hashPassword(password), userId);
+                userService.changeUserPassword(PasswordUtils.hashPassword(password), user.getId());
             }
         } catch (ServiceException e) {
             log.log(Level.ERROR, "SaveNewPassword error.", e);

@@ -49,10 +49,7 @@ public class GoToAdminPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-        || !validationService.isUser(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isUser(user.getRole())) {
             try {
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 int limitUsers = (int) session.getAttribute(LIMIT_USERS);
@@ -76,11 +73,9 @@ public class GoToAdminPage implements Command {
                     response.sendRedirect(PagePath.REDIRECT_ADMIN);
                     return;
                 }
-                int ordersSize = orderService.getAllOrders().size();
-                int usersSize = userService.getAllUsers().size();
-                boolean resultOrdersNext = ordersSize > limitOrders + Constants.DEFAULT_LIMIT;
+                boolean resultOrdersNext = orderService.getAllOrders().size() > limitOrders + Constants.DEFAULT_LIMIT;
                 boolean resultOrdersBack = limitOrders != 0;
-                boolean resultUsersNext = usersSize > limitUsers + Constants.DEFAULT_LIMIT;
+                boolean resultUsersNext = userService.getAllUsers().size() > limitUsers + Constants.DEFAULT_LIMIT;
                 boolean resultUsersBack = limitUsers != 0;
                 request.setAttribute(PARAM_NEXT_ORDERS, resultOrdersNext);
                 request.setAttribute(PARAM_BACK_ORDERS, resultOrdersBack);
@@ -101,6 +96,8 @@ public class GoToAdminPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

@@ -20,16 +20,15 @@ public class Logout implements Command {
         HttpSession session = request.getSession();
         if (session != null) {
             User user = (User) session.getAttribute(Constants.PARAM_USER);
-            if (session.getAttribute(Constants.PARAM_USER) == null) {
+            if (user == null) {
                 response.sendRedirect(PagePath.REDIRECT_LOGIN);
             }
-            int userId = user.getId();
             Enumeration<String> enumeration = session.getAttributeNames();
             while (enumeration.hasMoreElements()) {
                 String attributeName = enumeration.nextElement();
                 session.removeAttribute(attributeName);
             }
-            OrderProvider.getInstance().getOrder().get(userId).clear();
+            OrderProvider.getInstance().getOrder().get(user.getId()).clear();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_LOGIN);
         requestDispatcher.forward(request, response);

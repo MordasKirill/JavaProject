@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Order implements Serializable {
-    private String id;
+    private int id;
     private String fullName;
     private String address;
     private String email;
@@ -24,11 +24,11 @@ public class Order implements Serializable {
         this.details = details;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -104,8 +104,7 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Order)) return false;
         Order order = (Order) o;
-        return getId().equals(order.getId()) &&
-                getFullName().equals(order.getFullName()) &&
+        return getFullName().equals(order.getFullName()) &&
                 getAddress().equals(order.getAddress()) &&
                 getEmail().equals(order.getEmail()) &&
                 getPhone().equals(order.getPhone()) &&

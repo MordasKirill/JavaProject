@@ -26,16 +26,13 @@ public class GoToMainPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-            || !validationService.isAdmin(user.getRole())) {
-                response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
-            int userId = user.getId();
-            OrderProvider.getInstance().getOrder().get(userId).clear();
+        if (user != null || validationService.isAdmin(user.getRole())) {
+            OrderProvider.getInstance().getOrder().get(user.getId()).clear();
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
-
 }

@@ -49,11 +49,7 @@ public class GoToBasketPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-        || !validationService.isAdmin(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
-            int userId = user.getId();
+        if (user != null || validationService.isAdmin(user.getRole())) {
             int orderId = 0;
             if (session.getAttribute(ATTR_ORDER_ID) != null) {
                 orderId = (int) session.getAttribute(ATTR_ORDER_ID);
@@ -70,13 +66,13 @@ public class GoToBasketPage implements Command {
             LinkedList<MenuItem> linkedList = new LinkedList<>();
             request.setAttribute(ATTR_ORDER, linkedList);
             if (OrderProvider.getInstance().getOrder().size() != 0) {
-                linkedList = OrderProvider.getInstance().getOrder().get(userId);
+                linkedList = OrderProvider.getInstance().getOrder().get(user.getId());
                 request.setAttribute(ATTR_ORDER, linkedList);
             }
             try {
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), userId));
-                session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(userId));
-                session.setAttribute(ATTR_DISCOUNT, orderService.getDiscount(userId));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
+                session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(user.getId()));
+                session.setAttribute(ATTR_DISCOUNT, orderService.getDiscount(user.getId()));
             } catch (ServiceException e) {
 
                 log.log(Level.ERROR, "GoToBasketPage error.", e);
@@ -88,6 +84,8 @@ public class GoToBasketPage implements Command {
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

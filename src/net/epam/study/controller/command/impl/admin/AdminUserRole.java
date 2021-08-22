@@ -32,10 +32,7 @@ public class AdminUserRole implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-        || !validationService.isUser(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isUser(user.getRole())) {
             int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
             String role = request.getParameter(Constants.ATTR_ROLE);
             try {
@@ -48,6 +45,8 @@ public class AdminUserRole implements Command {
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

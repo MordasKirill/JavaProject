@@ -30,19 +30,14 @@ public class GoToPaymentPage implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-            || !validationService.isAdmin(user.getRole())) {
-                response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isAdmin(user.getRole())) {
             try {
-                int userId = user.getId();
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), userId));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
             } catch (ServiceException e) {
                 log.log(Level.ERROR, "GoToPaymentPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
@@ -52,6 +47,8 @@ public class GoToPaymentPage implements Command {
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

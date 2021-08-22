@@ -55,7 +55,7 @@ public class OrderDAOImpl implements OrderDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                order.setId(resultSet.getInt(COLUMN_ID_ORDER));
                 order.setFullName(resultSet.getString(COLUMN_FULL_NAME));
                 order.setAddress(resultSet.getString(COLUMN_ADDRESS));
                 order.setEmail(resultSet.getString(COLUMN_EMAIL));
@@ -86,7 +86,7 @@ public class OrderDAOImpl implements OrderDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                order.setId(resultSet.getInt(COLUMN_ID_ORDER));
                 order.setFullName(resultSet.getString(COLUMN_FULL_NAME));
                 order.setAddress(resultSet.getString(COLUMN_ADDRESS));
                 order.setEmail(resultSet.getString(COLUMN_EMAIL));
@@ -116,7 +116,7 @@ public class OrderDAOImpl implements OrderDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                order.setId(resultSet.getInt(COLUMN_ID_ORDER));
                 orders.add(order);
             }
         } catch (SQLException | RuntimeException exc) {

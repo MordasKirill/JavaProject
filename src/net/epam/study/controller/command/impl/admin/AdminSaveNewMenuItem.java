@@ -1,5 +1,6 @@
 package net.epam.study.controller.command.impl.admin;
 
+import net.epam.study.Constants;
 import net.epam.study.bean.MenuItem;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
@@ -46,8 +47,8 @@ public class AdminSaveNewMenuItem implements Command {
         String waitTime = request.getParameter(PARAM_WAIT_TIME);
         HttpSession session = request.getSession(true);
         try {
-            if (validationService.priceErrorMsg(price) == null
-                    && validationService.timeErrorMsg(waitTime) == null
+            if (validationService.getErrorMsg(price, Constants.PRICE_PATTERN, Constants.ADMIN_PRICE_ERROR) == null
+                    && validationService.getErrorMsg(waitTime, Constants.TIME_PATTERN, Constants.TIME_ERROR) == null
                     && !menuService.isMenuItemExists(itemName, category)) {
                 menuService.createMenuItem(new MenuItem(itemName, price, waitTime, category));
                 session.setAttribute(SUCCESS_ATTR, SUCCESS_MSG);
@@ -61,8 +62,8 @@ public class AdminSaveNewMenuItem implements Command {
                     session.setAttribute(ITEM_ERROR_ERR_MSG_ITEM_EXIST, ITEM_ERROR);
                 }
                 session.removeAttribute(SUCCESS_ATTR);
-                session.setAttribute(PRICE_ERROR, validationService.priceErrorMsg(price));
-                session.setAttribute(WAIT_TIME_ERROR, validationService.timeErrorMsg(waitTime));
+                session.setAttribute(PRICE_ERROR, validationService.getErrorMsg(price, Constants.PRICE_PATTERN,  Constants.ADMIN_PRICE_ERROR));
+                session.setAttribute(WAIT_TIME_ERROR, validationService.getErrorMsg(waitTime, Constants.TIME_PATTERN, Constants.TIME_ERROR));
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
                 requestDispatcher.forward(request, response);
             }

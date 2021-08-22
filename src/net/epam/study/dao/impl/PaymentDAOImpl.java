@@ -72,7 +72,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = new Order();
-                order.setId(resultSet.getString(COLUMN_ID_ORDER));
+                order.setId(resultSet.getInt(COLUMN_ID_ORDER));
                 orders.add(order);
             }
         } catch (SQLException | RuntimeException exc) {

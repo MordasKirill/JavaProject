@@ -44,27 +44,22 @@ public class SaveNewPayment implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
+        if (user == null) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
-        int userId = user.getId();
-        int orderId = 0;
-        if (session.getAttribute(ATTR_ORDER_ID) != null) {
-            orderId = (int) session.getAttribute(ATTR_ORDER_ID);
-        }
+        int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
         String fullName = request.getParameter(Constants.PARAM_NAME);
         String number = request.getParameter(ATTR_CARD_NUMBER);
             try {
-                if (validationService.fullNameErrorMsg(fullName) == null &&
-                        orderService.getTotal(userId) != null) {
-
+                if (validationService.getErrorMsg(fullName, Constants.FULL_NAME_PATTERN, Constants.FULL_NAME_ERROR) == null &&
+                        orderService.getTotal(user.getId()) != null) {
                     paymentService.changeOrderStatus(Status.DONE.toString().toLowerCase(), orderId);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                     requestDispatcher.forward(request, response);
                 } else {
-                    request.setAttribute(ERR_MSG_FULL_NAME, validationService.fullNameErrorMsg(fullName));
-                    request.setAttribute(ERR_MSG_PRICE, validationService.priceErrorMsg(orderService.applyDiscount(orderService.getTotal(userId), userId)));
-                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(userId), orderService.getDiscount(userId)));
+                    request.setAttribute(ERR_MSG_FULL_NAME, validationService.getErrorMsg(fullName, Constants.FULL_NAME_PATTERN, Constants.FULL_NAME_ERROR));
+                    request.setAttribute(ERR_MSG_PRICE, validationService.priceErrorMsg(orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId())));
+                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
                     session.setAttribute(ATTR_NUMBER_PAYMENT, number);
                     session.setAttribute(ATTR_FULL_NAME_PAYMENT, fullName);
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT);

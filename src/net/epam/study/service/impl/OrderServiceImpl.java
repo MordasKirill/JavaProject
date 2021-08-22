@@ -45,14 +45,11 @@ public class OrderServiceImpl implements OrderService {
      *
      */
     public void addToOrder(MenuItem menuItem, int userId) {
-        LinkedList<MenuItem> linkedList;
-        if (!OrderProvider.getInstance().getOrder().containsKey(userId)) {
-            linkedList =  new LinkedList<>();
-            linkedList.add(menuItem);
-        } else {
+        LinkedList<MenuItem> linkedList =  new LinkedList<>();
+        if (OrderProvider.getInstance().getOrder().containsKey(userId)) {
             linkedList = OrderProvider.getInstance().getOrder().get(userId);
-            linkedList.add(menuItem);
         }
+        linkedList.add(menuItem);
         OrderProvider.getInstance().getOrder().put(userId, linkedList);
     }
 

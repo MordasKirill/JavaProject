@@ -41,17 +41,15 @@ public class AddToCart implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-        || !validationService.isAdmin(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
-            int userId = user.getId();
+        if (user != null || validationService.isAdmin(user.getRole())) {
             String name = request.getParameter(Constants.PARAM_NAME);
             String price = request.getParameter(Constants.PARAM_PRICE);
             session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
-            orderService.addToOrder(new MenuItem(name, price), userId);
+            orderService.addToOrder(new MenuItem(name, price), user.getId());
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

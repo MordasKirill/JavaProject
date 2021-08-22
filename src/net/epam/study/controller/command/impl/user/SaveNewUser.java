@@ -38,13 +38,12 @@ public class SaveNewUser implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter(Constants.PARAM_LOGIN).trim();
         String password = request.getParameter(Constants.PARAM_PASSWORD);
-        int userId;
         HttpSession session = request.getSession(true);
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         UserService userService = serviceProvider.getUserService();
         try {
             if (userService.isUserUnique(login)) {
-                userId = userService.createNewUser(new User(login, PasswordUtils.hashPassword(password)));
+                int userId = userService.createNewUser(new User(login, PasswordUtils.hashPassword(password)));
                 LinkedList<MenuItem> menuItems = new LinkedList<>();
                 OrderProvider.getInstance().getOrder().put(userId, menuItems);
                 session.setAttribute(Constants.ATTR_AUTH, true);

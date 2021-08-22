@@ -39,12 +39,8 @@ public class GoToAccountPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null
-        || !validationService.isAdmin(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isAdmin(user.getRole())) {
             try {
-                int userId = user.getId();
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 if (request.getParameter(LOAD_ORDERS) != null) {
                     session.setAttribute(LIMIT_ORDERS, paginationService.getActualLimit(limitOrders));
@@ -56,14 +52,13 @@ public class GoToAccountPage implements Command {
                     response.sendRedirect(PagePath.REDIRECT_ACCOUNT);
                     return;
                 }
-                int ordersSize = orderService.getOrderDetails(userId).size();
-                boolean resultOrdersNext = ordersSize > limitOrders + Constants.DEFAULT_LIMIT;
+                boolean resultOrdersNext = orderService.getOrderDetails(user.getId()).size() > limitOrders + Constants.DEFAULT_LIMIT;
                 boolean resultOrdersBack = limitOrders != 0;
                 request.setAttribute(PARAM_NEXT_ORDERS, resultOrdersNext);
                 request.setAttribute(PARAM_BACK_ORDERS, resultOrdersBack);
-                request.setAttribute(PARAM_ORDERS, paymentService.getDetailsForCurrentUser(orderService.getOrderDetails(userId), paymentService.getAllPayments(userId, limitOrders)));
+                request.setAttribute(PARAM_ORDERS, paymentService.getDetailsForCurrentUser(orderService.getOrderDetails(user.getId()), paymentService.getAllPayments(user.getId(), limitOrders)));
                 request.setAttribute(Constants.ATTR_ROLE, user.getRole());
-                session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(userId));
+                session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(user.getId()));
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ACCOUNT);
                 requestDispatcher.forward(request, response);
             } catch (ServiceException e) {
@@ -72,6 +67,8 @@ public class GoToAccountPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

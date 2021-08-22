@@ -33,14 +33,12 @@ public class AdminChangeOrderStatus implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
-        User user = (User) session.getAttribute(Constants.PARAM_USER);
         if (session.getAttribute(Constants.PARAM_USER) == null) {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
+        User user = (User) session.getAttribute(Constants.PARAM_USER);
         int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
-        if (!validationService.isUser(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (validationService.isUser(user.getRole())) {
             String status = request.getParameter(Constants.PARAM_STATUS);
             String email = request.getParameter(Constants.PARAM_EMAIL);
             try {
@@ -59,6 +57,8 @@ public class AdminChangeOrderStatus implements Command {
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

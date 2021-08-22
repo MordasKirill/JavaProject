@@ -39,20 +39,14 @@ public class GoToMenuPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        }
-        int userId = user.getId();
-        if (!validationService.isAdmin(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isAdmin(user.getRole())) {
             try {
                 if (request.getParameter(Constants.PARAM_CATEGORY) != null
                         && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {
                     session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
                 }
                 LinkedList<MenuItem> linkedList;
-                linkedList = OrderProvider.getInstance().getOrder().get(userId);
+                linkedList = OrderProvider.getInstance().getOrder().get(user.getId());
                 request.setAttribute(ATTR_SIZE, linkedList.size());
                 request.setAttribute(ATTR_MENU_ITEMS, menuService.getMenu());
                 if (request.getParameter(Constants.PARAM_LOCALE) != null) {
@@ -67,6 +61,8 @@ public class GoToMenuPage implements Command {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
                 requestDispatcher.forward(request, response);
             }
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }

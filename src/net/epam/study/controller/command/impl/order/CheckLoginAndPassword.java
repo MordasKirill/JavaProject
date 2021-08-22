@@ -45,12 +45,10 @@ public class CheckLoginAndPassword implements Command {
         String login = request.getParameter(Constants.PARAM_LOGIN).trim();
         String password = request.getParameter(Constants.PARAM_PASSWORD);
         HttpSession session = request.getSession(true);
-        String role;
-        int userId;
         try {
             if (userService.isUserDataCorrect(new User(login, password))) {
-                userId = userService.getUserId(login);
-                role = userService.getUserRole(userId);
+                int userId = userService.getUserId(login);
+                String role = userService.getUserRole(userId);
                 LinkedList<MenuItem> menuItems = new LinkedList<>();
                 OrderProvider.getInstance().getOrder().put(userId, menuItems);
                 if (!validationService.isAdmin(role)) {

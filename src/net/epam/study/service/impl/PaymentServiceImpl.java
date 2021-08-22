@@ -62,7 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<Order> currentUserDetails = new ArrayList<>();
         for (Order allOrder : allOrders) {
             for (Order userOrder : userOrders) {
-                if (allOrder.getId().equals(userOrder.getId())) {
+                if (allOrder.getId() == (userOrder.getId())) {
                     currentUserDetails.add(allOrder);
                     break;
                 }

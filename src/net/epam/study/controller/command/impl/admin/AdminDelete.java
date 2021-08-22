@@ -51,10 +51,7 @@ public class AdminDelete implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (session.getAttribute(Constants.PARAM_USER) == null ||
-                !validationService.isUser(user.getRole())) {
-            response.sendRedirect(PagePath.REDIRECT_LOGIN);
-        } else {
+        if (user != null || validationService.isUser(user.getRole())) {
             String idOrder = request.getParameter(Constants.ID_ORDER);
             String idUser = request.getParameter(Constants.ID_USER);
             try {
@@ -72,6 +69,8 @@ public class AdminDelete implements Command {
             }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(PagePath.REDIRECT_LOGIN);
         }
     }
 }
