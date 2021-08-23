@@ -49,7 +49,7 @@ public class GoToAdminPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isUser(user.getRole())) {
+        if (user != null && validationService.isUser(user.getRole())) {
             try {
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 int limitUsers = (int) session.getAttribute(LIMIT_USERS);

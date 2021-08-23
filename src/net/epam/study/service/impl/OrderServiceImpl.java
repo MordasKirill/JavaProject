@@ -73,15 +73,12 @@ public class OrderServiceImpl implements OrderService {
      * Method to apply discount
      *
      * @param totalPrice price without discount
-     * @param userId user login
+     * @param discount user login
      * @return returns BigDecimal total of order
-     * @throws ServiceException exception in service
-     *                          throws in case something goes wrong
      */
-    public BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException {
+    public BigDecimal applyDiscount(BigDecimal totalPrice, int discount) {
         BigDecimal totalWithDiscount = new BigDecimal(String.valueOf(totalPrice));
-        int discount = getDiscount(userId);
-        if (discount >= 0) {
+        if (discount > 0) {
             BigDecimal amount = new BigDecimal(String.valueOf(totalWithDiscount.multiply(BigDecimal.valueOf(discount))));
             amount = amount.divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN);
             return totalWithDiscount.subtract(amount);

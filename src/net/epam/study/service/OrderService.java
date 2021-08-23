@@ -15,7 +15,7 @@ public interface OrderService {
 
     BigDecimal getTotal(int userId);
 
-    BigDecimal applyDiscount(BigDecimal totalPrice, int userId) throws ServiceException;
+    BigDecimal applyDiscount(BigDecimal totalPrice, int userId);
 
     int getDiscount(int userId) throws ServiceException;
 

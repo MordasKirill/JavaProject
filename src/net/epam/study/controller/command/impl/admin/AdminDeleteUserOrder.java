@@ -51,7 +51,7 @@ public class AdminDeleteUserOrder implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isUser(user.getRole())) {
+        if (user != null && validationService.isUser(user.getRole())) {
             String idOrder = request.getParameter(Constants.ID_ORDER);
             String idUser = request.getParameter(Constants.ID_USER);
             try {

@@ -26,7 +26,7 @@ public class GoToMainPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isAdmin(user.getRole())) {
+        if (user != null && validationService.isAdmin(user.getRole())) {
             OrderProvider.getInstance().getOrder().get(user.getId()).clear();
             request.getSession(true).setAttribute(Constants.ATTR_LOCAL, ValidationImpl.userLocale);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MAIN);

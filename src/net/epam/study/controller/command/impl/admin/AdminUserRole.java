@@ -32,7 +32,7 @@ public class AdminUserRole implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isUser(user.getRole())) {
+        if (user != null && validationService.isUser(user.getRole())) {
             int id = Integer.parseInt(request.getParameter(Constants.PARAM_ID));
             String role = request.getParameter(Constants.ATTR_ROLE);
             try {

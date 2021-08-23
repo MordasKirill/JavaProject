@@ -49,11 +49,8 @@ public class GoToBasketPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isAdmin(user.getRole())) {
-            int orderId = 0;
-            if (session.getAttribute(ATTR_ORDER_ID) != null) {
-                orderId = (int) session.getAttribute(ATTR_ORDER_ID);
-            }
+        if (user != null && validationService.isAdmin(user.getRole())) {
+            int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
             if (request.getParameter(PARAM_PAYMENT) != null) {
                 try {
                     paymentService.changeOrderStatus(Status.REJECTED.toString().toLowerCase(), orderId);

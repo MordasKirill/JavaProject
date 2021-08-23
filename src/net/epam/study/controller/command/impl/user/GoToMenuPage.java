@@ -39,7 +39,7 @@ public class GoToMenuPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isAdmin(user.getRole())) {
+        if (user != null && validationService.isAdmin(user.getRole())) {
             try {
                 if (request.getParameter(Constants.PARAM_CATEGORY) != null
                         && request.getParameter(Constants.PARAM_CATEGORY) != session.getAttribute(Constants.PARAM_CATEGORY)) {

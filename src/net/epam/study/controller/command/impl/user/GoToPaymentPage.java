@@ -35,7 +35,7 @@ public class GoToPaymentPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isAdmin(user.getRole())) {
+        if (user != null && validationService.isAdmin(user.getRole())) {
             try {
                 request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
             } catch (ServiceException e) {

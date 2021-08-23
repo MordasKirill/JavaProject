@@ -39,7 +39,7 @@ public class GoToAccountPage implements Command {
         ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null || validationService.isAdmin(user.getRole())) {
+        if (user != null && validationService.isAdmin(user.getRole())) {
             try {
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 if (request.getParameter(LOAD_ORDERS) != null) {
