@@ -70,8 +70,6 @@
 
 <c:if test="${sessionScope.local == 'ru' || sessionScope.local == null}">
     <script type="text/javascript">
-    /* функция добавления ведущих нулей */
-    /* (если число меньше десяти, перед числом добавляем ноль) */
     function zero_first_format(value)
     {
         if (value < 10)
@@ -81,7 +79,6 @@
         return value;
     }
 
-    /* функция получения текущей даты и времени */
     function date_time()
     {
         var current_datetime = new Date();
@@ -95,8 +92,6 @@
         return day+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
     }
 
-    /* каждую секунду получаем текущую дату и время */
-    /* и вставляем значение в блок с id "current_date_time_block2" */
     setInterval(function () {
         document.getElementById('current_date_time_block2').innerHTML = date_time();
     }, 1000);

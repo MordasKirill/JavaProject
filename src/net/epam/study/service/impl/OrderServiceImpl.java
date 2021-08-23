@@ -115,9 +115,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Get order method
+     * orderToString method - to get a String value of order
      *
-     * @return returns a StringBuilder value
+     * @param order means a Map from menu items
+     * @param userId means id of a user
+     * @return returns a String value
      * of all products in a cart
      */
     public String orderToString(Map<Integer, LinkedList<MenuItem>> order, int userId) {
@@ -125,6 +127,14 @@ public class OrderServiceImpl implements OrderService {
         return linkedList.toString();
     }
 
+    /**
+     * getOrderDetailsWithLimit method - to get a full
+     * info about orders, 8 elements per time
+     *
+     * @param limit means amount of elements per time
+     * @return returns a List<Order> value
+     * of order details
+     */
     @Override
     public List<Order> getOrderDetailsWithLimit(int limit) throws ServiceException {
         DAOProvider daoProvider = DAOProvider.getInstance();

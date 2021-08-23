@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
-    private static final long serialVersionUID = 1L;
     private final CommandProvider provider = new CommandProvider();
+    private final String COMMAND_PARAM = "command";
 
     public Controller() {
         super();
@@ -30,8 +30,7 @@ public class Controller extends HttpServlet {
     private void process(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletException {
         String name;
         Command command;
-        name = request.getParameter("command");
-
+        name = request.getParameter(COMMAND_PARAM);
         if (provider.isContains(name)) {
             command = provider.takeCommand(name);
             command.execute(request, response);
