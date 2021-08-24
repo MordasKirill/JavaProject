@@ -58,7 +58,7 @@ public class SaveNewPayment implements Command {
                     requestDispatcher.forward(request, response);
                 } else {
                     request.setAttribute(ERR_MSG_FULL_NAME, validationService.getErrorMsg(fullName, Constants.FULL_NAME_PATTERN, Constants.FULL_NAME_ERROR));
-                    request.setAttribute(ERR_MSG_PRICE, validationService.priceErrorMsg(orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId())));
+                    request.setAttribute(ERR_MSG_PRICE, validationService.priceErrorMsg(orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId()))));
                     request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
                     session.setAttribute(ATTR_NUMBER_PAYMENT, number);
                     session.setAttribute(ATTR_FULL_NAME_PAYMENT, fullName);

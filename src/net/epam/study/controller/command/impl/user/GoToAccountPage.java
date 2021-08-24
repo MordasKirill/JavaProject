@@ -5,7 +5,6 @@ import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.*;
-import net.epam.study.service.validation.ValidationService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -36,10 +35,9 @@ public class GoToAccountPage implements Command {
         PaymentService paymentService = serviceProvider.getPaymentService();
         PaginationService paginationService = serviceProvider.getPaginationService();
         OrderService orderService = serviceProvider.getOrderService();
-        ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null && validationService.isAdmin(user.getRole())) {
+        if (user != null) {
             try {
                 int limitOrders = (int) session.getAttribute(LIMIT_ORDERS);
                 if (request.getParameter(LOAD_ORDERS) != null) {

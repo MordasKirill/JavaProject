@@ -50,6 +50,7 @@
 <fmt:message bundle="${loc}" key="local.admin.placeholder.waittime" var="placeholderWaittime"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.en" var="en_button"/>
 <fmt:message bundle="${loc}" key="local.login.locbutton.name.ru" var="ru_button"/>
+<fmt:message bundle="${loc}" key="local.menu.back" var="mainPage"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html PUBLIC>
@@ -71,6 +72,7 @@
     <a href="Controller?command=gotoadminpage&locale=en" class="green" style="width: 100px">${en_button}</a>
     <a href="Controller?command=gotoadminpage&locale=ru" class="green" style="width: 100px">${ru_button}</a>
     <a href="Controller?command=logout" class="green" style="width: 200px; ">${logout}</a>
+    <a href="Controller?command=gotomainpage" class="green" style="width: 200px; ">${mainPage}</a>
 </div>
 <c:if test="${role == 'owner'}">
     <section>
@@ -99,7 +101,7 @@
                             <a href="Controller?command=userrole&id=${row.id}&role=admin" class="green">${toadmin}</a>
                         </c:if>
                         <c:if test="${row.role == 'user' || row.role == 'admin'}">
-                            <a href="Controller?command=dbinfodelete&idUser=${row.id}" class="green" style="color: darkred">${delete}</a>
+                            <a href="Controller?command=deleteuser&idUser=${row.id}" class="green" style="color: darkred">${delete}</a>
                         </c:if>
                     </div>
                 </div>
@@ -166,7 +168,7 @@
                         <a href="Controller?command=orderstatus&id=${row.id}&status=rejected&email=${row.email}" class="green">${reject}</a>
                     </c:if>
                     <c:if test="${role == 'owner'}">
-                        <a href="Controller?command=dbinfodelete&idOrder=${row.id}" class="green" style="color: darkred">${delete}</a>
+                        <a href="Controller?command=deleteorder&idOrder=${row.id}" class="green" style="color: darkred">${delete}</a>
                     </c:if>
                 </div>
             </div>

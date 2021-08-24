@@ -1,12 +1,15 @@
-package net.epam.study.controller.command.impl.order;
+package net.epam.study.controller.command.impl.admin;
 
 import net.epam.study.Constants;
-import net.epam.study.bean.MenuItem;
 import net.epam.study.bean.User;
 import net.epam.study.controller.command.Command;
 import net.epam.study.controller.command.PagePath;
-import net.epam.study.service.OrderService;
+import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
+import net.epam.study.service.UserService;
+import net.epam.study.service.validation.ValidationService;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,15 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Class represents an addToCart command
- */
-public class AddToCart implements Command {
+public class AdminDeleteUser implements Command {
+    private static final String ATTR_ERROR = "error";
+    private static final String MSG_ERROR = "Delete order error!";
+    /**
+     * Logger to get error log
+     */
+    private static final Logger LOG = Logger.getLogger(AdminDeleteUser.class);
 
     /**
-     * execute method produces all necessary actions to
-     * add item to cart
-     *
      * @param request  stores information about the request
      * @param response manages the response to the request
      * @throws ServletException servlet exceptions
@@ -36,15 +39,20 @@ public class AddToCart implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
-        OrderService orderService = serviceProvider.getOrderService();
+        UserService userService = serviceProvider.getUserService();
+        ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null) {
-            String name = request.getParameter(Constants.PARAM_NAME);
-            String price = request.getParameter(Constants.PARAM_PRICE);
-            session.setAttribute(Constants.PARAM_CATEGORY, request.getParameter(Constants.PARAM_CATEGORY));
-            orderService.addToOrder(new MenuItem(name, price), user.getId());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_MENU_INDEX);
+        if (user != null && validationService.isUser(user.getRole())) {
+            try {
+                userService.deleteUser(Integer.parseInt(request.getParameter(Constants.ID_USER)));
+            } catch (ServiceException e) {
+                LOG.log(Level.ERROR, "Admin delete user error.", e);
+                session.setAttribute(ATTR_ERROR, MSG_ERROR);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.ERROR);
+                requestDispatcher.forward(request, response);
+            }
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_ADMIN_INDEX);
             requestDispatcher.forward(request, response);
         } else {
             response.sendRedirect(PagePath.REDIRECT_LOGIN);

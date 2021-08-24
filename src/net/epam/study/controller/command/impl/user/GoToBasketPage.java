@@ -11,7 +11,6 @@ import net.epam.study.service.OrderService;
 import net.epam.study.service.PaymentService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -46,13 +45,12 @@ public class GoToBasketPage implements Command {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
         PaymentService paymentService = serviceProvider.getPaymentService();
-        ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null && validationService.isAdmin(user.getRole())) {
-            int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
+        if (user != null) {
             if (request.getParameter(PARAM_PAYMENT) != null) {
                 try {
+                    int orderId = (int) session.getAttribute(ATTR_ORDER_ID);
                     paymentService.changeOrderStatus(Status.REJECTED.toString().toLowerCase(), orderId);
                 } catch (ServiceException e) {
                     session.setAttribute(PARAM_ERROR, ERROR_MSG_PAYMENT);
@@ -63,7 +61,7 @@ public class GoToBasketPage implements Command {
             LinkedList<MenuItem> linkedList = OrderProvider.getInstance().getOrder().get(user.getId());
             request.setAttribute(ATTR_ORDER, linkedList);
             try {
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
                 session.setAttribute(ATTR_ORDERS_AMOUNT, paymentService.getDonePayments(user.getId()));
                 session.setAttribute(ATTR_DISCOUNT, orderService.getDiscount(user.getId()));
             } catch (ServiceException e) {

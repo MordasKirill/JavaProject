@@ -81,7 +81,7 @@ public class SaveNewOrder implements Command {
                 if (OrderProvider.getInstance().getOrder().get(user.getId()).size() == 0) {
                     request.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
                     request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(user.getId()));
-                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
+                    request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
                     request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                     requestDispatcher.forward(request, response);
@@ -89,11 +89,11 @@ public class SaveNewOrder implements Command {
                     int orderId = orderService.createOrder(new Order(fullName, address, email, phone, orderService.orderToString(OrderProvider.getInstance().getOrder(), user.getId())));
                     session.setAttribute(ATTR_ORDER_ID, orderId);
                     if (paymentMethod.equals(ATTR_METHOD_ONLINE)) {
-                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()), STATUS_PROCESSING);
+                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())), STATUS_PROCESSING);
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_PAYMENT_INDEX);
                         requestDispatcher.forward(request, response);
                     } else {
-                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()), STATUS_UPON_RECEIPT);
+                        paymentService.doPayment(user.getId(), orderId, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())), STATUS_UPON_RECEIPT);
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BILL_INDEX);
                         requestDispatcher.forward(request, response);
                     }
@@ -109,7 +109,7 @@ public class SaveNewOrder implements Command {
                 request.setAttribute(ATTR_ERR_MSG_PHONE, validationService.getErrorMsg(phone, Constants.PHONE_PATTERN, Constants.PHONE_ERROR));
                 request.setAttribute(ATTR_ERR_MSG_CITY, validationService.cityErrorMsg(city));
                 request.setAttribute(ATTR_ORDER, OrderProvider.getInstance().getOrder().get(user.getId()));
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
                 request.setAttribute(ATTR_SIZE, OrderProvider.getInstance().getOrder().size());
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(PagePath.FORWARD_BASKET);
                 requestDispatcher.forward(request, response);

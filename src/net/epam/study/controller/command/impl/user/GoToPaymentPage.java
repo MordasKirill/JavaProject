@@ -7,7 +7,6 @@ import net.epam.study.controller.command.PagePath;
 import net.epam.study.service.OrderService;
 import net.epam.study.service.ServiceException;
 import net.epam.study.service.ServiceProvider;
-import net.epam.study.service.validation.ValidationService;
 import net.epam.study.service.validation.impl.ValidationImpl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -32,12 +31,11 @@ public class GoToPaymentPage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServiceProvider serviceProvider = ServiceProvider.getInstance();
         OrderService orderService = serviceProvider.getOrderService();
-        ValidationService validationService = serviceProvider.getValidationService();
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(Constants.PARAM_USER);
-        if (user != null && validationService.isAdmin(user.getRole())) {
+        if (user != null) {
             try {
-                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), user.getId()));
+                request.setAttribute(ATTR_TOTAL, orderService.applyDiscount(orderService.getTotal(user.getId()), orderService.getDiscount(user.getId())));
             } catch (ServiceException e) {
                 log.log(Level.ERROR, "GoToPaymentPage error.", e);
                 session.setAttribute(ATTR_ERROR, ATTR_ERROR_MSG);
